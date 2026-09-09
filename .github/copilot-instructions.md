@@ -8,7 +8,7 @@
 
 ## Stack
 
-Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS. No backend, no database.
+Next.js 16 (App Router, Turbopack) · React 19.2 · TypeScript · Tailwind CSS 4. No backend, no database.
 
 ## Conventions
 

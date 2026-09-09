@@ -10,7 +10,7 @@ A civics/democracy game for kids 8–12: a child arrives in a village with no ru
 
 ## Stack
 
-- **Frontend:** Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS
+- **Frontend:** Next.js 16 (App Router, Turbopack) + React 19.2 + TypeScript + Tailwind CSS 4
 - **Backend:** none — no API routes, no database, everything runs client-side with in-memory state
 - **Deploy:** not yet set up
 
@@ -155,3 +155,13 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 - [ ] No English localization yet — all copy is inline Hebrew string constants in `src/content/`, not yet centralized into a single token source. Candidate for the `language-tokens` skill once a second language is actually planned
 - [ ] No component or e2e tests yet — RTL/Playwright are wired up but unused
 - [ ] Coverage threshold not yet enforced (see Testing section above)
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

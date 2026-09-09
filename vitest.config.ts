@@ -18,5 +18,5 @@ export default defineConfig({
       // Testing section). Add lines/functions thresholds once they do.
     },
   },
-  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+  resolve: { alias: { "@": path.resolve(import.meta.dirname, "./src") } },
 });
