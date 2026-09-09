@@ -1,0 +1,54 @@
+{
+  "name": "first-rule",
+  "version": "0.1.0",
+  "private": true,
+  "description": "כלל ראשון / First Rule — a civics game for kids. Chapter 1.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "next": "15.1.6",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@playwright/test": "^1.63.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "autoprefixer": "10.4.20",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.1.6",
+    "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
+    "lint-staged": "^17.5.0",
+    "postcss": "8.5.1",
+    "prettier": "^3.9.6",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.7.3",
+    "vitest": "2.1.8"
+  }
+}

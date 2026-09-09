@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: theme("colors.night");
+  color: theme("colors.paper");
+}
+
+/* One lamp on the table. The page is lit from the top right. */
+.lamplight {
+  background-image: radial-gradient(
+    120% 90% at 88% 0%,
+    rgba(232, 163, 61, 0.16) 0%,
+    rgba(232, 163, 61, 0.05) 38%,
+    transparent 72%
+  );
+}
+
+.rule-slot {
+  border-bottom: 1px dashed rgba(230, 224, 204, 0.45);
+  padding-bottom: 0.1em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .settle {
+    animation: settle 420ms ease-out both;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid theme("colors.lamp");
+  outline-offset: 3px;
+}

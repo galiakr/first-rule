@@ -1,0 +1,165 @@
+"use client";
+
+import { useState } from "react";
+
+import {
+  ABOUT_ME_TEXT,
+  ABOUT_TITLE,
+  ABOUT_VILLAGE_TEXT,
+  GROUP_BLURB,
+} from "@/content/village";
+import {
+  CHAPTER_1,
+  CHAPTER_1_INTRO,
+  CHAPTER_1_TITLE,
+} from "@/content/chapter1";
+import { GROUP_LABEL } from "@/engine/options";
+import { GROUPS } from "@/engine/rights";
+
+type Entry = { key: "about" | "intro" } | { key: "situation"; id: string };
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  /** How many situations of CHAPTER_1 have already been read (0 = none yet). */
+  readCount: number;
+}
+
+/**
+ * A read-only way back into what already happened. It never re-enters the
+ * game's own phase machine — no cursor moves, no rule can be rewritten here.
+ * It exists only so a scene, once read, isn't gone.
+ */
+export default function TableOfContents({ open, onClose, readCount }: Props) {
+  const [selected, setSelected] = useState<Entry | null>(null);
+
+  if (!open) return null;
+
+  function close() {
+    setSelected(null);
+    onClose();
+  }
+
+  const situation =
+    selected?.key === "situation"
+      ? (CHAPTER_1.find((s) => s.id === selected.id) ?? null)
+      : null;
+
+  return (
+    <div
+      className="fixed inset-0 z-20 flex"
+      role="dialog"
+      aria-label="תוכן העניינים"
+    >
+      <button
+        type="button"
+        aria-label="לסגור"
+        onClick={close}
+        className="flex-1 bg-night/70"
+      />
+      <div className="settle w-full max-w-md overflow-y-auto bg-paper p-6 text-ink shadow-2xl sm:p-8">
+        <div className="mb-6 flex items-baseline justify-between">
+          <h2 className="font-book text-2xl">תוכן העניינים</h2>
+          <button
+            type="button"
+            onClick={close}
+            className="text-sm text-ink/60 underline underline-offset-4"
+          >
+            לסגור
+          </button>
+        </div>
+
+        {selected === null ? (
+          <nav>
+            <ul className="space-y-3">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setSelected({ key: "about" })}
+                  className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                >
+                  {ABOUT_TITLE}
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setSelected({ key: "intro" })}
+                  className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                >
+                  {CHAPTER_1_TITLE}
+                </button>
+              </li>
+              {CHAPTER_1.map((s, i) => {
+                const read = i < readCount;
+                return (
+                  <li key={s.id}>
+                    <button
+                      type="button"
+                      disabled={!read}
+                      onClick={() =>
+                        setSelected({ key: "situation", id: s.id })
+                      }
+                      className={
+                        read
+                          ? "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                          : "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed text-ink/35"
+                      }
+                    >
+                      {s.title}
+                      {!read ? (
+                        <span className="ms-2 text-sm text-ink/40">
+                          (עוד לא הגעת)
+                        </span>
+                      ) : null}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        ) : (
+          <div className="space-y-6">
+            <button
+              type="button"
+              onClick={() => setSelected(null)}
+              className="text-sm text-ink/60 underline underline-offset-4"
+            >
+              חזרה לרשימה
+            </button>
+
+            {selected.key === "about" ? (
+              <div className="space-y-5">
+                <h3 className="font-book text-xl">{ABOUT_TITLE}</h3>
+                <p className="leading-relaxed">{ABOUT_VILLAGE_TEXT}</p>
+                <ul className="space-y-2">
+                  {GROUPS.map((g) => (
+                    <li key={g} className="border-b border-ink/15 pb-2">
+                      <span className="font-book">{GROUP_LABEL[g]}</span>
+                      <span className="text-ink/60"> — {GROUP_BLURB[g]}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="leading-relaxed">{ABOUT_ME_TEXT}</p>
+              </div>
+            ) : null}
+
+            {selected.key === "intro" ? (
+              <div className="space-y-4">
+                <h3 className="font-book text-xl">{CHAPTER_1_TITLE}</h3>
+                <p className="leading-relaxed">{CHAPTER_1_INTRO}</p>
+              </div>
+            ) : null}
+
+            {situation ? (
+              <div className="space-y-4">
+                <h3 className="font-book text-xl">{situation.title}</h3>
+                <p className="leading-relaxed">{situation.text}</p>
+              </div>
+            ) : null}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
