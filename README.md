@@ -1,60 +1,67 @@
 # כלל ראשון · First Rule
 
-משחק אזרחות לילדים בגילי 8–12. הילד/ה מגיע/ה לכפר שאין בו אף כלל, כותב/ת את
-הכללים בעצמו/ה — ואז חי/ה איתם.
+A civics game for kids aged 8–12. The child arrives in a village with no
+rules, writes the rules themselves — and then lives with them.
 
-זה **פרק 1 בלבד** ("אין כללים"), מתוך שבעה. העיצוב המלא נמצא במסמך
-`design-first-rule.md` שמחוץ למאגר הזה.
+This is **Chapter 1 only** ("No Rules"), out of seven. The full design is in
+`design-first-rule.md` at the root of this repo.
 
-## הרצה
+## Running it
 
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 35 טסטים על המנוע והתוכן
+npm test        # 35 tests over the engine and content
 npm run build
 ```
 
-הגופנים נטענים דרך `next/font/google` (Frank Ruhl Libre לספר ולכותרות,
-Assistant לממשק), ולכן ה־build הראשון דורש חיבור לאינטרנט.
+Fonts load via `next/font/google` (Frank Ruhl Libre for the rulebook and
+headings, Assistant for the interface), so the first build requires an
+internet connection.
 
-## מבנה
+## Structure
 
 ```
 src/
-  engine/          כל המשחק, כפונקציות טהורות. בלי React, בלי I/O.
-    types.ts       מודל הנתונים
-    options.ts     הבורר — 4 שדות × 4 אפשרויות, סגור ב־16
-    match.ts       האם כלל חל על מצב + הרכבת משפט הכלל
-    conflict.ts    סתירה טקסטואלית מול התנגשות בשטח
-    rights.ts      לוח הזכויות והאמון
-    game.ts        רדיוסר: מה נשאלים, מה קורה, מה נשמר
-  content/         הכפר ופרק 1 — דאטה בלבד
-  components/      בורר הכללים, ספר הכללים, סיום פרק
-  app/             מסך יחיד עם מכונת המצבים של הפרק
+  engine/          the whole game, as pure functions. No React, no I/O.
+    types.ts       the data model
+    options.ts     the builder — 4 fields × 4 options, closed at 16
+    match.ts       whether a rule applies to a situation + assembling the rule sentence
+    conflict.ts    textual contradiction vs. field collision
+    rights.ts      the rights board and trust
+    game.ts        reducer: what's asked, what happens, what's saved
+  content/         the village and Chapter 1 — data only
+  components/      rule builder, rule book, table of contents, chapter end, about screen
+  app/             a single screen with the chapter's state machine
 ```
 
-המנוע לא יודע דבר על ריאקט, ולכן אפשר לשחק פרק שלם בטסט בלי לרנדר כלום —
-ראו `playing the chapter through` ב־`src/engine/__tests__/engine.test.ts`.
+The engine knows nothing about React, so a whole chapter can be played
+through in a test without rendering anything — see
+`playing the chapter through` in `src/engine/__tests__/engine.test.ts`.
 
-## מה כבר אכוף בקוד
+## What's already enforced in code
 
-- **הבורר סגור ב־16.** טסט נכשל אם מוסיפים אפשרות חמישית לשדה כלשהו.
-- **חוק הצביטה (§7).** טסט עובר על ארבע אפשרויות ה"מה" ומוודא שלכל אחת יש
-  מצב בפרק שבו הפעלתה עולה במשהו — זכות שנמתחת או אמון שיורד.
-- **זכויות הן מצבים ולא ניקוד.** שלמה / מתוחה / שבורה, תמיד עם שם של קבוצה.
-  מתיחה לא מרפאת שבירה.
-- **אמון אף פעם לא מספר על המסך.** הוא נחשף רק דרך שלוש דרכים שבהן קבוצה
-  פונה אל הילד/ה.
-- **הנושא יורש מהמצב** ולא נבחר — לכן כללים יוצאים צרים מדי בכוונה.
+- **The builder is closed at 16.** A test fails if a fifth option is added to
+  any field.
+- **The pinch rule (§7).** A test runs over the four "what" options and
+  verifies each one has a situation in the chapter where applying it costs
+  something — a right that strains, or trust that drops.
+- **Rights are states, not points.** Intact / strained / broken, always with
+  a group's name attached. A strain never heals a break.
+- **Trust never appears as a number on screen.** It's only revealed through
+  three ways a group approaches the child.
+- **The subject is inherited from the situation** rather than chosen — so
+  rules come out narrower than intended, on purpose.
 
-## מה עוד לא כאן
+## What's not here yet
 
-תקדימים (פרק 2 ואילך), בחירות, הפרדת רשויות, תיקון חוקתי, שמירת מצב, אנגלית.
-`Situation` כבר נושא את המאפיינים שמנוע התקדימים יזדקק להם — `act`,
-`justification`, `power` — כך שפרק 2 לא ידרוש שינוי במודל.
+Precedents (Chapter 2 onward), elections, separation of powers, constitutional
+amendment, save state, English localization. `Situation` already carries the
+traits the precedent engine will need — `act`, `justification`, `power` — so
+Chapter 2 won't require a model change.
 
-## הערה על כתיבת תוכן
+## A note on writing content
 
-כל מצב חייב outcome לכל אחת מארבע אפשרויות ה"מה", כולל `noRuleOutcome`
-ו־`overrideOutcome`. טסט אוכף את זה. זו העבודה היקרה בפרויקט, ולא הקוד.
+Every situation needs an outcome for each of the four "what" options,
+including `noRuleOutcome` and `overrideOutcome`. A test enforces this. That's
+the expensive work on this project, not the code.
