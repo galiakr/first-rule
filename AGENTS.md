@@ -6,7 +6,7 @@
 
 ## What this project is
 
-A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapter 1 ("אין כללים") of a planned seven.
+A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–2 ("אין כללים", "זה כבר קרה") of a planned seven.
 
 ## Stack
 
@@ -23,12 +23,14 @@ src/
     options.ts     the rule builder — 4 fields × 4 options, closed at 16
     match.ts       whether a rule applies to a situation + rule-sentence assembly
     conflict.ts    textual contradiction vs. field collision
+    precedent.ts   does a past ruling apply to a new situation (trait matching)
     rights.ts      the rights board and trust
-    game.ts        the reducer: what's asked, what happens, what's saved
-  content/         the village and Chapter 1 — data only (content/chapter1.ts, content/village.ts)
+    game.ts        the reducer: what's asked, what happens, what's saved, chapter transitions
+  content/         the village, chapters 1–2 — data only (chapter1.ts, chapter2.ts, village.ts)
+    situations.ts  every situation keyed by id, for precedent source lookup
     tokens/        language tokens: tokens.csv (source), generate.py, locales/*.json (generated), t()
-  components/      rule builder, rule book, table of contents, chapter end, about screen
-  app/             single-screen state machine driving the chapter (src/app/page.tsx)
+  components/      rule builder, rule book, table of contents, chapter end, about screen, precedent choice
+  app/             single-screen state machine driving the whole game across chapters (src/app/page.tsx)
 ```
 
 The engine is intentionally React-free and I/O-free — a whole chapter can be played through in a test without rendering anything (see `src/engine/__tests__/engine.test.ts`).
@@ -86,7 +88,7 @@ Stack: **Vitest** + **React Testing Library** + **Playwright** (e2e)
 
 ### Current state
 
-- `src/engine/` has full behavioral coverage (35 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
+- `src/engine/` has full behavioral coverage (52 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
 - Components (`src/components/`, `src/app/page.tsx`) have **no tests yet**. RTL/Playwright were added to the toolchain ahead of need — write the first component test the next time a component changes, don't let the tooling sit unused.
 - No coverage threshold is enforced yet (`vitest.config.ts` reports coverage but doesn't gate on it) — turn on the toolkit-default 80% lines/functions threshold once component tests exist, not before, or CI will fail on day one for the wrong reason.
 
@@ -152,8 +154,10 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
-- [ ] Chapters 2–7 are not built yet (precedents, elections, separation of powers, constitutional amendment, save state — see README "מה עוד לא כאן")
-- [ ] No English localization yet. UI chrome and Chapter 1 content are centralized in `src/content/tokens/tokens.csv` (he complete, en blank) — a translator can fill the `en` column and regenerate `locales/en.json`. `options.ts`'s rule-sentence `template` fields and `SUBJECT_FORMS` are deliberately still hardcoded Hebrew (grammatical case, not just wording) and need a sentence-composer redesign before a second language can actually ship
+- [ ] Chapters 1–2 are built (see `docs/chapter-1-plan.md`, `docs/chapter-2-plan.md`); chapters 3–7 are not (elections, separation of powers, constitutional amendment, save state — see README "מה עוד לא כאן")
+- [ ] Chapter 2 introduced `chefetz` and `davar` as fresh subjects (c2s1/c2s2) that aren't pinched within Chapter 2 itself — a later chapter needs to eventually collide with rules written for them, same as Chapter 1 already does for `mayim`/`shvil`
+- [ ] Two of six protections still unused: `halich` (due process) and, as of Chapter 2, `bitui` is now exercised (c2s2) — only `halich` remains untouched
+- [ ] No English localization yet. UI chrome and Chapters 1–2 content are centralized in `src/content/tokens/tokens.csv` (he complete, en blank) — a translator can fill the `en` column and regenerate `locales/en.json`. `options.ts`'s rule-sentence `template` fields and `SUBJECT_FORMS` are deliberately still hardcoded Hebrew (grammatical case, not just wording) and need a sentence-composer redesign before a second language can actually ship
 - [ ] No component or e2e tests yet — RTL/Playwright are wired up but unused
 - [ ] Coverage threshold not yet enforced (see Testing section above)
 

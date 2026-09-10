@@ -10,7 +10,14 @@ import type { GameState } from "@/engine/types";
  * The only place the rights board is shown (§8, §10). Not a score — a list of
  * protections with the group they belong to, broken ones first.
  */
-export default function ChapterEnd({ state }: { state: GameState }) {
+export default function ChapterEnd({
+  state,
+  onContinue,
+}: {
+  state: GameState;
+  /** Present when there's a next chapter to move to; absent at the last built one. */
+  onContinue?: () => void;
+}) {
   const harm = harmed(state.rights);
   const harmedGroups = new Set(harm.map((h) => h.group));
   const untouched = GROUPS.filter((g) => !harmedGroups.has(g));
@@ -18,7 +25,9 @@ export default function ChapterEnd({ state }: { state: GameState }) {
   return (
     <div className="space-y-10">
       <header className="space-y-3">
-        <p className="text-sm text-quiet">{t("chapter_end.subtitle")}</p>
+        <p className="text-sm text-quiet">
+          {t("chapter_end.subtitle", { chapter: state.chapter })}
+        </p>
         <h2 className="font-book text-3xl leading-tight">
           {t("chapter_end.title")}
         </h2>
@@ -93,9 +102,21 @@ export default function ChapterEnd({ state }: { state: GameState }) {
         </section>
       ) : null}
 
-      <p className="max-w-read border-t border-moss pt-6 text-quiet">
-        {t("chapter_end.closing_note")}
-      </p>
+      {onContinue ? (
+        <div className="border-t border-moss pt-6">
+          <button
+            type="button"
+            onClick={onContinue}
+            className="rounded-sm bg-lamp px-5 py-2.5 text-night"
+          >
+            {t("chapter_end.continue")}
+          </button>
+        </div>
+      ) : (
+        <p className="max-w-read border-t border-moss pt-6 text-quiet">
+          {t("chapter_end.closing_note")}
+        </p>
+      )}
     </div>
   );
 }

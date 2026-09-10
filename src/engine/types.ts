@@ -115,6 +115,44 @@ export interface Outcome {
   trust: TrustEffect[];
 }
 
+/**
+ * The five closed trait dimensions a precedent can be essential on (§6.1).
+ * Each maps directly onto a field already carried by Situation/Precedent —
+ * no new vocabulary, just a way to name which of those fields mattered.
+ */
+export type TraitKey = "act" | "justification" | "power" | "subject" | "actor";
+
+/**
+ * One candidate answer to "what determined it?" — a full sentence the child
+ * taps, not a category name (§6.1). Picking it saves `traits` as the
+ * precedent's essentialTraits.
+ */
+export interface PrecedentOption {
+  traits: TraitKey[];
+  label: string;
+}
+
+/**
+ * A ruling the child made on a past situation, available to match future
+ * ones (§6.1). Every resolved situation produces one automatically — see
+ * game.ts's resolve(). `essentialTraits` is null until the first situation
+ * that might invoke this precedent asks the child what determined it.
+ */
+export interface Precedent {
+  id: string;
+  /** The situation where this ruling was made. */
+  situationId: string;
+  /** What the child decided. Null when noRuleOutcome applied. */
+  governedBy: WhatClause | null;
+  overrode: boolean;
+  actorId: string;
+  act: ActKind;
+  justification: Justification;
+  power: PowerBalance;
+  subject: Subject;
+  essentialTraits: TraitKey[] | null;
+}
+
 export interface Situation {
   id: string;
   chapter: number;
@@ -140,6 +178,16 @@ export interface Situation {
 
   /** Situations 1–2 of a chapter invite a rule; 3–4 collide with one. */
   invitesRule: boolean;
+
+  /**
+   * id of an earlier situation this one might invoke as a precedent (§6.1).
+   * Content-authored, not runtime-detected — keeps matching itself a plain
+   * trait-equality check with no thresholds. Required alongside
+   * `precedentOptions` when set (enforced by a content test).
+   */
+  precedentOf?: string;
+  /** 2–3 options offered the first time this precedent is compared. */
+  precedentOptions?: PrecedentOption[];
 
   /** Applied when no written rule covers this situation. */
   noRuleOutcome: Outcome;
@@ -170,13 +218,15 @@ export interface LogEntry {
 
 export interface GameState {
   chapter: number;
-  /** Index into the chapter's situation list. */
+  /** Total situations resolved so far, across all chapters. */
   cursor: number;
   rules: Rule[];
   rights: RightsBoard;
   /** Raw trust per group. Never shown as a number (§7). */
   trust: Record<GroupId, number>;
   log: LogEntry[];
+  /** Every resolved situation, available for future precedent matching. */
+  precedents: Precedent[];
   /** True once the "sometimes you only find out later" line has been said (§6.2). */
   sawCollisionNote: boolean;
 }

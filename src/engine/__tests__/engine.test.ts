@@ -1,9 +1,19 @@
 import { describe, expect, it } from "vitest";
 
 import { CHAPTER_1 } from "@/content/chapter1";
+import { CHAPTER_2 } from "@/content/chapter2";
+import { SITUATIONS_BY_ID } from "@/content/situations";
 import { ACTORS } from "@/content/village";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
-import { addRule, initialState, outcomeFor, promptFor, resolve } from "../game";
+import {
+  activatePrecedent,
+  addRule,
+  advanceChapter,
+  initialState,
+  outcomeFor,
+  promptFor,
+  resolve,
+} from "../game";
 import {
   applicableRules,
   ruleApplies,
@@ -17,6 +27,7 @@ import {
   WHEN_OPTIONS,
   WHO_OPTIONS,
 } from "../options";
+import { TRAIT_KEYS, traitDifferences, traitsMatch } from "../precedent";
 import {
   applyRights,
   emptyRightsBoard,
@@ -24,10 +35,14 @@ import {
   rightsKey,
   trustLevel,
 } from "../rights";
-import type { Rule, Situation } from "../types";
+import type { GameState, Precedent, Rule, Situation } from "../types";
 
 const s1 = CHAPTER_1[0];
 const s3 = CHAPTER_1[2];
+const c1s2 = CHAPTER_1[1];
+const c2s1 = CHAPTER_2[0];
+const c2s3 = CHAPTER_2[2];
+const c2s4 = CHAPTER_2[3];
 
 function rule(over: Partial<Rule> = {}): Rule {
   return {
@@ -298,18 +313,18 @@ describe("trust never surfaces as a number", () => {
 
 describe("what the child is asked at each situation", () => {
   it("invites a rule when nothing covers the first situation", () => {
-    const prompt = promptFor(initialState(), s1, ACTORS);
+    const prompt = promptFor(initialState(), s1, ACTORS, SITUATIONS_BY_ID);
     expect(prompt.kind).toBe("write-rule");
   });
 
   it("applies the rule once one exists", () => {
     const state = addRule(initialState(), rule({ id: "water" }));
-    const prompt = promptFor(state, s3, ACTORS);
+    const prompt = promptFor(state, s3, ACTORS, SITUATIONS_BY_ID);
     expect(prompt.kind).toBe("rule-applies");
   });
 
   it("says nothing covers this when a situation that does not invite a rule is uncovered", () => {
-    const prompt = promptFor(initialState(), s3, ACTORS);
+    const prompt = promptFor(initialState(), s3, ACTORS, SITUATIONS_BY_ID);
     expect(prompt.kind).toBe("no-rule");
   });
 });
@@ -354,7 +369,7 @@ describe("playing the chapter through", () => {
     });
     state = addRule(state, water);
 
-    const prompt = promptFor(state, s3, ACTORS);
+    const prompt = promptFor(state, s3, ACTORS, SITUATIONS_BY_ID);
     expect(prompt.kind).toBe("rule-applies");
 
     state = resolve(state, {
@@ -394,5 +409,211 @@ describe("playing the chapter through", () => {
       rule({ id: "path", subject: "shvil", writtenAt: "c1s2" }),
     );
     expect(applicableRules(state.rules, CHAPTER_1[3], ACTORS)).toHaveLength(1);
+  });
+});
+
+function precedent(over: Partial<Precedent> = {}): Precedent {
+  return {
+    id: "p",
+    situationId: "c1s2",
+    governedBy: "ask-first",
+    overrode: false,
+    actorId: c1s2.actorId,
+    act: c1s2.act,
+    justification: c1s2.justification,
+    power: c1s2.power,
+    subject: c1s2.subject,
+    essentialTraits: null,
+    ...over,
+  };
+}
+
+describe("precedent trait matching", () => {
+  it("lists all five trait dimensions, in a fixed order", () => {
+    expect(TRAIT_KEYS).toEqual([
+      "act",
+      "justification",
+      "power",
+      "subject",
+      "actor",
+    ]);
+  });
+
+  it("matches only the requested traits, not all of them", () => {
+    const p = precedent();
+    expect(traitsMatch(p, c2s3, ["act"])).toBe(true);
+    expect(traitsMatch(p, c2s3, ["power"])).toBe(true);
+    expect(traitsMatch(p, c2s3, ["justification"])).toBe(false);
+  });
+
+  it("requires every requested trait to match, not just one", () => {
+    const p = precedent();
+    expect(traitsMatch(p, c2s3, ["act", "justification"])).toBe(false);
+  });
+
+  it("lists every trait that actually differs", () => {
+    const p = precedent();
+    expect(traitDifferences(p, c2s3).sort()).toEqual(
+      ["actor", "justification", "subject"].sort(),
+    );
+  });
+});
+
+describe("what the child is asked, with a precedent in play", () => {
+  function afterC1s2(): GameState {
+    return resolve(initialState(), {
+      situation: c1s2,
+      governedBy: "ask-first",
+      appliedRuleIds: [],
+      overrode: false,
+    });
+  }
+
+  it("offers a precedent choice the first time a situation might invoke one", () => {
+    const state = afterC1s2();
+    const prompt = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("precedent-choice");
+  });
+
+  it("reminds once activated with a trait that still holds", () => {
+    let state = afterC1s2();
+    state = activatePrecedent(state, state.precedents[0].id, ["act"]);
+    const prompt = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("precedent-reminder");
+  });
+
+  it("falls through with precedent context when the essential trait doesn't hold", () => {
+    let state = afterC1s2();
+    state = activatePrecedent(state, state.precedents[0].id, ["justification"]);
+    const prompt = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("no-rule"); // c2s3.invitesRule is false
+    if (prompt.kind === "no-rule") {
+      expect(prompt.precedentContext?.differences).toContain("justification");
+    }
+  });
+});
+
+describe("resolving a situation records a precedent", () => {
+  it("is essentialTraits: null until asked about", () => {
+    const state = resolve(initialState(), {
+      situation: s1,
+      governedBy: "ask-first",
+      appliedRuleIds: [],
+      overrode: false,
+    });
+    expect(state.precedents).toHaveLength(1);
+    expect(state.precedents[0]).toMatchObject({
+      situationId: "c1s1",
+      governedBy: "ask-first",
+      essentialTraits: null,
+    });
+  });
+});
+
+describe("chapter 2 content holds up", () => {
+  it("has four situations, two that invite a rule and two that do not", () => {
+    expect(CHAPTER_2).toHaveLength(4);
+    expect(CHAPTER_2.filter((s) => s.invitesRule)).toHaveLength(2);
+  });
+
+  it("gives every situation an outcome for all four WHAT clauses", () => {
+    for (const s of CHAPTER_2) {
+      for (const what of WHAT_OPTIONS) {
+        expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
+      }
+    }
+  });
+
+  it("c2s1 and c2s2 are fresh cases with no precedent link", () => {
+    expect(c2s1.precedentOf).toBeUndefined();
+    expect(CHAPTER_2[1].precedentOf).toBeUndefined();
+  });
+
+  it("c2s3 and c2s4 both point at the same precedent source, not at each other", () => {
+    expect(c2s3.precedentOf).toBe("c1s2");
+    expect(c2s4.precedentOf).toBe("c1s2");
+  });
+
+  it("c2s3's precedent options are each true of its own source", () => {
+    const source = SITUATIONS_BY_ID[c2s3.precedentOf!];
+    const synthetic = precedent({ situationId: source.id });
+    for (const option of c2s3.precedentOptions ?? []) {
+      expect(traitsMatch(synthetic, c2s3, option.traits)).toBe(true);
+    }
+    expect(c2s3.precedentOptions?.length).toBeGreaterThan(0);
+  });
+
+  it("c2s4 matches the c1s2 precedent on act but not on power", () => {
+    const synthetic = precedent();
+    expect(traitsMatch(synthetic, c2s4, ["act"])).toBe(true);
+    expect(traitsMatch(synthetic, c2s4, ["power"])).toBe(false);
+  });
+});
+
+describe("playing chapter 2 through", () => {
+  function afterC1s2(): GameState {
+    return resolve(initialState(), {
+      situation: c1s2,
+      governedBy: "ask-first",
+      appliedRuleIds: [],
+      overrode: false,
+    });
+  }
+
+  it("picking act at c2s3 leads to a reminder at c2s4", () => {
+    let state = afterC1s2();
+    const choice = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    if (choice.kind !== "precedent-choice")
+      throw new Error("expected a choice");
+    state = activatePrecedent(state, choice.precedent.id, ["act"]);
+
+    const atC2s3 = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    expect(atC2s3.kind).toBe("precedent-reminder");
+    if (atC2s3.kind !== "precedent-reminder")
+      throw new Error("expected a reminder");
+    state = resolve(state, {
+      situation: c2s3,
+      governedBy: atC2s3.precedent.governedBy,
+      appliedRuleIds: [],
+      overrode: false,
+    });
+
+    const atC2s4 = promptFor(state, c2s4, ACTORS, SITUATIONS_BY_ID);
+    expect(atC2s4.kind).toBe("precedent-reminder");
+  });
+
+  it("picking power at c2s3 leads to a precedent-flagged no-rule at c2s4", () => {
+    let state = afterC1s2();
+    const choice = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    if (choice.kind !== "precedent-choice")
+      throw new Error("expected a choice");
+    state = activatePrecedent(state, choice.precedent.id, ["power"]);
+
+    const atC2s3 = promptFor(state, c2s3, ACTORS, SITUATIONS_BY_ID);
+    expect(atC2s3.kind).toBe("precedent-reminder"); // power still holds for c2s3 itself
+    if (atC2s3.kind !== "precedent-reminder")
+      throw new Error("expected a reminder");
+    state = resolve(state, {
+      situation: c2s3,
+      governedBy: atC2s3.precedent.governedBy,
+      appliedRuleIds: [],
+      overrode: false,
+    });
+
+    const atC2s4 = promptFor(state, c2s4, ACTORS, SITUATIONS_BY_ID);
+    expect(atC2s4.kind).toBe("no-rule");
+    if (atC2s4.kind === "no-rule") {
+      expect(atC2s4.precedentContext?.differences).toContain("power");
+    }
+  });
+});
+
+describe("moving between chapters", () => {
+  it("advances the chapter number and keeps everything else", () => {
+    let state = initialState();
+    state = addRule(state, rule({ id: "water" }));
+    state = advanceChapter(state);
+    expect(state.chapter).toBe(2);
+    expect(state.rules).toHaveLength(1);
   });
 });

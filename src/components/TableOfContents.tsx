@@ -9,21 +9,27 @@ import {
   ABOUT_VILLAGE_TEXT,
   GROUP_BLURB,
 } from "@/content/village";
-import {
-  CHAPTER_1,
-  CHAPTER_1_INTRO,
-  CHAPTER_1_TITLE,
-} from "@/content/chapter1";
 import { GROUP_LABEL } from "@/engine/options";
 import { GROUPS } from "@/engine/rights";
+import type { Situation } from "@/engine/types";
 
-type Entry = { key: "about" | "intro" } | { key: "situation"; id: string };
+export interface ChapterEntry {
+  title: string;
+  intro: string;
+  situations: Situation[];
+  /** How many of this chapter's situations have already been read (0 = none yet). */
+  readCount: number;
+}
+
+type Entry =
+  | { key: "about" }
+  | { key: "intro"; chapterIndex: number }
+  | { key: "situation"; id: string };
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  /** How many situations of CHAPTER_1 have already been read (0 = none yet). */
-  readCount: number;
+  chapters: ChapterEntry[];
 }
 
 /**
@@ -31,7 +37,7 @@ interface Props {
  * game's own phase machine — no cursor moves, no rule can be rewritten here.
  * It exists only so a scene, once read, isn't gone.
  */
-export default function TableOfContents({ open, onClose, readCount }: Props) {
+export default function TableOfContents({ open, onClose, chapters }: Props) {
   const [selected, setSelected] = useState<Entry | null>(null);
 
   if (!open) return null;
@@ -43,7 +49,9 @@ export default function TableOfContents({ open, onClose, readCount }: Props) {
 
   const situation =
     selected?.key === "situation"
-      ? (CHAPTER_1.find((s) => s.id === selected.id) ?? null)
+      ? (chapters
+          .flatMap((c) => c.situations)
+          .find((s) => s.id === selected.id) ?? null)
       : null;
 
   return (
@@ -82,41 +90,49 @@ export default function TableOfContents({ open, onClose, readCount }: Props) {
                   {ABOUT_TITLE}
                 </button>
               </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => setSelected({ key: "intro" })}
-                  className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
-                >
-                  {CHAPTER_1_TITLE}
-                </button>
-              </li>
-              {CHAPTER_1.map((s, i) => {
-                const read = i < readCount;
-                return (
-                  <li key={s.id}>
-                    <button
-                      type="button"
-                      disabled={!read}
-                      onClick={() =>
-                        setSelected({ key: "situation", id: s.id })
-                      }
-                      className={
-                        read
-                          ? "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
-                          : "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed text-ink/35"
-                      }
-                    >
-                      {s.title}
-                      {!read ? (
-                        <span className="ms-2 text-sm text-ink/40">
-                          {t("toc.not_reached")}
-                        </span>
-                      ) : null}
-                    </button>
-                  </li>
-                );
-              })}
+              {chapters.map((chapter, chapterIndex) => (
+                <li key={chapterIndex}>
+                  <ul className="space-y-3">
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSelected({ key: "intro", chapterIndex })
+                        }
+                        className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                      >
+                        {chapter.title}
+                      </button>
+                    </li>
+                    {chapter.situations.map((s, i) => {
+                      const read = i < chapter.readCount;
+                      return (
+                        <li key={s.id}>
+                          <button
+                            type="button"
+                            disabled={!read}
+                            onClick={() =>
+                              setSelected({ key: "situation", id: s.id })
+                            }
+                            className={
+                              read
+                                ? "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                                : "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed text-ink/35"
+                            }
+                          >
+                            {s.title}
+                            {!read ? (
+                              <span className="ms-2 text-sm text-ink/40">
+                                {t("toc.not_reached")}
+                              </span>
+                            ) : null}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              ))}
             </ul>
           </nav>
         ) : (
@@ -147,8 +163,12 @@ export default function TableOfContents({ open, onClose, readCount }: Props) {
 
             {selected.key === "intro" ? (
               <div className="space-y-4">
-                <h3 className="font-book text-xl">{CHAPTER_1_TITLE}</h3>
-                <p className="leading-relaxed">{CHAPTER_1_INTRO}</p>
+                <h3 className="font-book text-xl">
+                  {chapters[selected.chapterIndex].title}
+                </h3>
+                <p className="leading-relaxed">
+                  {chapters[selected.chapterIndex].intro}
+                </p>
               </div>
             ) : null}
 

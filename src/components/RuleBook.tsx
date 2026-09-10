@@ -2,20 +2,33 @@
 
 import { t } from "@/content/tokens";
 import { ruleSentence } from "@/engine/match";
-import type { Rule } from "@/engine/types";
+import { findOption, WHAT_OPTIONS } from "@/engine/options";
+import type { Precedent, Rule, Situation } from "@/engine/types";
 
 interface Props {
   rules: Rule[];
+  precedents: Precedent[];
+  situationsById: Record<string, Situation>;
   open: boolean;
   onClose: () => void;
 }
 
 /**
- * The book is open the whole game (§10). It shows rules and, later, precedents.
- * It never shows who was harmed — that waits for the end of the chapter.
+ * The book is open the whole game (§10). It shows rules and precedents. It
+ * never shows who was harmed — that waits for the end of the chapter.
  */
-export default function RuleBook({ rules, open, onClose }: Props) {
+export default function RuleBook({
+  rules,
+  precedents,
+  situationsById,
+  open,
+  onClose,
+}: Props) {
   if (!open) return null;
+
+  // Only precedents the child has actually explained (§6.1) — one still
+  // sitting at essentialTraits: null hasn't been asked about yet.
+  const activated = precedents.filter((p) => p.essentialTraits !== null);
 
   return (
     <div
@@ -59,6 +72,30 @@ export default function RuleBook({ rules, open, onClose }: Props) {
             ))}
           </ol>
         )}
+
+        {activated.length > 0 ? (
+          <div className="mt-8 border-t border-ink/15 pt-6">
+            <h3 className="mb-4 font-book text-xl">
+              {t("rulebook.precedents_heading")}
+            </h3>
+            <ol className="space-y-4">
+              {activated.map((p) => {
+                const source = situationsById[p.situationId];
+                const ruling = p.governedBy
+                  ? findOption(WHAT_OPTIONS, p.governedBy).label
+                  : t("rulebook.precedent_no_ruling");
+                return (
+                  <li key={p.id} className="text-[1.05rem] leading-relaxed">
+                    {t("rulebook.precedent_entry", {
+                      title: source?.title ?? p.situationId,
+                      ruling,
+                    })}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        ) : null}
       </div>
     </div>
   );

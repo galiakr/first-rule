@@ -4,27 +4,37 @@ import { useMemo, useState } from "react";
 
 import AboutVillage from "@/components/AboutVillage";
 import ChapterEnd from "@/components/ChapterEnd";
+import PrecedentChoice from "@/components/PrecedentChoice";
 import RuleBook from "@/components/RuleBook";
 import RuleBuilder from "@/components/RuleBuilder";
 import TableOfContents from "@/components/TableOfContents";
+import type { ChapterEntry } from "@/components/TableOfContents";
 import { t } from "@/content/tokens";
 import {
   CHAPTER_1,
   CHAPTER_1_INTRO,
   CHAPTER_1_TITLE,
 } from "@/content/chapter1";
+import {
+  CHAPTER_2,
+  CHAPTER_2_INTRO,
+  CHAPTER_2_TITLE,
+} from "@/content/chapter2";
+import { SITUATIONS_BY_ID } from "@/content/situations";
 import { ACTORS } from "@/content/village";
 import {
+  activatePrecedent,
   addRule,
+  advanceChapter,
   initialState,
   outcomeFor,
   promptFor,
   resolve,
 } from "@/engine/game";
 import { ruleSentence } from "@/engine/match";
-import { GROUP_LABEL } from "@/engine/options";
+import { findOption, GROUP_LABEL, WHAT_OPTIONS } from "@/engine/options";
 import { trustLevel } from "@/engine/rights";
-import type { GameState, Rule, WhatClause } from "@/engine/types";
+import type { GameState, Rule, TraitKey, WhatClause } from "@/engine/types";
 
 type Phase =
   "about" | "intro" | "scene" | "decide" | "outcome" | "lesson" | "end";
@@ -34,6 +44,11 @@ interface Pending {
   appliedRuleIds: string[];
   overrode: boolean;
 }
+
+const CHAPTERS = [
+  { title: CHAPTER_1_TITLE, intro: CHAPTER_1_INTRO, situations: CHAPTER_1 },
+  { title: CHAPTER_2_TITLE, intro: CHAPTER_2_INTRO, situations: CHAPTER_2 },
+];
 
 /** How a group shows up, given how much it trusts you. Never a number (§7). */
 function opener(state: GameState, group: keyof GameState["trust"]): string {
@@ -46,6 +61,14 @@ function opener(state: GameState, group: keyof GameState["trust"]): string {
     case "stops-coming":
       return t("app.opener.stops_coming", vars);
   }
+}
+
+/** Recap line for a precedent's past ruling — null governedBy means no rule fired. */
+function pastRuling(governedBy: WhatClause | null): string {
+  if (governedBy === null) return t("precedent.past_ruling_none");
+  return t("precedent.past_ruling", {
+    ruling: findOption(WHAT_OPTIONS, governedBy).label,
+  });
 }
 
 function Action({
@@ -72,20 +95,50 @@ function Action({
   );
 }
 
+/** The banner shown atop write-rule/no-rule when a precedent partially matches. */
+function PrecedentContextBanner({ differences }: { differences: TraitKey[] }) {
+  return (
+    <div className="settle rounded-sm border-r-2 border-lamp bg-dusk p-4">
+      <p className="text-[0.95rem]">{t("precedent.raised_intro")}</p>
+      <p className="mt-2 text-sm text-quiet">
+        {t("precedent.differences_heading")}{" "}
+        {differences.map((key) => t(`trait.${key}`)).join(", ")}
+      </p>
+    </div>
+  );
+}
+
 export default function Page() {
   const [state, setState] = useState<GameState>(initialState);
   const [phase, setPhase] = useState<Phase>("about");
+  const [chapterIndex, setChapterIndex] = useState(0);
   const [index, setIndex] = useState(0);
   const [pending, setPending] = useState<Pending | null>(null);
   const [bookOpen, setBookOpen] = useState(false);
   const [tocOpen, setTocOpen] = useState(false);
 
-  const situation = CHAPTER_1[index];
-  const readCount = phase === "about" || phase === "intro" ? 0 : index + 1;
+  const currentChapter = CHAPTERS[chapterIndex];
+  const hasNextChapter = chapterIndex + 1 < CHAPTERS.length;
+  const situation = currentChapter.situations[index];
   const prompt = useMemo(
-    () => (situation ? promptFor(state, situation, ACTORS) : null),
+    () =>
+      situation ? promptFor(state, situation, ACTORS, SITUATIONS_BY_ID) : null,
     [state, situation],
   );
+
+  const chapterEntries: ChapterEntry[] = CHAPTERS.map((c, i) => ({
+    title: c.title,
+    intro: c.intro,
+    situations: c.situations,
+    readCount:
+      i < chapterIndex
+        ? c.situations.length
+        : i > chapterIndex
+          ? 0
+          : phase === "about" || phase === "intro"
+            ? 0
+            : index + 1,
+  }));
 
   function settle(next: Pending) {
     setPending(next);
@@ -96,7 +149,7 @@ export default function Page() {
     if (!pending || !situation) return;
     setState((s) => resolve(s, { situation, ...pending }));
     setPending(null);
-    if (index + 1 >= CHAPTER_1.length) {
+    if (index + 1 >= currentChapter.situations.length) {
       setPhase("end");
     } else {
       setIndex(index + 1);
@@ -111,6 +164,13 @@ export default function Page() {
       appliedRuleIds: [rule.id],
       overrode: false,
     });
+  }
+
+  function continueToNextChapter() {
+    setState((s) => advanceChapter(s));
+    setChapterIndex((i) => i + 1);
+    setIndex(0);
+    setPhase("intro");
   }
 
   return (
@@ -128,7 +188,7 @@ export default function Page() {
                 {t("app.chapter_progress", {
                   chapter: state.chapter,
                   n: index + 1,
-                  total: CHAPTER_1.length,
+                  total: currentChapter.situations.length,
                 })}
               </p>
             ) : null}
@@ -159,9 +219,9 @@ export default function Page() {
         {phase === "intro" ? (
           <section className="space-y-6">
             <h1 className="font-book text-4xl leading-tight">
-              {CHAPTER_1_TITLE}
+              {currentChapter.title}
             </h1>
-            <p className="text-lg leading-relaxed">{CHAPTER_1_INTRO}</p>
+            <p className="text-lg leading-relaxed">{currentChapter.intro}</p>
             <Action onClick={() => setPhase("scene")}>
               {t("app.intro_continue")}
             </Action>
@@ -183,8 +243,62 @@ export default function Page() {
 
         {phase === "decide" && situation && prompt ? (
           <section className="settle space-y-6">
+            {prompt.kind === "precedent-choice" ? (
+              <PrecedentChoice
+                source={prompt.source}
+                situation={situation}
+                options={situation.precedentOptions ?? []}
+                onPick={(traits) =>
+                  setState((s) =>
+                    activatePrecedent(s, prompt.precedent.id, traits),
+                  )
+                }
+              />
+            ) : null}
+
+            {prompt.kind === "precedent-reminder" ? (
+              <>
+                <p className="text-lg leading-relaxed">
+                  {t("precedent.reminder_intro")}
+                </p>
+                <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
+                  {pastRuling(prompt.precedent.governedBy)}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Action
+                    onClick={() =>
+                      settle({
+                        governedBy: prompt.precedent.governedBy,
+                        appliedRuleIds: [],
+                        overrode: false,
+                      })
+                    }
+                  >
+                    {t("precedent.apply")}
+                  </Action>
+                  <Action
+                    tone="quiet"
+                    onClick={() =>
+                      settle({
+                        governedBy: prompt.precedent.governedBy,
+                        appliedRuleIds: [],
+                        overrode: true,
+                      })
+                    }
+                  >
+                    {t("app.decide.override_rule")}
+                  </Action>
+                </div>
+              </>
+            ) : null}
+
             {prompt.kind === "write-rule" ? (
               <>
+                {prompt.precedentContext ? (
+                  <PrecedentContextBanner
+                    differences={prompt.precedentContext.differences}
+                  />
+                ) : null}
                 <p className="text-lg leading-relaxed">
                   {t("app.decide.write_rule_intro")}
                 </p>
@@ -273,6 +387,11 @@ export default function Page() {
 
             {prompt.kind === "no-rule" ? (
               <>
+                {prompt.precedentContext ? (
+                  <PrecedentContextBanner
+                    differences={prompt.precedentContext.differences}
+                  />
+                ) : null}
                 <p className="text-lg leading-relaxed">
                   {t("app.decide.no_rule_intro")}
                 </p>
@@ -309,18 +428,25 @@ export default function Page() {
               {situation.lesson}
             </p>
             <Action onClick={commit}>
-              {index + 1 >= CHAPTER_1.length
+              {index + 1 >= currentChapter.situations.length
                 ? t("app.lesson.close_chapter")
                 : t("app.lesson.next")}
             </Action>
           </section>
         ) : null}
 
-        {phase === "end" ? <ChapterEnd state={state} /> : null}
+        {phase === "end" ? (
+          <ChapterEnd
+            state={state}
+            onContinue={hasNextChapter ? continueToNextChapter : undefined}
+          />
+        ) : null}
       </div>
 
       <RuleBook
         rules={state.rules}
+        precedents={state.precedents}
+        situationsById={SITUATIONS_BY_ID}
         open={bookOpen}
         onClose={() => setBookOpen(false)}
       />
@@ -328,7 +454,7 @@ export default function Page() {
       <TableOfContents
         open={tocOpen}
         onClose={() => setTocOpen(false)}
-        readCount={readCount}
+        chapters={chapterEntries}
       />
     </main>
   );
