@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import LinkedText from "@/components/LinkedText";
 import { t } from "@/content/tokens";
 import {
   ABOUT_ME_TEXT,
@@ -208,7 +209,7 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                   {situationLocation.situation.title}
                 </h3>
                 <p className="leading-relaxed">
-                  {situationLocation.situation.text}
+                  <LinkedText text={situationLocation.situation.text} />
                 </p>
               </div>
             ) : null}

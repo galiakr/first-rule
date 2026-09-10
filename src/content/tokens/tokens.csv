@@ -189,3 +189,6 @@ rulebook.precedent_entry,"One precedent in the rule book list. {title}=the past 
 rulebook.precedent_no_ruling,Shown in the rule book when a precedent's past case had no rule apply,שום כלל לא חל,
 toc.chapter_number,Small label above a chapter's title in the table of contents. {n}=chapter number,פרק {n},
 toc.situation_number,Small label above a situation's title in the table of contents. {n}=situation number within its chapter,מצב {n},
+about.name_prompt,Label above the village-naming input on the about screen,איך תרצה לקרוא לכפר הזה?,
+about.name_placeholder,"Placeholder in the village-naming input, and the fallback name used if left blank",הכפר,
+character.non_resident,Shown in a character's hover tooltip when they don't live in the village (only נעם today),לא גר בכפר,

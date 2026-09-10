@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import AboutVillage from "@/components/AboutVillage";
 import ChapterEnd from "@/components/ChapterEnd";
+import LinkedText from "@/components/LinkedText";
 import PrecedentChoice from "@/components/PrecedentChoice";
 import RuleBook from "@/components/RuleBook";
 import RuleBuilder from "@/components/RuleBuilder";
@@ -110,6 +111,7 @@ function PrecedentContextBanner({ differences }: { differences: TraitKey[] }) {
 
 export default function Page() {
   const [state, setState] = useState<GameState>(initialState);
+  const [villageName, setVillageName] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("about");
   const [chapterIndex, setChapterIndex] = useState(0);
   const [index, setIndex] = useState(0);
@@ -179,6 +181,9 @@ export default function Page() {
         <div className="flex items-baseline justify-between">
           <div className="flex items-baseline gap-3">
             <p className="font-book text-lg text-lamp">{t("app.title")}</p>
+            {villageName ? (
+              <p className="text-sm text-quiet">{villageName}</p>
+            ) : null}
             {situation &&
             (phase === "scene" ||
               phase === "decide" ||
@@ -213,7 +218,12 @@ export default function Page() {
         </div>
 
         {phase === "about" ? (
-          <AboutVillage onContinue={() => setPhase("intro")} />
+          <AboutVillage
+            onContinue={(name) => {
+              setVillageName(name);
+              setPhase("intro");
+            }}
+          />
         ) : null}
 
         {phase === "intro" ? (
@@ -234,7 +244,9 @@ export default function Page() {
               {opener(state, situation.speakerGroup)}
             </p>
             <h2 className="font-book text-2xl">{situation.title}</h2>
-            <p className="text-lg leading-relaxed">{situation.text}</p>
+            <p className="text-lg leading-relaxed">
+              <LinkedText text={situation.text} />
+            </p>
             <Action onClick={() => setPhase("decide")}>
               {t("app.scene_continue")}
             </Action>
@@ -414,7 +426,12 @@ export default function Page() {
         {phase === "outcome" && situation && pending ? (
           <section className="settle space-y-6">
             <p className="text-lg leading-relaxed">
-              {outcomeFor(situation, pending.governedBy, pending.overrode).text}
+              <LinkedText
+                text={
+                  outcomeFor(situation, pending.governedBy, pending.overrode)
+                    .text
+                }
+              />
             </p>
             <Action onClick={() => setPhase("lesson")}>
               {t("app.outcome.continue")}
@@ -425,7 +442,7 @@ export default function Page() {
         {phase === "lesson" && situation ? (
           <section className="settle space-y-6">
             <p className="border-r-2 border-lamp pe-4 ps-1 text-lg leading-relaxed">
-              {situation.lesson}
+              <LinkedText text={situation.lesson} />
             </p>
             <Action onClick={commit}>
               {index + 1 >= currentChapter.situations.length
