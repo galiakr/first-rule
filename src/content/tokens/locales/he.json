@@ -242,7 +242,9 @@
     "rule_number": "כלל {n}"
   },
   "toc": {
-    "not_reached": "(עוד לא הגעת)"
+    "chapter_number": "פרק {n}",
+    "not_reached": "(עוד לא הגעת)",
+    "situation_number": "מצב {n}"
   },
   "trait": {
     "act": "סוג המעשה",

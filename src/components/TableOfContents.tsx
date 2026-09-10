@@ -26,6 +26,22 @@ type Entry =
   | { key: "intro"; chapterIndex: number }
   | { key: "situation"; id: string };
 
+function findSituation(chapters: ChapterEntry[], id: string) {
+  for (let chapterIndex = 0; chapterIndex < chapters.length; chapterIndex++) {
+    const situationIndex = chapters[chapterIndex].situations.findIndex(
+      (s) => s.id === id,
+    );
+    if (situationIndex !== -1) {
+      return {
+        chapterIndex,
+        situationIndex,
+        situation: chapters[chapterIndex].situations[situationIndex],
+      };
+    }
+  }
+  return null;
+}
+
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -47,12 +63,8 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
     onClose();
   }
 
-  const situation =
-    selected?.key === "situation"
-      ? (chapters
-          .flatMap((c) => c.situations)
-          .find((s) => s.id === selected.id) ?? null)
-      : null;
+  const situationLocation =
+    selected?.key === "situation" ? findSituation(chapters, selected.id) : null;
 
   return (
     <div
@@ -101,6 +113,9 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                         }
                         className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
                       >
+                        <span className="block text-xs font-ui text-ink/50">
+                          {t("toc.chapter_number", { n: chapterIndex + 1 })}
+                        </span>
                         {chapter.title}
                       </button>
                     </li>
@@ -120,6 +135,9 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                                 : "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed text-ink/35"
                             }
                           >
+                            <span className="block text-xs font-ui text-ink/40">
+                              {t("toc.situation_number", { n: i + 1 })}
+                            </span>
                             {s.title}
                             {!read ? (
                               <span className="ms-2 text-sm text-ink/40">
@@ -163,6 +181,9 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
 
             {selected.key === "intro" ? (
               <div className="space-y-4">
+                <p className="text-sm text-ink/50">
+                  {t("toc.chapter_number", { n: selected.chapterIndex + 1 })}
+                </p>
                 <h3 className="font-book text-xl">
                   {chapters[selected.chapterIndex].title}
                 </h3>
@@ -172,10 +193,23 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
               </div>
             ) : null}
 
-            {situation ? (
+            {situationLocation ? (
               <div className="space-y-4">
-                <h3 className="font-book text-xl">{situation.title}</h3>
-                <p className="leading-relaxed">{situation.text}</p>
+                <p className="text-sm text-ink/50">
+                  {t("toc.chapter_number", {
+                    n: situationLocation.chapterIndex + 1,
+                  })}{" "}
+                  ·{" "}
+                  {t("toc.situation_number", {
+                    n: situationLocation.situationIndex + 1,
+                  })}
+                </p>
+                <h3 className="font-book text-xl">
+                  {situationLocation.situation.title}
+                </h3>
+                <p className="leading-relaxed">
+                  {situationLocation.situation.text}
+                </p>
               </div>
             ) : null}
           </div>
