@@ -7,6 +7,7 @@ import ChapterEnd from "@/components/ChapterEnd";
 import RuleBook from "@/components/RuleBook";
 import RuleBuilder from "@/components/RuleBuilder";
 import TableOfContents from "@/components/TableOfContents";
+import { t } from "@/content/tokens";
 import {
   CHAPTER_1,
   CHAPTER_1_INTRO,
@@ -36,14 +37,14 @@ interface Pending {
 
 /** How a group shows up, given how much it trusts you. Never a number (§7). */
 function opener(state: GameState, group: keyof GameState["trust"]): string {
-  const name = GROUP_LABEL[group];
+  const vars = { group: GROUP_LABEL[group] };
   switch (trustLevel(state.trust[group])) {
     case "comes-to-you":
-      return `${name} באו אליך ראשונים, וסיפרו הכול.`;
+      return t("app.opener.comes_to_you", vars);
     case "comes-but":
-      return `${name} התלבטו לפני שבאו, וסיפרו רק חלק.`;
+      return t("app.opener.comes_but", vars);
     case "stops-coming":
-      return `${name} לא באו לספר לך. שמעת על זה אחר כך, ממישהו אחר.`;
+      return t("app.opener.stops_coming", vars);
   }
 }
 
@@ -117,14 +118,18 @@ export default function Page() {
       <div className="mx-auto w-full max-w-read space-y-8">
         <div className="flex items-baseline justify-between">
           <div className="flex items-baseline gap-3">
-            <p className="font-book text-lg text-lamp">כלל ראשון</p>
+            <p className="font-book text-lg text-lamp">{t("app.title")}</p>
             {situation &&
             (phase === "scene" ||
               phase === "decide" ||
               phase === "outcome" ||
               phase === "lesson") ? (
               <p className="text-sm text-quiet">
-                פרק {state.chapter} · מצב {index + 1} מתוך {CHAPTER_1.length}
+                {t("app.chapter_progress", {
+                  chapter: state.chapter,
+                  n: index + 1,
+                  total: CHAPTER_1.length,
+                })}
               </p>
             ) : null}
           </div>
@@ -134,14 +139,14 @@ export default function Page() {
               onClick={() => setTocOpen(true)}
               className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
             >
-              תוכן העניינים
+              {t("app.toc_button")}
             </button>
             <button
               type="button"
               onClick={() => setBookOpen(true)}
               className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
             >
-              ספר הכללים
+              {t("app.rulebook_button")}
               {state.rules.length > 0 ? ` (${state.rules.length})` : ""}
             </button>
           </div>
@@ -157,7 +162,9 @@ export default function Page() {
               {CHAPTER_1_TITLE}
             </h1>
             <p className="text-lg leading-relaxed">{CHAPTER_1_INTRO}</p>
-            <Action onClick={() => setPhase("scene")}>להתחיל</Action>
+            <Action onClick={() => setPhase("scene")}>
+              {t("app.intro_continue")}
+            </Action>
           </section>
         ) : null}
 
@@ -168,7 +175,9 @@ export default function Page() {
             </p>
             <h2 className="font-book text-2xl">{situation.title}</h2>
             <p className="text-lg leading-relaxed">{situation.text}</p>
-            <Action onClick={() => setPhase("decide")}>אז מה עושים</Action>
+            <Action onClick={() => setPhase("decide")}>
+              {t("app.scene_continue")}
+            </Action>
           </section>
         ) : null}
 
@@ -177,8 +186,7 @@ export default function Page() {
             {prompt.kind === "write-rule" ? (
               <>
                 <p className="text-lg leading-relaxed">
-                  אין שום כלל שנוגע בזה. אתה יכול לכתוב אחד עכשיו — והוא יישאר
-                  בספר.
+                  {t("app.decide.write_rule_intro")}
                 </p>
                 <RuleBuilder
                   subject={situation.subject}
@@ -199,7 +207,7 @@ export default function Page() {
             {prompt.kind === "rule-applies" ? (
               <>
                 <p className="text-lg leading-relaxed">
-                  יש כלל בספר שחל על זה. אתה כתבת אותו.
+                  {t("app.decide.rule_applies_intro")}
                 </p>
                 <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
                   {ruleSentence(prompt.rules[0])}
@@ -214,7 +222,7 @@ export default function Page() {
                       })
                     }
                   >
-                    להפעיל את הכלל
+                    {t("app.decide.apply_rule")}
                   </Action>
                   <Action
                     tone="quiet"
@@ -226,7 +234,7 @@ export default function Page() {
                       })
                     }
                   >
-                    להחליט אחרת הפעם
+                    {t("app.decide.override_rule")}
                   </Action>
                 </div>
               </>
@@ -235,7 +243,7 @@ export default function Page() {
             {prompt.kind === "collision" ? (
               <>
                 <p className="text-lg leading-relaxed">
-                  שני כללים שכתבת חלים כאן, והם אומרים דברים הפוכים.
+                  {t("app.decide.collision_intro")}
                 </p>
                 <div className="space-y-3">
                   {prompt.rules.map((rule) => (
@@ -257,8 +265,7 @@ export default function Page() {
                 </div>
                 {prompt.firstTime ? (
                   <p className="border-r-2 border-lamp ps-1 pe-4 text-quiet">
-                    לפעמים רואים מראש שכלל חדש מתנגש בישן. לפעמים מגלים רק כשזה
-                    כבר קרה למישהו.
+                    {t("app.decide.collision_first_time_note")}
                   </p>
                 ) : null}
               </>
@@ -267,7 +274,7 @@ export default function Page() {
             {prompt.kind === "no-rule" ? (
               <>
                 <p className="text-lg leading-relaxed">
-                  אין בספר שום כלל שנוגע בזה. אף אחד לא כתב אחד בזמנו.
+                  {t("app.decide.no_rule_intro")}
                 </p>
                 <Action
                   onClick={() =>
@@ -278,7 +285,7 @@ export default function Page() {
                     })
                   }
                 >
-                  להמשיך
+                  {t("app.decide.continue")}
                 </Action>
               </>
             ) : null}
@@ -290,7 +297,9 @@ export default function Page() {
             <p className="text-lg leading-relaxed">
               {outcomeFor(situation, pending.governedBy, pending.overrode).text}
             </p>
-            <Action onClick={() => setPhase("lesson")}>ואז</Action>
+            <Action onClick={() => setPhase("lesson")}>
+              {t("app.outcome.continue")}
+            </Action>
           </section>
         ) : null}
 
@@ -300,7 +309,9 @@ export default function Page() {
               {situation.lesson}
             </p>
             <Action onClick={commit}>
-              {index + 1 >= CHAPTER_1.length ? "לסגור את הפרק" : "הלאה"}
+              {index + 1 >= CHAPTER_1.length
+                ? t("app.lesson.close_chapter")
+                : t("app.lesson.next")}
             </Action>
           </section>
         ) : null}

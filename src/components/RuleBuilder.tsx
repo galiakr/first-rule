@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { t } from "@/content/tokens";
 import { textualConflict } from "@/engine/conflict";
 import { ruleSentence } from "@/engine/match";
 import {
@@ -135,13 +136,20 @@ export default function RuleBuilder({
       ? fill(findOption(CONSEQUENCE_OPTIONS, consequence).template, subject)
       : null,
   ];
-  const blanks = ["מי", "מה", "מתי", "ואם לא"];
+  const blanks = [
+    t("builder.blank_who"),
+    t("builder.blank_what"),
+    t("builder.blank_when"),
+    t("builder.blank_consequence"),
+  ];
 
   return (
     <div className="space-y-6">
       <div className="rounded-sm bg-paper p-5 text-ink">
         <p className="mb-1 text-sm text-ink/60">
-          הכלל שאתה כותב, על {SUBJECT_FORMS[subject].label}
+          {t("builder.subject_prefix", {
+            subject: SUBJECT_FORMS[subject].label,
+          })}
         </p>
         <p className="font-book text-[1.35rem] leading-relaxed">
           {parts.map((part, i) => (
@@ -150,14 +158,14 @@ export default function RuleBuilder({
                 <span className="rule-slot text-ink/35">{blanks[i]}</span>
               )}
               {i === 0 ? " " : i === 3 ? "." : ", "}
-              {i === 2 ? "אם לא — " : null}
+              {i === 2 ? t("builder.when_connector") : null}
             </span>
           ))}
         </p>
       </div>
 
       <Field
-        legend="על מי זה חל"
+        legend={t("builder.legend_who")}
         options={WHO_OPTIONS}
         value={scope}
         onPick={(v) => {
@@ -168,22 +176,27 @@ export default function RuleBuilder({
 
       {needsGroup ? (
         <Field
-          legend="איזו קבוצה"
+          legend={t("builder.legend_group")}
           options={GROUPS.map((g) => ({ value: g, label: GROUP_LABEL[g] }))}
           value={group}
           onPick={setGroup}
         />
       ) : null}
 
-      <Field legend="מה" options={WHAT_OPTIONS} value={what} onPick={setWhat} />
       <Field
-        legend="מתי"
+        legend={t("builder.legend_what")}
+        options={WHAT_OPTIONS}
+        value={what}
+        onPick={setWhat}
+      />
+      <Field
+        legend={t("builder.legend_when")}
         options={WHEN_OPTIONS}
         value={when}
         onPick={setWhen}
       />
       <Field
-        legend="ואם לא"
+        legend={t("builder.legend_consequence")}
         options={CONSEQUENCE_OPTIONS}
         value={consequence}
         onPick={setConsequence}
@@ -191,16 +204,11 @@ export default function RuleBuilder({
 
       {clashes.length > 0 ? (
         <div className="settle rounded-sm border-r-2 border-harm bg-dusk p-4">
-          <p className="mb-2 text-[0.95rem]">
-            זה לא יכול לחיות יחד עם כלל שכבר כתבת:
-          </p>
+          <p className="mb-2 text-[0.95rem]">{t("builder.clash_intro")}</p>
           <p className="font-book text-[1.05rem] text-lamp">
             {ruleSentence(clashes[0])}
           </p>
-          <p className="mt-2 text-sm text-quiet">
-            אפשר לכתוב אותו בכל זאת. שני הכללים יישארו בספר, ומישהו יצטרך להחליט
-            איזה מהם עובד.
-          </p>
+          <p className="mt-2 text-sm text-quiet">{t("builder.clash_note")}</p>
         </div>
       ) : null}
 
@@ -211,14 +219,14 @@ export default function RuleBuilder({
           onClick={() => draft && onWrite(draft)}
           className="rounded-sm bg-lamp px-5 py-2.5 text-night disabled:cursor-not-allowed disabled:bg-moss disabled:text-quiet"
         >
-          לכתוב את זה בספר
+          {t("builder.write")}
         </button>
         <button
           type="button"
           onClick={onSkip}
           className="rounded-sm px-4 py-2.5 text-quiet underline underline-offset-4 hover:text-paper"
         >
-          לא לכתוב כלל הפעם
+          {t("builder.skip")}
         </button>
       </div>
     </div>

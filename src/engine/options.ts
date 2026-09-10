@@ -5,8 +5,17 @@
  * assembled rule; `{et}`, `{be}` and `{group}` are filled in, so the four picks
  * together form one Hebrew sentence.
  *
+ * `label` and `GROUP_LABEL` come from the language tokens (src/content/tokens)
+ * since they're plain text. `template` and `SUBJECT_FORMS` stay hardcoded
+ * Hebrew — they encode Hebrew grammatical case (accusative/prepositional
+ * forms of the subject), not just wording, so translating them is a sentence-
+ * composer redesign, not a token swap. Out of scope until a second language
+ * is actually being wired up.
+ *
  * Do not add a fifth option to any field without a situation that pinches it.
  */
+
+import { t } from "@/content/tokens";
 
 import type {
   ConsequenceClause,
@@ -25,16 +34,20 @@ export interface Option<T extends string> {
 }
 
 export const WHO_OPTIONS: Option<WhoScope>[] = [
-  { value: "residents", label: "מי שגר בכפר", template: "מי שגר בכפר" },
+  {
+    value: "residents",
+    label: t("builder.who.residents"),
+    template: "מי שגר בכפר",
+  },
   {
     value: "anyone-present",
-    label: "כל מי שנמצא כאן עכשיו",
+    label: t("builder.who.anyone_present"),
     template: "כל מי שנמצא כאן עכשיו",
   },
-  { value: "group", label: "קבוצה מסוימת", template: "כל {group}" },
+  { value: "group", label: t("builder.who.group"), template: "כל {group}" },
   {
     value: "everyone-except",
-    label: "כולם חוץ מ־",
+    label: t("builder.who.everyone_except"),
     template: "כולם חוץ מ{group}",
   },
 ];
@@ -42,37 +55,41 @@ export const WHO_OPTIONS: Option<WhoScope>[] = [
 export const WHAT_OPTIONS: Option<WhatClause>[] = [
   {
     value: "ask-first",
-    label: "אסור לקחת בלי לבקש",
+    label: t("builder.what.ask_first"),
     template: "לא ייקח {et} בלי לבקש",
   },
-  { value: "forbidden", label: "אסור בכלל", template: "לא ייגע {be} בכלל" },
+  {
+    value: "forbidden",
+    label: t("builder.what.forbidden"),
+    template: "לא ייגע {be} בכלל",
+  },
   {
     value: "by-turn",
-    label: "מותר, אבל לפי תור",
+    label: t("builder.what.by_turn"),
     template: "ייקח {et} לפי תור",
   },
   {
     value: "share-equally",
-    label: "חייבים לחלוק שווה",
+    label: t("builder.what.share_equally"),
     template: "יחלוק {et} שווה בשווה",
   },
 ];
 
 export const WHEN_OPTIONS: Option<WhenClause>[] = [
-  { value: "always", label: "תמיד", template: "תמיד" },
+  { value: "always", label: t("builder.when.always"), template: "תמיד" },
   {
     value: "when-scarce",
-    label: "רק כשאין מספיק לכולם",
+    label: t("builder.when.when_scarce"),
     template: "רק כשאין מספיק לכולם",
   },
   {
     value: "when-harmed",
-    label: "רק אם מישהו נפגע מזה",
+    label: t("builder.when.when_harmed"),
     template: "רק אם מישהו נפגע מזה",
   },
   {
     value: "first-time-forgiven",
-    label: "בפעם הראשונה סולחים",
+    label: t("builder.when.first_time_forgiven"),
     template: "מהפעם השנייה והלאה",
   },
 ];
@@ -80,27 +97,27 @@ export const WHEN_OPTIONS: Option<WhenClause>[] = [
 export const CONSEQUENCE_OPTIONS: Option<ConsequenceClause>[] = [
   {
     value: "return-or-fix",
-    label: "צריך להחזיר או לתקן",
+    label: t("builder.consequence.return_or_fix"),
     template: "יצטרך להחזיר או לתקן",
   },
   {
     value: "help-victim",
-    label: "צריך לעזור לנפגע יום אחד",
+    label: t("builder.consequence.help_victim"),
     template: "יצטרך לעזור לנפגע יום אחד",
   },
   {
     value: "lose-next-turn",
-    label: "מפסיד את הזכות לזה בפעם הבאה",
+    label: t("builder.consequence.lose_next_turn"),
     template: "יפסיד את הזכות לזה בפעם הבאה",
   },
   {
     value: "village-decides",
-    label: "הכפר מחליט בכל מקרה לגופו",
+    label: t("builder.consequence.village_decides"),
     template: "הכפר יחליט בכל מקרה לגופו",
   },
 ];
 
-/** The subject is inherited from the situation, never picked (§6). */
+/** The subject is inherited from the situation, never chosen (§6). */
 export interface SubjectForms {
   label: string;
   /** Accusative: "את המים". */
@@ -126,12 +143,12 @@ export const SUBJECT_FORMS: Record<Subject, SubjectForms> = {
 };
 
 export const GROUP_LABEL: Record<GroupId, string> = {
-  vatikim: "הוותיקים",
-  hadashim: "החדשים",
-  roim: "הרועים",
-  banaim: "הבנאים",
-  yeladim: "הילדים",
-  ovrim: "העוברים",
+  vatikim: t("village.groups.vatikim.label"),
+  hadashim: t("village.groups.hadashim.label"),
+  roim: t("village.groups.roim.label"),
+  banaim: t("village.groups.banaim.label"),
+  yeladim: t("village.groups.yeladim.label"),
+  ovrim: t("village.groups.ovrim.label"),
 };
 
 export function findOption<T extends string>(

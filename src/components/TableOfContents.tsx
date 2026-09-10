@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { t } from "@/content/tokens";
 import {
   ABOUT_ME_TEXT,
   ABOUT_TITLE,
@@ -49,23 +50,23 @@ export default function TableOfContents({ open, onClose, readCount }: Props) {
     <div
       className="fixed inset-0 z-20 flex"
       role="dialog"
-      aria-label="תוכן העניינים"
+      aria-label={t("app.toc_button")}
     >
       <button
         type="button"
-        aria-label="לסגור"
+        aria-label={t("common.close")}
         onClick={close}
         className="flex-1 bg-night/70"
       />
       <div className="settle w-full max-w-md overflow-y-auto bg-paper p-6 text-ink shadow-2xl sm:p-8">
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="font-book text-2xl">תוכן העניינים</h2>
+          <h2 className="font-book text-2xl">{t("app.toc_button")}</h2>
           <button
             type="button"
             onClick={close}
             className="text-sm text-ink/60 underline underline-offset-4"
           >
-            לסגור
+            {t("common.close")}
           </button>
         </div>
 
@@ -109,7 +110,7 @@ export default function TableOfContents({ open, onClose, readCount }: Props) {
                       {s.title}
                       {!read ? (
                         <span className="ms-2 text-sm text-ink/40">
-                          (עוד לא הגעת)
+                          {t("toc.not_reached")}
                         </span>
                       ) : null}
                     </button>
@@ -125,7 +126,7 @@ export default function TableOfContents({ open, onClose, readCount }: Props) {
               onClick={() => setSelected(null)}
               className="text-sm text-ink/60 underline underline-offset-4"
             >
-              חזרה לרשימה
+              {t("common.back_to_list")}
             </button>
 
             {selected.key === "about" ? (

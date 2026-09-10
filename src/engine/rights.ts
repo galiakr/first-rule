@@ -6,6 +6,8 @@
  * only as one of three ways a group behaves toward the child.
  */
 
+import { t } from "@/content/tokens";
+
 import type {
   GroupId,
   Protection,
@@ -26,12 +28,12 @@ export const PROTECTIONS: Protection[] = [
 ];
 
 export const PROTECTION_LABEL: Record<Protection, string> = {
-  kinyan: "קניין",
-  bitui: "ביטוי",
-  shivyon: "שוויון בפני החוק",
-  machse: "מחסה",
-  halich: "הליך הוגן",
-  shayachut: "שייכות",
+  kinyan: t("rights.protections.kinyan"),
+  bitui: t("rights.protections.bitui"),
+  shivyon: t("rights.protections.shivyon"),
+  machse: t("rights.protections.machse"),
+  halich: t("rights.protections.halich"),
+  shayachut: t("rights.protections.shayachut"),
 };
 
 export const GROUPS: GroupId[] = [
@@ -44,9 +46,9 @@ export const GROUPS: GroupId[] = [
 ];
 
 export const STATE_LABEL: Record<ProtectionState, string> = {
-  intact: "שלמה",
-  strained: "מתוחה",
-  broken: "שבורה",
+  intact: t("rights.states.intact"),
+  strained: t("rights.states.strained"),
+  broken: t("rights.states.broken"),
 };
 
 export function rightsKey(protection: Protection, group: GroupId): string {

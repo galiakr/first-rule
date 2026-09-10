@@ -18,9 +18,9 @@ step that does this automatically.
 
 ## Log
 
-| Date | Project | Skill | Outcome | Detail | Ref |
-| ---- | ------- | ----- | ------- | ------ | --- |
-|      |         |       |         |        |     |
+| Date       | Project    | Skill           | Outcome      | Detail                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Ref |
+| ---------- | ---------- | --------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| 2026-09-09 | first-rule | language-tokens | Action taken | Centralized 130 hard-coded Hebrew strings (UI chrome across page.tsx/RuleBook/TableOfContents/AboutVillage/ChapterEnd/RuleBuilder, plus all of Chapter 1's situation content) into src/content/tokens/tokens.csv, generating locales/he.json (complete) and locales/en.json (130/130 blank, pending a translator). Deliberately excluded: options.ts's WHAT/WHO/WHEN/CONSEQUENCE `template` fields and SUBJECT_FORMS — these encode Hebrew grammatical case, not just wording, so translating them needs a sentence-composer redesign, not a token swap. |     |
 
 ## How to add a row
 

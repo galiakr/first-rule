@@ -1,3 +1,4 @@
+import { t } from "@/content/tokens";
 import {
   ABOUT_ME_TEXT,
   ABOUT_TITLE,
@@ -46,7 +47,7 @@ export default function AboutVillage({
         onClick={onContinue}
         className="rounded-sm bg-lamp px-5 py-2.5 text-night"
       >
-        להיכנס לכפר
+        {t("about.enter_village")}
       </button>
     </section>
   );

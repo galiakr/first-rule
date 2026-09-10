@@ -26,6 +26,7 @@ src/
     rights.ts      the rights board and trust
     game.ts        the reducer: what's asked, what happens, what's saved
   content/         the village and Chapter 1 — data only (content/chapter1.ts, content/village.ts)
+    tokens/        language tokens: tokens.csv (source), generate.py, locales/*.json (generated), t()
   components/      rule builder, rule book, table of contents, chapter end, about screen
   app/             single-screen state machine driving the chapter (src/app/page.tsx)
 ```
@@ -152,7 +153,7 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
 - [ ] Chapters 2–7 are not built yet (precedents, elections, separation of powers, constitutional amendment, save state — see README "מה עוד לא כאן")
-- [ ] No English localization yet — all copy is inline Hebrew string constants in `src/content/`, not yet centralized into a single token source. Candidate for the `language-tokens` skill once a second language is actually planned
+- [ ] No English localization yet. UI chrome and Chapter 1 content are centralized in `src/content/tokens/tokens.csv` (he complete, en blank) — a translator can fill the `en` column and regenerate `locales/en.json`. `options.ts`'s rule-sentence `template` fields and `SUBJECT_FORMS` are deliberately still hardcoded Hebrew (grammatical case, not just wording) and need a sentence-composer redesign before a second language can actually ship
 - [ ] No component or e2e tests yet — RTL/Playwright are wired up but unused
 - [ ] Coverage threshold not yet enforced (see Testing section above)
 

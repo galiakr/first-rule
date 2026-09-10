@@ -1,12 +1,13 @@
+import { t } from "@/content/tokens";
 import type { Actor, GroupId } from "@/engine/types";
 
 export const GROUP_BLURB: Record<GroupId, string> = {
-  vatikim: "היו כאן ראשונים, ומרגישים שמגיע להם קודם",
-  hadashim: "הגיעו לא מזמן, ואין להם עדיין כלום מוסכם",
-  roim: "צריכים שטח ומים, ונעים בין המקומות",
-  banaim: "רוצים לשנות דברים, ומהר",
-  yeladim: "אף אחד לא שואל אותם",
-  ovrim: "לא גרים כאן. רק עוברים",
+  vatikim: t("village.groups.vatikim.blurb"),
+  hadashim: t("village.groups.hadashim.blurb"),
+  roim: t("village.groups.roim.blurb"),
+  banaim: t("village.groups.banaim.blurb"),
+  yeladim: t("village.groups.yeladim.blurb"),
+  ovrim: t("village.groups.ovrim.blurb"),
 };
 
 /**
@@ -14,16 +15,11 @@ export const GROUP_BLURB: Record<GroupId, string> = {
  * moves them, not by role — and says what the child's own role is not:
  * nobody appointed it.
  */
-export const ABOUT_TITLE = "הכפר, לפני שנכנסים";
+export const ABOUT_TITLE = t("about.title");
 
-export const ABOUT_VILLAGE_TEXT =
-  "כפר קטן, בלי חומה ובלי שער. שש קבוצות גרות בו, חוץ מאחת שרק עוברת דרכו — " +
-  "ולכל אחת יש דבר אחר שמטריד אותה.";
+export const ABOUT_VILLAGE_TEXT = t("about.village_text");
 
-export const ABOUT_ME_TEXT =
-  "אף אחד לא מינה אותך לשום דבר. אין לך תואר, ואין שום דבר שמונע ממישהו אחר " +
-  "בכפר לעשות בדיוק את מה שאתה עושה. אתה פשוט מי שכולם באים אליו כשמשהו " +
-  "נתקע — וזה יימשך רק כל עוד הם ממשיכים לבוא.";
+export const ABOUT_ME_TEXT = t("about.me_text");
 
 export const ACTORS: Record<string, Actor> = {
   yotam: {

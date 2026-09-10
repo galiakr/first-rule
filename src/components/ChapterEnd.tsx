@@ -1,5 +1,6 @@
 "use client";
 
+import { t } from "@/content/tokens";
 import { ruleSentence } from "@/engine/match";
 import { GROUP_LABEL } from "@/engine/options";
 import { GROUPS, PROTECTION_LABEL, STATE_LABEL, harmed } from "@/engine/rights";
@@ -17,17 +18,16 @@ export default function ChapterEnd({ state }: { state: GameState }) {
   return (
     <div className="space-y-10">
       <header className="space-y-3">
-        <p className="text-sm text-quiet">סוף פרק ראשון</p>
+        <p className="text-sm text-quiet">{t("chapter_end.subtitle")}</p>
         <h2 className="font-book text-3xl leading-tight">
-          הכפר קורא את מה שכתבת
+          {t("chapter_end.title")}
         </h2>
       </header>
 
       <section className="rounded-sm bg-paper p-6 text-ink">
         {state.rules.length === 0 ? (
           <p className="font-book text-lg leading-relaxed">
-            לא נכתב אף כלל. הכפר נשאר בדיוק כמו שהיה, וכל דבר הוכרע מחדש בכל
-            פעם.
+            {t("chapter_end.no_rules")}
           </p>
         ) : (
           <ol className="space-y-5">
@@ -45,9 +45,11 @@ export default function ChapterEnd({ state }: { state: GameState }) {
       </section>
 
       <section className="space-y-4">
-        <h3 className="font-book text-xl">את מי הכללים האלה השאירו בחוץ</h3>
+        <h3 className="font-book text-xl">
+          {t("chapter_end.left_out_heading")}
+        </h3>
         {harm.length === 0 ? (
-          <p className="text-quiet">אף הגנה לא נשברה ולא נמתחה בפרק הזה.</p>
+          <p className="text-quiet">{t("chapter_end.no_harm")}</p>
         ) : (
           <ul className="space-y-2">
             {harm.map((h) => (
@@ -63,9 +65,15 @@ export default function ChapterEnd({ state }: { state: GameState }) {
                   {STATE_LABEL[h.state]}
                 </span>
                 <span className="font-book text-lg">
-                  הזכות ל{PROTECTION_LABEL[h.protection]}
+                  {t("chapter_end.protection_prefix", {
+                    protection: PROTECTION_LABEL[h.protection],
+                  })}
                 </span>
-                <span className="text-quiet">— אצל {GROUP_LABEL[h.group]}</span>
+                <span className="text-quiet">
+                  {t("chapter_end.group_prefix", {
+                    group: GROUP_LABEL[h.group],
+                  })}
+                </span>
               </li>
             ))}
           </ul>
@@ -74,17 +82,19 @@ export default function ChapterEnd({ state }: { state: GameState }) {
 
       {untouched.length > 0 ? (
         <section className="space-y-2">
-          <h3 className="font-book text-xl">ואת מי הם הגנו</h3>
+          <h3 className="font-book text-xl">
+            {t("chapter_end.protected_heading")}
+          </h3>
           <p className="text-quiet">
-            {untouched.map((g) => GROUP_LABEL[g]).join(", ")} יצאו מהפרק הזה עם
-            כל ההגנות שלמות.
+            {t("chapter_end.protected_text", {
+              groups: untouched.map((g) => GROUP_LABEL[g]).join(", "),
+            })}
           </p>
         </section>
       ) : null}
 
       <p className="max-w-read border-t border-moss pt-6 text-quiet">
-        זה הפרק הראשון. הכללים שכתבת נשארים בספר, והם ימשיכו לחול גם בפרקים
-        הבאים — גם כשלא יתאים לך.
+        {t("chapter_end.closing_note")}
       </p>
     </div>
   );

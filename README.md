@@ -31,6 +31,8 @@ src/
     rights.ts      the rights board and trust
     game.ts        reducer: what's asked, what happens, what's saved
   content/         the village and Chapter 1 — data only
+    tokens/        language tokens: tokens.csv is the source of truth, generate.py builds
+                   locales/*.json from it, t() reads them (he complete, en blank)
   components/      rule builder, rule book, table of contents, chapter end, about screen
   app/             a single screen with the chapter's state machine
 ```
