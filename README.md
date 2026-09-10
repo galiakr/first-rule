@@ -4,7 +4,7 @@ A civics game for kids aged 8–12. The child arrives in a village with no
 rules, writes the rules themselves — and then lives with them.
 
 This is **Chapter 1 only** ("No Rules"), out of seven. The full design is in
-`design-first-rule.md` at the root of this repo.
+`docs/design.md`.
 
 ## Running it
 

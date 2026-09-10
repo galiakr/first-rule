@@ -4,7 +4,7 @@
 
 ## Project context
 
-כלל ראשון · First Rule — a Hebrew, RTL civics/democracy game for kids 8–12. A child arrives in a village with no rules, writes them over the course of the game, and lives under them. Chapter 1 of a planned seven is implemented. Design source of truth: `design-first-rule.md` at the repo root.
+כלל ראשון · First Rule — a Hebrew, RTL civics/democracy game for kids 8–12. A child arrives in a village with no rules, writes them over the course of the game, and lives under them. Chapter 1 of a planned seven is implemented. Design source of truth: `docs/design.md`.
 
 ## Stack
 
@@ -21,7 +21,7 @@ Next.js 16 (App Router, Turbopack) · React 19.2 · TypeScript · Tailwind CSS 4
 
 ## Game-design invariants
 
-Read `design-first-rule.md` before changing `src/engine/` or `src/content/`. Key ones enforced by tests: the rule builder is closed at 16 options (4 fields × 4), every writable rule needs a future situation where it costs the child ("the pinch", §7), rights are states (`intact`/`strained`/`broken`) never points, and trust is never shown as a number.
+Read `docs/design.md` before changing `src/engine/` or `src/content/`. Key ones enforced by tests: the rule builder is closed at 16 options (4 fields × 4), every writable rule needs a future situation where it costs the child ("the pinch", §7), rights are states (`intact`/`strained`/`broken`) never points, and trust is never shown as a number.
 
 ## When writing tests
 

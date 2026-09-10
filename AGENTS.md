@@ -6,7 +6,7 @@
 
 ## What this project is
 
-A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `design-first-rule.md` at the repo root — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapter 1 ("אין כללים") of a planned seven.
+A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapter 1 ("אין כללים") of a planned seven.
 
 ## Stack
 
@@ -45,7 +45,7 @@ The engine is intentionally React-free and I/O-free — a whole chapter can be p
 - Component files: `PascalCase.tsx`. Engine files: `camelCase.ts`. Test files: `*.test.ts`
 - Default to no comments. Only add one when the _why_ is genuinely non-obvious (a design-doc constraint, a subtle invariant) — the existing engine files' file-header comments are the model to follow, not inline narration
 
-## Game-design invariants (do not relax without reading `design-first-rule.md`)
+## Game-design invariants (do not relax without reading `docs/design.md`)
 
 These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test here usually means the change violates a deliberate design constraint, not a bug in the test:
 
@@ -138,7 +138,7 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 ## Instructions for AI assistants
 
 - Run lint and tests before declaring something done
-- Read `design-first-rule.md` before changing anything under `src/engine/` or `src/content/` — the design doc's §7 (the pinch), §6 (the builder), and §8 (rights model) are load-bearing, not decoration
+- Read `docs/design.md` before changing anything under `src/engine/` or `src/content/` — the design doc's §7 (the pinch), §6 (the builder), and §8 (rights model) are load-bearing, not decoration
 - Surface edge cases and error states — not just the happy path
 - Add accessibility attributes to every interactive element
 - Suggest before refactoring — don't restructure without asking
