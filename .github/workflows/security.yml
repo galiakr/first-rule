@@ -15,6 +15,9 @@ on:
 jobs:
   secret-scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write # gitleaks-action reads the PR's commits and comments on findings
     steps:
       - uses: actions/checkout@v7
         with:
