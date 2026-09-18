@@ -67,3 +67,23 @@ export function actor(id: string): Actor {
   if (!a) throw new Error(`Unknown actor: ${id}`);
   return a;
 }
+
+/**
+ * The child, for situations where they're the actor/victim (Chapter 3, §9).
+ * Deliberately NOT part of ACTORS — LinkedText scans every ACTORS name as a
+ * substring to linkify in prose, and "אתה" (you) is far too common a word
+ * for that; it would highlight huge parts of the game's ordinary narration.
+ * Only merge this in at the one call site that needs it for rule matching
+ * (page.tsx's promptFor call), never into the shared registry.
+ *
+ * groups: [] is not an oversight — it's the mechanism. A group-scoped rule
+ * can never reach the child directly, but an everyone-except rule always
+ * does, since they can never be the excluded group. That's real gameplay,
+ * not a workaround (see docs/chapter-3-plan.md).
+ */
+export const CHILD_ACTOR: Actor = {
+  id: "you",
+  name: t("common.you"),
+  groups: [],
+  resident: true,
+};
