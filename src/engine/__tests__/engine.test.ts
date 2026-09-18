@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { CHAPTER_1 } from "@/content/chapter1";
 import { CHAPTER_2 } from "@/content/chapter2";
+import { CHAPTER_3 } from "@/content/chapter3";
 import { SITUATIONS_BY_ID } from "@/content/situations";
-import { ACTORS } from "@/content/village";
+import { ACTORS, CHILD_ACTOR } from "@/content/village";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
 import {
   activatePrecedent,
@@ -31,6 +32,7 @@ import { TRAIT_KEYS, traitDifferences, traitsMatch } from "../precedent";
 import {
   applyRights,
   emptyRightsBoard,
+  GROUPS,
   harmed,
   rightsKey,
   trustLevel,
@@ -43,6 +45,10 @@ const c1s2 = CHAPTER_1[1];
 const c2s1 = CHAPTER_2[0];
 const c2s3 = CHAPTER_2[2];
 const c2s4 = CHAPTER_2[3];
+const c3s1 = CHAPTER_3[0];
+const c3s3 = CHAPTER_3[2];
+const c3s4 = CHAPTER_3[3];
+const ACTORS_WITH_CHILD = { ...ACTORS, you: CHILD_ACTOR };
 
 function rule(over: Partial<Rule> = {}): Rule {
   return {
@@ -615,5 +621,112 @@ describe("moving between chapters", () => {
     state = advanceChapter(state);
     expect(state.chapter).toBe(2);
     expect(state.rules).toHaveLength(1);
+  });
+});
+
+describe("the child as an actor (§9 chapter 3)", () => {
+  it("is never part of the shared ACTORS registry LinkedText scans", () => {
+    // The regression this guards against: merging CHILD_ACTOR into ACTORS
+    // would make LinkedText linkify "אתה" (you) everywhere in the game's
+    // ordinary narration — one of the most common words in Hebrew.
+    expect(Object.values(ACTORS)).not.toContain(CHILD_ACTOR);
+    expect(ACTORS.you).toBeUndefined();
+  });
+
+  it("has no group, so residents/anyone-present cover it but a group scope never does", () => {
+    expect(whoCovers(rule({ who: { scope: "residents" } }), CHILD_ACTOR)).toBe(
+      true,
+    );
+    expect(
+      whoCovers(rule({ who: { scope: "anyone-present" } }), CHILD_ACTOR),
+    ).toBe(true);
+    expect(
+      whoCovers(
+        rule({ who: { scope: "group", group: "vatikim" } }),
+        CHILD_ACTOR,
+      ),
+    ).toBe(false);
+  });
+
+  it("can never be the excluded group, so everyone-except always covers it", () => {
+    for (const group of GROUPS) {
+      expect(
+        whoCovers(
+          rule({ who: { scope: "everyone-except", group } }),
+          CHILD_ACTOR,
+        ),
+      ).toBe(true);
+    }
+  });
+});
+
+describe("chapter 3 content holds up", () => {
+  it("has four situations", () => {
+    expect(CHAPTER_3).toHaveLength(4);
+  });
+
+  it("gives every situation an outcome for all four WHAT clauses", () => {
+    for (const s of CHAPTER_3) {
+      for (const what of WHAT_OPTIONS) {
+        expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
+      }
+    }
+  });
+
+  it("c3s1 and c3s4 target the child directly", () => {
+    expect(c3s1.actorId).toBe("you");
+    expect(c3s4.actorId).toBe("you");
+  });
+});
+
+describe("playing chapter 3 through", () => {
+  it("a water rule from chapter 1 reaches the child at c3s1", () => {
+    let state = initialState();
+    state = addRule(
+      state,
+      rule({ id: "water", subject: "mayim", who: { scope: "residents" } }),
+    );
+    const prompt = promptFor(state, c3s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("rule-applies");
+  });
+
+  it("falls through to no-rule at c3s1 when no water rule was ever written", () => {
+    const prompt = promptFor(
+      initialState(),
+      c3s1,
+      ACTORS_WITH_CHILD,
+      SITUATIONS_BY_ID,
+    );
+    expect(prompt.kind).toBe("no-rule");
+  });
+
+  it("an everyone-except chefetz rule written at c3s3 still reaches the child at c3s4", () => {
+    let state = initialState();
+    state = addRule(
+      state,
+      rule({
+        id: "rope",
+        subject: "chefetz",
+        who: { scope: "everyone-except", group: "banaim" },
+        writtenAt: "c3s3",
+      }),
+    );
+    const prompt = promptFor(state, c3s4, ACTORS_WITH_CHILD, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("rule-applies");
+  });
+
+  it("a group-scoped chefetz rule does not reach the child at c3s4", () => {
+    let state = initialState();
+    state = addRule(
+      state,
+      rule({
+        id: "rope",
+        subject: "chefetz",
+        who: { scope: "group", group: "banaim" },
+        writtenAt: "c3s3",
+      }),
+    );
+    const prompt = promptFor(state, c3s4, ACTORS_WITH_CHILD, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("no-rule");
   });
 });

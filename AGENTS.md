@@ -6,7 +6,7 @@
 
 ## What this project is
 
-A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–2 ("אין כללים", "זה כבר קרה") of a planned seven.
+A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–3 ("אין כללים", "זה כבר קרה") of a planned seven.
 
 ## Stack
 
@@ -88,8 +88,9 @@ Stack: **Vitest** + **React Testing Library** + **Playwright** (e2e)
 
 ### Current state
 
-- `src/engine/` has full behavioral coverage (52 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
-- Components (`src/components/`, `src/app/page.tsx`) have **no tests yet**. RTL/Playwright were added to the toolchain ahead of need — write the first component test the next time a component changes, don't let the tooling sit unused.
+- `src/engine/` has full behavioral coverage (68 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
+- One component has tests (`LinkedText`). Most of `src/components/` and `src/app/page.tsx` don't yet — write one the next time a component changes, don't let the tooling sit unused.
+- `e2e/` has two real Playwright specs: `home.spec.ts` (the about screen) and `situation-screen.spec.ts`, which drives a full situation through a real browser and asserts scene/decide/outcome/lesson all stay visible on one screen as they accumulate, rather than replacing each other — the actual behavior the single-screen redesign depends on, not just that the final state is reachable.
 - No coverage threshold is enforced yet (`vitest.config.ts` reports coverage but doesn't gate on it) — turn on the toolkit-default 80% lines/functions threshold once component tests exist, not before, or CI will fail on day one for the wrong reason.
 
 ### Rules
@@ -154,11 +155,12 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
-- [ ] Chapters 1–2 are built (see `docs/chapter-1-plan.md`, `docs/chapter-2-plan.md`); chapters 3–7 are not (elections, separation of powers, constitutional amendment, save state — see README "מה עוד לא כאן")
+- [ ] Chapters 1–3 are built (see `docs/chapter-1-plan.md`, `docs/chapter-2-plan.md`, `docs/chapter-3-plan.md`); chapters 4–7 are not (passers-through, elections, separation of powers, constitutional amendment, save state — see README "מה עוד לא כאן")
 - [ ] Chapter 2 introduced `chefetz` and `davar` as fresh subjects (c2s1/c2s2) that aren't pinched within Chapter 2 itself — a later chapter needs to eventually collide with rules written for them, same as Chapter 1 already does for `mayim`/`shvil`
-- [ ] Two of six protections still unused: `halich` (due process) and, as of Chapter 2, `bitui` is now exercised (c2s2) — only `halich` remains untouched
-- [ ] No English localization yet. UI chrome and Chapters 1–2 content are centralized in `src/content/tokens/tokens.csv` (he complete, en blank) — a translator can fill the `en` column and regenerate `locales/en.json`. `options.ts`'s rule-sentence `template` fields and `SUBJECT_FORMS` are deliberately still hardcoded Hebrew (grammatical case, not just wording) and need a sentence-composer redesign before a second language can actually ship
-- [ ] No component or e2e tests yet — RTL/Playwright are wired up but unused
+- [ ] Four of five `ActKind` values used (`took-without-asking`, `blocked`, `told-what-was-private`, `refused-to-share`); only `broke` remains unused
+- [x] All six protections now exercised at least once — `halich` (due process) was the last, via c3s2's `forbidden` outcome
+- [ ] No English localization yet. UI chrome and Chapters 1–3 content are centralized in `src/content/tokens/tokens.csv` (he complete, en blank) — a translator can fill the `en` column and regenerate `locales/en.json`. `options.ts`'s rule-sentence `template` fields and `SUBJECT_FORMS` are deliberately still hardcoded Hebrew (grammatical case, not just wording) and need a sentence-composer redesign before a second language can actually ship
+- [ ] One component has tests (`LinkedText`, in `src/components/__tests__/`); the rest of `src/components/` and `src/app/page.tsx` still don't. `e2e/` now has two real Playwright specs (see Testing section above)
 - [ ] Coverage threshold not yet enforced (see Testing section above)
 
 <!-- BEGIN:nextjs-agent-rules -->

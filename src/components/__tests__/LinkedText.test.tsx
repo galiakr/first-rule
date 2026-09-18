@@ -38,4 +38,17 @@ describe("LinkedText", () => {
     const trigger = screen.getByLabelText(/^נעם —/);
     expect(trigger.getAttribute("aria-label")).toContain("לא גר בכפר");
   });
+
+  it("never linkifies 'אתה' (the child, Chapter 3) — it isn't in ACTORS", () => {
+    // Real Chapter 3 prose (c3s1): full of "אתה" in ordinary narration.
+    // Confirms CHILD_ACTOR staying out of ACTORS actually holds at the
+    // component that would otherwise over-match it.
+    const text =
+      "הבוקר אתה צריך מים בדחיפות — מישהו נחבל קרוב לשדה, וצריך לשטוף ולקרר. " +
+      "הבאר של יותם הכי קרובה. אין זמן לחפש אותו ולשאול. אתה ממלא דלי ורץ הלאה.";
+    render(<LinkedText text={text} />);
+    expect(screen.queryByLabelText(/^אתה —/)).not.toBeInTheDocument();
+    // יותם, the one real character mentioned, is still linkified normally.
+    expect(screen.getByLabelText(/^יותם —/)).toBeInTheDocument();
+  });
 });

@@ -3,16 +3,17 @@
 A civics game for kids aged 8–12. The child arrives in a village with no
 rules, writes the rules themselves — and then lives with them.
 
-This is **Chapters 1–2** ("No Rules", "This Already Happened"), out of seven.
-The full design is in `docs/design.md`; per-chapter implementation notes are
-in `docs/chapter-1-plan.md` and `docs/chapter-2-plan.md`.
+This is **Chapters 1–3** ("No Rules", "This Already Happened", "Your Rule
+Against You"), out of seven. The full design is in `docs/design.md`;
+per-chapter implementation notes are in `docs/chapter-1-plan.md`,
+`docs/chapter-2-plan.md`, and `docs/chapter-3-plan.md`.
 
 ## Running it
 
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 52 tests over the engine and content
+npm test        # 68 tests over the engine and content
 npm run build
 ```
 
@@ -32,7 +33,7 @@ src/
     precedent.ts   does a past ruling apply to a new situation — trait matching
     rights.ts      the rights board and trust
     game.ts        reducer: what's asked, what happens, what's saved, chapter transitions
-  content/         the village, chapters 1–2 — data only
+  content/         the village, chapters 1–3 — data only
     situations.ts  every situation keyed by id, for precedent source lookup
     tokens/        language tokens: tokens.csv is the source of truth, generate.py builds
                    locales/*.json from it, t() reads them (he complete, en blank)
@@ -61,11 +62,14 @@ through in a test without rendering anything — see
 - **A precedent's essential traits are chosen once** (§6.1), the first time a
   situation might invoke it, and saved on the precedent itself — never as a
   global rule about what "counts" as similar.
+- **The child has no group of their own** (Chapter 3, §4) — a rule scoped to
+  a specific group can never reach them, but `everyone-except` always does,
+  since they can never be the excluded group.
 
 ## What's not here yet
 
 Elections, separation of powers, constitutional amendment, save state,
-English localization (chapters 3–7). `chefetz` and `davar`, the two subjects
+English localization (chapters 4–7). `chefetz` and `davar`, the two subjects
 Chapter 2 introduces, aren't pinched within Chapter 2 itself — a later
 chapter needs to eventually collide with rules written for them.
 

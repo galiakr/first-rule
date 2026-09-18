@@ -4,7 +4,7 @@
 
 ## Project context
 
-כלל ראשון · First Rule — a Hebrew, RTL civics/democracy game for kids 8–12. A child arrives in a village with no rules, writes them over the course of the game, and lives under them. Chapters 1–2 of a planned seven are implemented. Design source of truth: `docs/design.md`.
+כלל ראשון · First Rule — a Hebrew, RTL civics/democracy game for kids 8–12. A child arrives in a village with no rules, writes them over the course of the game, and lives under them. Chapters 1–3 of a planned seven are implemented. Design source of truth: `docs/design.md`.
 
 ## Stack
 
