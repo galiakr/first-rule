@@ -2,10 +2,16 @@
 
 import { useLanguage } from "@/content/language";
 import { ruleSentence } from "@/engine/match";
-import { findOption, whatOptions } from "@/engine/options";
-import type { Precedent, Rule, Situation } from "@/engine/types";
+import {
+  amendmentOptions,
+  authoritySentence,
+  findOption,
+  whatOptions,
+} from "@/engine/options";
+import type { GameState, Precedent, Rule, Situation } from "@/engine/types";
 
 interface Props {
+  state: GameState;
   rules: Rule[];
   precedents: Precedent[];
   situationsById: Record<string, Situation>;
@@ -18,6 +24,7 @@ interface Props {
  * never shows who was harmed — that waits for the end of the chapter.
  */
 export default function RuleBook({
+  state,
   rules,
   precedents,
   situationsById,
@@ -73,6 +80,28 @@ export default function RuleBook({
             ))}
           </ol>
         )}
+
+        {state.authority ? (
+          <div className="mt-8 border-t border-ink/15 pt-6">
+            <h3 className="mb-3 font-book text-xl">
+              {t("rulebook.authority_heading")}
+            </h3>
+            <p className="font-book text-[1.15rem] leading-relaxed">
+              {authoritySentence(state.authority, lang)}
+            </p>
+          </div>
+        ) : null}
+
+        {state.amendment ? (
+          <div className="mt-8 border-t border-ink/15 pt-6">
+            <h3 className="mb-3 font-book text-xl">
+              {t("rulebook.amendment_heading")}
+            </h3>
+            <p className="font-book text-[1.15rem] leading-relaxed">
+              {findOption(amendmentOptions(lang), state.amendment).template}
+            </p>
+          </div>
+        ) : null}
 
         {activated.length > 0 ? (
           <div className="mt-8 border-t border-ink/15 pt-6">

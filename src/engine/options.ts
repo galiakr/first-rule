@@ -18,6 +18,9 @@ import { perLanguage, translator } from "@/content/tokens";
 import type { Lang } from "@/content/tokens";
 
 import type {
+  AmendmentForm,
+  AuthorityForm,
+  AuthorityRule,
   ConsequenceClause,
   GroupId,
   Subject,
@@ -114,6 +117,47 @@ export const subjectForms = perLanguage(
   },
 );
 
+/**
+ * The five shapes authority can take (§9.5) and the four ways a rule may
+ * later be changed (§10). Deliberately separate tables from the 4x4 builder:
+ * §11 closes that one at four options per field, and these are different
+ * kinds of rule, not a fifth field.
+ */
+export const authorityOptions = perLanguage(
+  (lang: Lang): Option<AuthorityForm>[] => {
+    const t = translator(lang);
+    const one = (value: AuthorityForm, key: string): Option<AuthorityForm> => ({
+      value,
+      label: t(`authority.form.${key}.label`),
+      template: t(`authority.form.${key}.template`),
+    });
+    return [
+      one("you", "you"),
+      one("most-senior", "most_senior"),
+      one("two-together", "two_together"),
+      one("each-alone", "each_alone"),
+      one("village-chooses", "village_chooses"),
+    ];
+  },
+);
+
+export const amendmentOptions = perLanguage(
+  (lang: Lang): Option<AmendmentForm>[] => {
+    const t = translator(lang);
+    const one = (value: AmendmentForm, key: string): Option<AmendmentForm> => ({
+      value,
+      label: t(`closing.amendment.${key}.label`),
+      template: t(`closing.amendment.${key}.template`),
+    });
+    return [
+      one("author", "author"),
+      one("two-agree", "two_agree"),
+      one("whole-village", "whole_village"),
+      one("cannot", "cannot"),
+    ];
+  },
+);
+
 export const groupLabel = perLanguage((lang: Lang): Record<GroupId, string> => {
   const t = translator(lang);
   return {
@@ -150,4 +194,21 @@ export function fill(
     .join(forms.be)
     .split("{group}")
     .join(group ? groupLabel(lang)[group] : "");
+}
+
+/** The authority rule as one line, for the book. */
+export function authoritySentence(
+  authority: AuthorityRule,
+  lang: Lang,
+): string {
+  const form = findOption(authorityOptions(lang), authority.form).template;
+  const who = fill(
+    findOption(whoOptions(lang), authority.who.scope).template,
+    // The authority rule is not about a subject, so {et}/{be} never appear
+    // in its WHO fragment; any subject would do here.
+    "mayim",
+    lang,
+    authority.who.group,
+  );
+  return translator(lang)("authority.sentence", { form, who });
 }

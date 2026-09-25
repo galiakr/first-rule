@@ -3,19 +3,19 @@
 A civics game for kids aged 8–12. The child arrives in a village with no
 rules, writes the rules themselves — and then lives with them.
 
-This is **Chapters 1–3** ("No Rules", "This Already Happened", "Your Rule
-Against You"), out of seven. The full design is in `docs/design.md`;
-per-chapter implementation notes are in `docs/chapter-1-plan.md`,
-`docs/chapter-2-plan.md`, and `docs/chapter-3-plan.md`. Chapters 4–7 are
-planned but not built — see `docs/roadmap.md` for build order and
-`docs/chapter-4-plan.md` … `docs/chapter-7-plan.md` for each.
+This is **Chapters 1–5**, out of seven — ending where the village closes its
+rule book for good. The full design is in `docs/design.md`;
+per-chapter implementation notes are in `docs/chapter-1-plan.md` …
+`docs/chapter-5-plan.md`. Chapters 6–7 are planned but not built — see
+`docs/roadmap.md` for build order and `docs/chapter-6-plan.md` /
+`docs/chapter-7-plan.md` for each.
 
 ## Running it
 
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 98 tests over the engine, content and components
+npm test        # 141 tests over the engine, content and components
 npm run build
 ```
 
@@ -56,7 +56,7 @@ src/
     precedent.ts   does a past ruling apply to a new situation — trait matching
     rights.ts      the rights board and trust
     game.ts        reducer: what's asked, what happens, what's saved, chapter transitions
-  content/         the village, chapters 1–3 — data only
+  content/         the village, chapters 1–5 — data only
     situations.ts  every situation keyed by id, for precedent source lookup
     tokens/        language tokens: tokens.csv is the source of truth, generate.py builds
                    locales/*.json from it (he and en both complete)
@@ -91,8 +91,7 @@ through in a test without rendering anything — see
 
 ## What's not here yet
 
-Elections, separation of powers, constitutional amendment, save state
-(chapters 4–7). `chefetz` and `davar`, the two subjects
+Separation of powers, constitutional amendment, save state (chapters 6–7). `chefetz` and `davar`, the two subjects
 Chapter 2 introduces, aren't pinched within Chapter 2 itself — a later
 chapter needs to eventually collide with rules written for them.
 

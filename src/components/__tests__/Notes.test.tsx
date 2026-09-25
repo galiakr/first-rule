@@ -4,12 +4,15 @@ import { describe, expect, it } from "vitest";
 
 import Notes from "@/components/Notes";
 import { chapterNotes } from "@/content/notes";
+import { chapters } from "@/content/situations";
 import { DEFAULT_LANG, translator } from "@/content/tokens";
 import { renderWithLanguage } from "@/test/render";
 
 const t = translator(DEFAULT_LANG);
 const CHAPTER_NOTES = chapterNotes(DEFAULT_LANG);
-const TITLES = ["אין כללים", "זה כבר קרה", "הכלל שלך נגדך"];
+// Taken from the real chapters rather than hardcoded, so adding a chapter
+// can never leave this fixture silently short.
+const TITLES = chapters(DEFAULT_LANG).map((c) => c.title);
 
 function renderNotes(unlocked: number[]) {
   renderWithLanguage(
@@ -64,7 +67,7 @@ describe("Notes", () => {
   });
 
   it("starts every unlocked chapter collapsed", () => {
-    renderNotes([1, 2, 3]);
+    renderNotes(CHAPTER_NOTES.map((n) => n.chapter));
     for (const note of CHAPTER_NOTES) {
       expect(header(note.chapter)).toHaveAttribute("aria-expanded", "false");
       expect(screen.queryByText(note.concept)).not.toBeInTheDocument();
@@ -103,7 +106,7 @@ describe("Notes", () => {
 
   it("collapses the open chapter when a different one is clicked", async () => {
     const user = userEvent.setup();
-    renderNotes([1, 2, 3]);
+    renderNotes(CHAPTER_NOTES.map((n) => n.chapter));
 
     await user.click(header(1));
     expect(screen.getByText(CHAPTER_NOTES[0].concept)).toBeInTheDocument();
@@ -127,7 +130,9 @@ describe("Notes", () => {
     expect(
       screen.queryByRole("button", { name: new RegExp(TITLES[2]) }),
     ).not.toBeInTheDocument();
-    expect(screen.getAllByText(t("notes.locked"))).toHaveLength(1);
+    expect(screen.getAllByText(t("notes.locked"))).toHaveLength(
+      CHAPTER_NOTES.length - 2,
+    );
   });
 
   it("forgets which chapter was open once the notebook is closed", async () => {

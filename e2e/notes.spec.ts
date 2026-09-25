@@ -18,7 +18,12 @@ test("the notebook opens from the header and stays locked until a chapter ends",
   await expect(
     notebook.getByText("המחברת עוד ריקה", { exact: false }),
   ).toBeVisible();
-  await expect(notebook.getByText("נפתח בסוף הפרק")).toHaveCount(3);
+  // Every chapter listed is still locked. The count is content-dependent
+  // (it grows with each chapter built), so assert the invariant, not the
+  // number: nothing is open, and no concept is named anywhere.
+  const locked = notebook.getByText("נפתח בסוף הפרק");
+  expect(await locked.count()).toBeGreaterThan(0);
+  await expect(notebook.getByRole("button", { expanded: true })).toHaveCount(0);
   await expect(notebook.getByText("כלל הוא החלטה שמחליטים מראש")).toHaveCount(
     0,
   );

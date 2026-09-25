@@ -3,6 +3,9 @@
 import { useState } from "react";
 
 import AboutVillage from "@/components/AboutVillage";
+import AuthorityBuilder from "@/components/AuthorityBuilder";
+import BookClosing from "@/components/BookClosing";
+import ElectionResult from "@/components/ElectionResult";
 import ChapterEnd from "@/components/ChapterEnd";
 import LinkedText from "@/components/LinkedText";
 import Notes from "@/components/Notes";
@@ -24,25 +27,46 @@ import {
   initialState,
   outcomeFor,
   promptFor,
+  replaceRule,
   resolve,
+  saysOverrideNote,
 } from "@/engine/game";
+import {
+  canOverride,
+  closeBook,
+  setAuthority,
+  variantKeys,
+} from "@/engine/authority";
 import type { Prompt } from "@/engine/game";
 import { ruleSentence } from "@/engine/match";
+import { authoritySentence } from "@/engine/options";
 import { findOption, groupLabel, whatOptions } from "@/engine/options";
 import { trustLevel } from "@/engine/rights";
-import type { GameState, Rule, TraitKey, WhatClause } from "@/engine/types";
+import type {
+  AmendmentForm,
+  AuthorityRule,
+  GameState,
+  Rule,
+  TraitKey,
+  WhatClause,
+} from "@/engine/types";
 
 // "about"/"intro"/"end" are still their own screens. Everything about one
 // situation — scene, decide, outcome, lesson — lives on a single "situation"
 // screen, appended section by section as each step completes, so the event
 // stays in front of the child the whole time they're deciding what to do
 // about it (never hidden behind a phase switch).
-type Phase = "about" | "intro" | "situation" | "end";
+// "closing" is the book-closing ceremony at the end of chapter 5 (§10): it
+// sits between the last situation and the chapter-end screen, because from
+// then on nothing may be written into the book again.
+type Phase = "about" | "intro" | "situation" | "closing" | "end";
 
 interface Pending {
   governedBy: WhatClause | null;
   appliedRuleIds: string[];
   overrode: boolean;
+  /** Chapter 5's situations branch on the authority rule, not the WHAT clause. */
+  variants?: string[];
 }
 
 /** How a group shows up, given how much it trusts you. Never a number (§7). */
@@ -174,7 +198,7 @@ export default function Page() {
    * the child acted. */
   function settle(next: Pending) {
     setDecidedPrompt(prompt);
-    setPending(next);
+    setPending({ variants: variantKeys(state), ...next });
   }
 
   function commit() {
@@ -184,10 +208,27 @@ export default function Page() {
     setDecidedPrompt(null);
     setLessonRevealed(false);
     if (index + 1 >= currentChapter.situations.length) {
-      setPhase("end");
+      // The book closes at the end of chapter 5 (§10), before the rights
+      // board is read out.
+      setPhase(state.chapter === 5 && !state.bookClosed ? "closing" : "end");
     } else {
       setIndex(index + 1);
     }
+  }
+
+  function writeAuthority(authority: AuthorityRule) {
+    // The election, if there is one, runs off the trust the child has
+    // already earned — so it has to be computed from the state as it stands
+    // before this situation resolves.
+    const next = setAuthority(state, authority);
+    setState(next);
+    setDecidedPrompt(prompt);
+    setPending({
+      governedBy: null,
+      appliedRuleIds: [],
+      overrode: false,
+      variants: variantKeys(next),
+    });
   }
 
   function write(rule: Rule) {
@@ -341,6 +382,19 @@ export default function Page() {
                   </>
                 ) : null}
 
+                {prompt.kind === "write-authority" ? (
+                  <AuthorityBuilder
+                    onWrite={writeAuthority}
+                    onSkip={() =>
+                      settle({
+                        governedBy: null,
+                        appliedRuleIds: [],
+                        overrode: false,
+                      })
+                    }
+                  />
+                ) : null}
+
                 {prompt.kind === "write-rule" ? (
                   <>
                     {prompt.precedentContext ? (
@@ -370,11 +424,16 @@ export default function Page() {
                 {prompt.kind === "rule-applies" ? (
                   <>
                     <p className="text-lg leading-relaxed">
-                      {t("app.decide.rule_applies_intro")}
+                      {canOverride(state)
+                        ? t("app.decide.rule_applies_intro")
+                        : t("app.decide.other_decides_intro")}
                     </p>
                     <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
                       {ruleSentence(prompt.rules[0], lang)}
                     </div>
+                    {/* Once the child lost the role, the rule is applied to
+                        them word for word and there is nothing to choose —
+                        §9.5's whole point about losing being real. */}
                     <div className="flex flex-wrap gap-3">
                       <Action
                         onClick={() =>
@@ -385,20 +444,24 @@ export default function Page() {
                           })
                         }
                       >
-                        {t("app.decide.apply_rule")}
+                        {canOverride(state)
+                          ? t("app.decide.apply_rule")
+                          : t("app.decide.watch")}
                       </Action>
-                      <Action
-                        tone="quiet"
-                        onClick={() =>
-                          settle({
-                            governedBy: prompt.rules[0].what,
-                            appliedRuleIds: prompt.rules.map((r) => r.id),
-                            overrode: true,
-                          })
-                        }
-                      >
-                        {t("app.decide.override_rule")}
-                      </Action>
+                      {canOverride(state) ? (
+                        <Action
+                          tone="quiet"
+                          onClick={() =>
+                            settle({
+                              governedBy: prompt.rules[0].what,
+                              appliedRuleIds: prompt.rules.map((r) => r.id),
+                              overrode: true,
+                            })
+                          }
+                        >
+                          {t("app.decide.override_rule")}
+                        </Action>
+                      ) : null}
                     </div>
                   </>
                 ) : null}
@@ -475,6 +538,22 @@ export default function Page() {
                   </>
                 ) : null}
 
+                {decidedPrompt.kind === "write-authority" ? (
+                  state.authority ? (
+                    <>
+                      <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
+                        {authoritySentence(state.authority, lang)}
+                      </div>
+                      <Confirmed>{t("authority.write")}</Confirmed>
+                      {state.election ? (
+                        <ElectionResult election={state.election} />
+                      ) : null}
+                    </>
+                  ) : (
+                    <Confirmed>{t("authority.skip")}</Confirmed>
+                  )
+                ) : null}
+
                 {decidedPrompt.kind === "write-rule" ? (
                   <>
                     {decidedPrompt.precedentContext ? (
@@ -547,10 +626,16 @@ export default function Page() {
                         situation,
                         pending.governedBy,
                         pending.overrode,
+                        pending.variants,
                       ).text
                     }
                   />
                 </p>
+                {saysOverrideNote(state, pending.overrode) ? (
+                  <p className="border-s-2 border-harm pe-4 ps-3 text-lg leading-relaxed">
+                    {t("app.override_note")}
+                  </p>
+                ) : null}
                 {!lessonRevealed ? (
                   <Action onClick={() => setLessonRevealed(true)}>
                     {t("app.outcome.continue")}
@@ -575,15 +660,30 @@ export default function Page() {
           </section>
         ) : null}
 
+        {phase === "closing" ? (
+          <BookClosing
+            rules={state.rules}
+            onReplace={(ruleId, next) =>
+              setState((s) => replaceRule(s, ruleId, next))
+            }
+            onClose={(amendment: AmendmentForm) => {
+              setState((s) => closeBook(s, amendment));
+              setPhase("end");
+            }}
+          />
+        ) : null}
+
         {phase === "end" ? (
           <ChapterEnd
             state={state}
+            epilogue={currentChapter.epilogue}
             onContinue={hasNextChapter ? continueToNextChapter : undefined}
           />
         ) : null}
       </div>
 
       <RuleBook
+        state={state}
         rules={state.rules}
         precedents={state.precedents}
         situationsById={situationsById(lang)}
