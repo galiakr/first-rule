@@ -1,6 +1,6 @@
 # Chapter 5 — "מי מחליט מי מחליט" (Who Decides Who Decides)
 
-> Status: planned, not yet built. The heaviest remaining chapter; see `roadmap.md`.
+> Status: **built**. It was the heaviest chapter; 6 and 7 follow (see `roadmap.md`).
 
 ## Context
 
@@ -66,8 +66,22 @@ bookClosed: boolean;
 - `ChapterEnd` for Chapter 5: change-one-rule step, then the amendment step, then the usual continue.
 - `RuleBook` shows the authority rule and, after closing, the amendment rule.
 
-## Open questions
+## Open questions, as answered in the build
 
-- Tie-breaking and `comes-but` (decision #2).
-- Whether _each for themselves_ should also set `decider: "other"` (nobody decides) or stay `"you"` with worse outcomes. Lean: stays `"you"`, the cost is in the outcomes.
-- Exact phrasing of the authority options for an 8-year-old — same caution §13 raises about Chapter 2's question.
+- **A tie keeps the child in place.** `won = for >= against`. Nobody voted them out, and a tie is not a mandate to replace an incumbent; losing should have to be earned the same way the trust behind it was. This makes losing uncommon, which is correct — §9 wants it possible, not typical.
+- **`comes-but` abstains**, as leaned. A group that comes but tells you only half of it is present, not persuaded; counting that as opposition would make the vote harsher than the behaviour it represents.
+- **_Each for themselves_ keeps `decider: "you"`**, as leaned. The cost is in c5s3's outcome, where nobody decides and the fastest, biggest person simply takes the sheltered spot while שירה is still explaining why she needs it.
+- **Phrasing** stayed concrete and first-person (_אני מחליט_, _מי שהכי ותיק מחליט_) rather than abstract. Still the thing most worth watching with a real child, alongside Chapter 2's question.
+
+## What changed in the build
+
+- **`most-senior` hands the role away**, which the plan implied without saying. The most senior person in the village is יותם, not the child, so choosing that form _is_ choosing to stop deciding. It is the one form that loses the role without an election.
+- **A general `variantOutcomes` mechanism** rather than anything chapter-5-specific: `outcomeFor(situation, what, overrode, variants)` takes candidate keys, most specific first, and falls back to the WHAT-keyed outcomes. `variantKeys(state)` yields the authority form (with the election folded in), then `authority-written`, then `you-decide`/`other-decides`. Chapter 6 can reuse this for its three jobs without touching the engine again.
+- **Winning and losing the same vote are separate variants** (`village-chooses-won` / `village-chooses-lost`). They are different things to live through and deserved different prose.
+- **The authority builder has a skip.** Everything else in the game lets the child decline, and c5s2's "you wrote nothing" outcome — the village quietly learning which of the two rulers to go to for the answer they want — is too good to make unreachable.
+- **A playthrough caught c5s2 still showing "you wrote nothing" after the child had just written the line.** Writing the authority rule settles with `governedBy: null`, so it fell through to `noRuleOutcome`. Fixed with an `authority-written` variant, and pinned by a test. Second chapter running that the eyeball playthrough caught a content bug the type system could not.
+- **The ceremony is its own phase** (`"closing"`), not a `ChapterEnd` variant as the plan guessed. It runs between the last situation and the chapter-end screen: the book is read aloud, one rule may be changed, the amendment rule is written, and only then does the rights board appear. `BookClosing` deliberately says nothing about why the amendment rule might matter later — §10's veil is the point.
+
+## Carried forward
+
+Losing the election persists into chapters 6–7, which are not built yet. Chapter 6 asks the child to staff three jobs; what that means for a child who no longer decides is an open question for that chapter, noted in `roadmap.md`.

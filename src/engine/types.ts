@@ -195,8 +195,76 @@ export interface Situation {
   outcomes: Partial<Record<WhatClause, Outcome>>;
   /** Applied when the child goes against a rule that did apply. */
   overrideOutcome: Outcome;
+  /**
+   * Outcomes for a situation that branches on something other than its WHAT
+   * clause — chapter 5 branches on which authority form was written, and on
+   * whether the child still decides. Looked up first when a variant key is
+   * passed; the WHAT-keyed outcomes above are the fallback.
+   */
+  variantOutcomes?: Record<string, Outcome>;
+  /**
+   * This situation asks for the authority rule rather than an ordinary one
+   * (§9.5). Mutually exclusive with `invitesRule` — pinned by a content test.
+   */
+  invitesAuthority?: boolean;
   /** Said after the outcome — the concept, named only now (§2). */
   lesson: string;
+}
+
+/* ---- who decides (§9.5) ---- */
+
+/**
+ * The five shapes authority can take (§9.5). A separate structure from the
+ * 4x4 rule builder on purpose: §11 forbids opening that builder past four
+ * options per field, and this is a different kind of rule.
+ */
+export type AuthorityForm =
+  | "you" // אני מחליט
+  | "most-senior" // מי שהכי ותיק — יותם, not the child
+  | "two-together" // שניים יחד — the child and the most senior
+  | "each-alone" // כל אחד לעצמו
+  | "village-chooses"; // הכפר בוחר — an election
+
+/** Who decides, and who that rule reaches. The WHO field sets who votes. */
+export interface AuthorityRule {
+  form: AuthorityForm;
+  who: RuleWho;
+}
+
+/** How a written rule may later be changed (§10). Written behind a veil. */
+export type AmendmentForm =
+  | "author" // מי שכתב אותו
+  | "two-agree" // שניים צריכים להסכים
+  | "whole-village" // כל הכפר
+  | "cannot"; // אי אפשר לשנות
+
+/**
+ * One round of voting, decided entirely by trust the child already earned
+ * or burned (§9: one round, no campaign, no promises). Groups, never counts
+ * — §7's rule that trust is never a number holds here too.
+ */
+export interface Election {
+  eligible: GroupId[];
+  votedFor: GroupId[];
+  votedAgainst: GroupId[];
+  abstained: GroupId[];
+  won: boolean;
+}
+
+/** Who rules on situations from here on. */
+export type Decider = "you" | "other";
+
+/**
+ * One chapter's content. `epilogue` is said at the chapter end, after the
+ * rights board — it names the chapter's concept in words, which only some
+ * chapters do (§2: felt first, named afterwards, and not every chapter has
+ * a single idea to name).
+ */
+export interface Chapter {
+  title: string;
+  intro: string;
+  epilogue?: string;
+  situations: Situation[];
 }
 
 /* ---- game state ---- */
@@ -229,4 +297,23 @@ export interface GameState {
   precedents: Precedent[];
   /** True once the "sometimes you only find out later" line has been said (§6.2). */
   sawCollisionNote: boolean;
+  /** True once the "so the rules are whatever you decide" line has been said (§7). */
+  sawOverrideNote: boolean;
+
+  /* ---- chapter 5 ---- */
+
+  /** The rule about who decides, once written (§9.5). */
+  authority: AuthorityRule | null;
+  /** The single round of voting, if the child chose "the village chooses". */
+  election: Election | null;
+  /**
+   * Who rules from here on. "other" after losing an election, or after
+   * writing that the most senior decides — which is יותם, not the child.
+   * Losing is a real outcome and the game continues under it (§9.5).
+   */
+  decider: Decider;
+  /** How a rule may be changed. Written at the closing, used in chapter 7. */
+  amendment: AmendmentForm | null;
+  /** True once the book is closed (§10). No situation may invite a rule after. */
+  bookClosed: boolean;
 }

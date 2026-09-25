@@ -12,9 +12,9 @@
 
 import { perLanguage, translator } from "@/content/tokens";
 import type { Lang } from "@/content/tokens";
-import type { Situation } from "@/engine/types";
+import type { Chapter, Situation } from "@/engine/types";
 
-export const chapter1 = perLanguage((lang: Lang) => {
+export const chapter1 = perLanguage((lang: Lang): Chapter => {
   const t = translator(lang);
   const situations: Situation[] = [
     {

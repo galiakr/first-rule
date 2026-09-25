@@ -3,9 +3,21 @@ import { describe, expect, it } from "vitest";
 import { chapter1 } from "@/content/chapter1";
 import { chapter2 } from "@/content/chapter2";
 import { chapter3 } from "@/content/chapter3";
+import { chapter4 } from "@/content/chapter4";
+import { chapter5 } from "@/content/chapter5";
 import { chapterNotes } from "@/content/notes";
 import { situationsById } from "@/content/situations";
 import { actors, actorsWithChild, childActor } from "@/content/village";
+import {
+  authorityVariant,
+  canOverride,
+  closeBook,
+  deciderFor,
+  eligibleGroups,
+  runElection,
+  setAuthority,
+  variantKeys,
+} from "../authority";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
 import {
   activatePrecedent,
@@ -14,7 +26,9 @@ import {
   initialState,
   outcomeFor,
   promptFor,
+  replaceRule,
   resolve,
+  saysOverrideNote,
 } from "../game";
 import {
   applicableRules,
@@ -46,6 +60,8 @@ const LANG = "he" as const;
 const CHAPTER_1 = chapter1(LANG).situations;
 const CHAPTER_2 = chapter2(LANG).situations;
 const CHAPTER_3 = chapter3(LANG).situations;
+const CHAPTER_4 = chapter4(LANG).situations;
+const CHAPTER_5 = chapter5(LANG).situations;
 const CHAPTER_NOTES = chapterNotes(LANG);
 const SITUATIONS_BY_ID = situationsById(LANG);
 const ACTORS = actors(LANG);
@@ -60,6 +76,9 @@ const c2s4 = CHAPTER_2[3];
 const c3s1 = CHAPTER_3[0];
 const c3s3 = CHAPTER_3[2];
 const c3s4 = CHAPTER_3[3];
+const c4s1 = CHAPTER_4[0];
+const c4s2 = CHAPTER_4[1];
+const c4s4 = CHAPTER_4[3];
 const ACTORS_WITH_CHILD = actorsWithChild(LANG);
 
 function rule(over: Partial<Rule> = {}): Rule {
@@ -747,11 +766,17 @@ describe("playing chapter 3 through", () => {
 });
 
 describe("the notebook holds up", () => {
-  const BUILT_CHAPTERS = [CHAPTER_1, CHAPTER_2, CHAPTER_3];
+  const BUILT_CHAPTERS = [
+    CHAPTER_1,
+    CHAPTER_2,
+    CHAPTER_3,
+    CHAPTER_4,
+    CHAPTER_5,
+  ];
 
   it("has exactly one note per built chapter, numbered in order", () => {
     expect(CHAPTER_NOTES).toHaveLength(BUILT_CHAPTERS.length);
-    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3]);
+    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3, 4, 5]);
   });
 
   it("fills every field — a missing token would surface as its own key", () => {
@@ -775,5 +800,491 @@ describe("the notebook holds up", () => {
       expect(note.questions.length).toBeGreaterThanOrEqual(2);
       expect(new Set(note.questions).size).toBe(note.questions.length);
     }
+  });
+});
+
+describe("chapter 4 content holds up", () => {
+  it("has four situations", () => {
+    expect(CHAPTER_4).toHaveLength(4);
+  });
+
+  it("gives every situation an outcome for all four WHAT clauses", () => {
+    for (const s of CHAPTER_4) {
+      for (const what of whatOptions(LANG)) {
+        expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
+      }
+    }
+  });
+
+  it("never lets the passers-through speak", () => {
+    // §4: "אין להם קול בכלל". What נעם did, or what was done to him, is
+    // always reported by somebody else — he never opens a scene.
+    for (const s of CHAPTER_4) {
+      expect(s.speakerGroup, s.id).not.toBe("ovrim");
+    }
+  });
+
+  it("puts נעם on both sides: once as the actor, once as the one harmed", () => {
+    expect(c4s1.actorId).toBe("noam");
+    expect(c4s2.victimId).toBe("noam");
+    expect(c4s4.actorId).toBe("noam");
+  });
+
+  it("is the first chapter to move a right belonging to the passers-through", () => {
+    // §8's own example is "הזכות לקניין שבורה — אצל העוברים", and it has
+    // nowhere to appear before this chapter.
+    const earlier = [...CHAPTER_1, ...CHAPTER_2, ...CHAPTER_3];
+    const touchesOvrim = (s: Situation) =>
+      [s.noRuleOutcome, s.overrideOutcome, ...Object.values(s.outcomes)].some(
+        (o) => o?.rights.some((r) => r.group === "ovrim"),
+      );
+    expect(earlier.some(touchesOvrim)).toBe(false);
+    expect(CHAPTER_4.some(touchesOvrim)).toBe(true);
+  });
+
+  it("names the concept only at the chapter's end, not in a situation", () => {
+    // §2: felt first, named afterwards. The epilogue is the one place both
+    // halves are said together.
+    const epilogue = chapter4(LANG).epilogue;
+    expect(epilogue).toBeTruthy();
+    expect(chapter1(LANG).epilogue).toBeUndefined();
+  });
+});
+
+describe("§6's two outcomes are both reachable at c4s1", () => {
+  function waterRule(who: Rule["who"]): Rule {
+    return rule({ id: "water", subject: "mayim", who, writtenAt: "c1s1" });
+  }
+
+  it("a residents rule leaves the gap: nothing reaches him", () => {
+    const state = addRule(initialState(4), waterRule({ scope: "residents" }));
+    const prompt = promptFor(state, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID);
+    expect(prompt.kind).toBe("no-rule");
+  });
+
+  it("a group rule leaves the same gap — he belongs to no village group", () => {
+    const state = addRule(
+      initialState(4),
+      waterRule({ scope: "group", group: "roim" }),
+    );
+    expect(
+      promptFor(state, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("no-rule");
+  });
+
+  it("an anyone-present rule reaches him, and he pays under it", () => {
+    const state = addRule(
+      initialState(4),
+      waterRule({ scope: "anyone-present" }),
+    );
+    expect(
+      promptFor(state, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("rule-applies");
+  });
+
+  it("an everyone-except rule reaches him unless it excludes his own group", () => {
+    const reaches = addRule(
+      initialState(4),
+      waterRule({ scope: "everyone-except", group: "roim" }),
+    );
+    expect(
+      promptFor(reaches, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("rule-applies");
+
+    const excludesHim = addRule(
+      initialState(4),
+      waterRule({ scope: "everyone-except", group: "ovrim" }),
+    );
+    expect(
+      promptFor(excludesHim, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("no-rule");
+  });
+
+  it("c4s4's no-rule copy has to serve two different silences", () => {
+    // It fires when the child wrote no shetach rule at all, and when they
+    // wrote one that doesn't reach him. The copy must not claim a rule
+    // exists — this test is here to say why if anyone rewrites it.
+    const wroteNothing = initialState(4);
+    expect(
+      promptFor(wroteNothing, c4s4, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("no-rule");
+
+    const wroteOneThatMissesHim = addRule(
+      initialState(4),
+      rule({ id: "ground", subject: "shetach", who: { scope: "residents" } }),
+    );
+    expect(
+      promptFor(
+        wroteOneThatMissesHim,
+        c4s4,
+        ACTORS_WITH_CHILD,
+        SITUATIONS_BY_ID,
+      ).kind,
+    ).toBe("no-rule");
+  });
+
+  it("the covered branch is what puts העוברים on the rights board", () => {
+    const covered = outcomeFor(c4s1, "forbidden", false);
+    expect(covered.rights.some((r) => r.group === "ovrim")).toBe(true);
+    // The gap costs the village instead — nobody's rule was broken, but
+    // יותם stops trusting that anything here is settled.
+    const gap = outcomeFor(c4s1, null, false);
+    expect(gap.rights.every((r) => r.group !== "ovrim")).toBe(true);
+    expect(gap.trust).toContainEqual({ group: "vatikim", delta: -1 });
+  });
+});
+
+describe("a rule binds by who acted, so it can protect someone it never binds", () => {
+  it("a residents-only rule covers ברק at c4s2, though נעם is the one harmed", () => {
+    // ruleApplies checks the actor's coverage. נעם is never bound by this
+    // rule, and is protected by it anyway — without having been asked.
+    const state = addRule(
+      initialState(4),
+      rule({ id: "things", subject: "chefetz", who: { scope: "residents" } }),
+    );
+    expect(
+      promptFor(state, c4s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("rule-applies");
+    expect(whoCovers(state.rules[0], ACTORS.noam)).toBe(false);
+  });
+});
+
+describe("§7's line, said once, on the second override", () => {
+  function overrode(state: GameState, situation: Situation): GameState {
+    return resolve(state, {
+      situation,
+      governedBy: "ask-first",
+      appliedRuleIds: ["r"],
+      overrode: true,
+    });
+  }
+
+  it("stays quiet on the first override and speaks on the second", () => {
+    let state = initialState();
+    expect(saysOverrideNote(state, true)).toBe(false);
+
+    state = overrode(state, s1);
+    // Second override: this is the one the village names.
+    expect(saysOverrideNote(state, true)).toBe(true);
+  });
+
+  it("never speaks when the child is not overriding", () => {
+    const state = overrode(initialState(), s1);
+    expect(saysOverrideNote(state, false)).toBe(false);
+  });
+
+  it("is said once, and not again on a third override", () => {
+    let state = overrode(initialState(), s1);
+    expect(state.sawOverrideNote).toBe(false);
+
+    state = overrode(state, c1s2);
+    expect(state.sawOverrideNote).toBe(true);
+    expect(saysOverrideNote(state, true)).toBe(false);
+
+    state = overrode(state, s3);
+    expect(saysOverrideNote(state, true)).toBe(false);
+  });
+});
+
+describe("chapter 5 content holds up", () => {
+  it("has four situations, one of which asks who decides", () => {
+    expect(CHAPTER_5).toHaveLength(4);
+    expect(CHAPTER_5.filter((s) => s.invitesAuthority)).toHaveLength(1);
+  });
+
+  it("never asks for an ordinary rule and the authority rule at once", () => {
+    for (const s of CHAPTER_5) {
+      expect(s.invitesAuthority && s.invitesRule, s.id).toBeFalsy();
+    }
+  });
+
+  it("gives every situation an outcome for all four WHAT clauses", () => {
+    for (const s of CHAPTER_5) {
+      for (const what of whatOptions(LANG)) {
+        expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
+      }
+    }
+  });
+
+  it("covers every authority form at the situation that tests it", () => {
+    // c5s3 is where whatever was written about authority actually bites, so
+    // every form the builder offers needs somewhere to land — including both
+    // sides of the election, which are different things to live through.
+    const variants = CHAPTER_5[2].variantOutcomes ?? {};
+    expect(Object.keys(variants).sort()).toEqual([
+      "each-alone",
+      "most-senior",
+      "two-together",
+      "village-chooses-lost",
+      "village-chooses-won",
+      "you",
+    ]);
+  });
+
+  it("covers both sides of losing at the situation that lives with it", () => {
+    expect(Object.keys(CHAPTER_5[3].variantOutcomes ?? {}).sort()).toEqual([
+      "other-decides",
+      "you-decide",
+    ]);
+  });
+});
+
+describe("who votes", () => {
+  it("leaves the passers-through out when the rule is for residents", () => {
+    const eligible = eligibleGroups({ scope: "residents" });
+    expect(eligible).not.toContain("ovrim");
+    expect(eligible).toHaveLength(GROUPS.length - 1);
+  });
+
+  it("includes everyone when the rule reaches anyone present", () => {
+    expect(eligibleGroups({ scope: "anyone-present" })).toEqual(GROUPS);
+  });
+
+  it("narrows to one group, or to everyone but one", () => {
+    expect(eligibleGroups({ scope: "group", group: "roim" })).toEqual(["roim"]);
+    expect(
+      eligibleGroups({ scope: "everyone-except", group: "roim" }),
+    ).not.toContain("roim");
+  });
+});
+
+describe("the election", () => {
+  function withTrust(trust: Partial<Record<(typeof GROUPS)[number], number>>) {
+    const state = initialState(5);
+    return { ...state, trust: { ...state.trust, ...trust } };
+  }
+
+  it("counts a group that comes to you first as a vote for you", () => {
+    // Everyone starts trusting the child, so an untouched game is a sweep.
+    const result = runElection(initialState(5), { scope: "anyone-present" });
+    expect(result.votedFor).toEqual(GROUPS);
+    expect(result.votedAgainst).toEqual([]);
+    expect(result.won).toBe(true);
+  });
+
+  it("counts a group that stopped coming as a vote against", () => {
+    const state = withTrust({
+      vatikim: 0,
+      roim: 0,
+      banaim: 0,
+      yeladim: 0,
+      hadashim: 0,
+      ovrim: 0,
+    });
+    const result = runElection(state, { scope: "anyone-present" });
+    expect(result.votedAgainst).toEqual(GROUPS);
+    expect(result.won).toBe(false);
+  });
+
+  it("lets a half-trusting group abstain rather than count against you", () => {
+    const state = withTrust({ vatikim: 1, roim: 1 });
+    const result = runElection(state, { scope: "anyone-present" });
+    expect(result.abstained).toEqual(["vatikim", "roim"]);
+    expect(result.votedFor).not.toContain("vatikim");
+    expect(result.votedAgainst).not.toContain("vatikim");
+  });
+
+  it("keeps the incumbent on a tie — nobody voted them out", () => {
+    const state = withTrust({ vatikim: 0, roim: 0, banaim: 0 });
+    const result = runElection(state, { scope: "anyone-present" });
+    expect(result.votedFor).toHaveLength(3);
+    expect(result.votedAgainst).toHaveLength(3);
+    expect(result.won).toBe(true);
+  });
+
+  it("is decided only by the groups the WHO field let vote", () => {
+    // The passers-through are against, and it changes nothing, because a
+    // residents-scoped rule never gave them a voice (§6).
+    const state = withTrust({ ovrim: 0 });
+    expect(runElection(state, { scope: "residents" }).eligible).not.toContain(
+      "ovrim",
+    );
+    expect(
+      runElection(state, { scope: "anyone-present" }).votedAgainst,
+    ).toEqual(["ovrim"]);
+  });
+});
+
+describe("who decides, once it is written down", () => {
+  it("keeps the child deciding when they wrote that they decide", () => {
+    const state = setAuthority(initialState(5), {
+      form: "you",
+      who: { scope: "residents" },
+    });
+    expect(state.decider).toBe("you");
+    expect(state.election).toBeNull();
+    expect(canOverride(state)).toBe(true);
+  });
+
+  it("hands it away when the most senior decides — that is not the child", () => {
+    const state = setAuthority(initialState(5), {
+      form: "most-senior",
+      who: { scope: "residents" },
+    });
+    expect(state.decider).toBe("other");
+    expect(canOverride(state)).toBe(false);
+  });
+
+  it("keeps the child nominally in place when each decides for themselves", () => {
+    // The cost of this one lands in the outcomes, not in the role.
+    expect(deciderFor("each-alone", null)).toBe("you");
+    expect(deciderFor("two-together", null)).toBe("you");
+  });
+
+  it("runs the vote, and hands the role over if it is lost", () => {
+    const burnt = initialState(5);
+    const state = setAuthority(
+      {
+        ...burnt,
+        trust: {
+          ...burnt.trust,
+          vatikim: 0,
+          roim: 0,
+          banaim: 0,
+          yeladim: 0,
+          hadashim: 0,
+        },
+      },
+      { form: "village-chooses", who: { scope: "residents" } },
+    );
+    expect(state.election?.won).toBe(false);
+    expect(state.decider).toBe("other");
+  });
+});
+
+describe("losing is real, and the game goes on under it", () => {
+  const lost = setAuthority(initialState(5), {
+    form: "most-senior",
+    who: { scope: "residents" },
+  });
+
+  it("stops the child writing rules into the book", () => {
+    const situation = { ...c1s2, invitesRule: true };
+    expect(
+      promptFor(lost, situation, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("no-rule");
+  });
+
+  it("still applies the rules the child already wrote, to the child", () => {
+    const state = addRule(lost, rule({ subject: "mayim" }));
+    expect(promptFor(state, s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind).toBe(
+      "rule-applies",
+    );
+    // The rule holds; the child just no longer chooses whether to apply it.
+    expect(canOverride(state)).toBe(false);
+  });
+
+  it("branches the outcome on who decides, not on the WHAT clause", () => {
+    const c5s4 = CHAPTER_5[3];
+    const mine = outcomeFor(c5s4, "ask-first", false, variantKeys(lost));
+    const kept = outcomeFor(
+      c5s4,
+      "ask-first",
+      false,
+      variantKeys(initialState(5)),
+    );
+    expect(mine.text).toBe(c5s4.variantOutcomes!["other-decides"].text);
+    expect(kept.text).toBe(c5s4.variantOutcomes!["you-decide"].text);
+  });
+
+  it("tells c5s3 apart by which form was written", () => {
+    for (const form of [
+      "you",
+      "most-senior",
+      "two-together",
+      "each-alone",
+    ] as const) {
+      const state = setAuthority(initialState(5), {
+        form,
+        who: { scope: "residents" },
+      });
+      expect(authorityVariant(state)).toBe(form);
+    }
+  });
+
+  it("tells winning and losing the same vote apart", () => {
+    const base = initialState(5);
+    const won = setAuthority(base, {
+      form: "village-chooses",
+      who: { scope: "residents" },
+    });
+    expect(authorityVariant(won)).toBe("village-chooses-won");
+
+    const lostVote = setAuthority(
+      {
+        ...base,
+        trust: {
+          ...base.trust,
+          vatikim: 0,
+          roim: 0,
+          banaim: 0,
+          yeladim: 0,
+          hadashim: 0,
+        },
+      },
+      { form: "village-chooses", who: { scope: "residents" } },
+    );
+    expect(authorityVariant(lostVote)).toBe("village-chooses-lost");
+  });
+});
+
+describe("the book closes", () => {
+  it("asks who decides before anything else at c5s2", () => {
+    // c5s2 must not be shadowed by an ordinary rule that happens to fire.
+    const c5s2 = CHAPTER_5[1];
+    const state = addRule(initialState(5), rule({ subject: "mayim" }));
+    expect(
+      promptFor(state, c5s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("write-authority");
+  });
+
+  it("says the line was written, not that nothing was", () => {
+    // The outcome of c5s2 turns on whether the line now exists at all; a
+    // playthrough caught it still reading "you wrote nothing" after the
+    // child had just written it.
+    const c5s2 = CHAPTER_5[1];
+    const wrote = setAuthority(initialState(5), {
+      form: "each-alone",
+      who: { scope: "residents" },
+    });
+    expect(outcomeFor(c5s2, null, false, variantKeys(wrote)).text).toBe(
+      c5s2.variantOutcomes!["authority-written"].text,
+    );
+    // Declining is still a real answer, and keeps its own outcome.
+    expect(
+      outcomeFor(c5s2, null, false, variantKeys(initialState(5))).text,
+    ).toBe(c5s2.noRuleOutcome.text);
+  });
+
+  it("asks only once", () => {
+    const c5s2 = CHAPTER_5[1];
+    const answered = setAuthority(initialState(5), {
+      form: "you",
+      who: { scope: "residents" },
+    });
+    expect(
+      promptFor(answered, c5s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).not.toBe("write-authority");
+  });
+
+  it("swaps one rule in place, keeping the book's order and length", () => {
+    let state = addRule(initialState(5), rule({ id: "a", subject: "mayim" }));
+    state = addRule(state, rule({ id: "b", subject: "shvil" }));
+    state = replaceRule(state, "a", rule({ id: "ignored", what: "forbidden" }));
+
+    expect(state.rules).toHaveLength(2);
+    expect(state.rules.map((r) => r.id)).toEqual(["a", "b"]);
+    expect(state.rules[0].what).toBe("forbidden");
+  });
+
+  it("stops anything else being written once it is closed", () => {
+    const closed = closeBook(initialState(5), "two-agree");
+    expect(closed.bookClosed).toBe(true);
+    expect(closed.amendment).toBe("two-agree");
+
+    const situation = { ...c1s2, invitesRule: true };
+    expect(
+      promptFor(closed, situation, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("no-rule");
   });
 });

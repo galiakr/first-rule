@@ -1,6 +1,6 @@
 # Chapter 4 — "מי שלא היה כאן" (Who Wasn't Here)
 
-> Status: planned, not yet built. See `roadmap.md` for how this fits with 5–7.
+> Status: **built**. See `roadmap.md` for how 5–7 follow.
 
 ## Context
 
@@ -45,3 +45,12 @@ Chapter epilogue (new `epilogue` field, see roadmap): the two halves of the conc
 ## Verification
 
 `tsc`, lint, tests, build, both e2e specs; play through with a `residents` water rule and again with `anyone-present`, confirming the two different c4s1 screens and that "העוברים" shows up on the rights board at chapter end.
+
+## What changed in the build
+
+- **c4s1's `power` is `victim-stronger`**, not `equal`: נעם owns nothing here and has no standing, while יותם dug the well. It also keeps c4s1's traits from accidentally matching c1s1's, which is only cosmetic today (precedents are content-authored via `precedentOf`, never runtime-detected) but would have been a trap later.
+- **c4s2 uses a blanket, and `firstOffence: false`** — ברק already took מיכל's hammer in c2s1, so a `first-time-forgiven` rule bites him here. That continuity was free and worth keeping.
+- **The two branches damage different rights, which is the chapter's argument in one line.** Playing it through with a `residents` water rule leaves `kinyan` **broken** for `ovrim` (nothing protected נעם when his blanket was taken); playing it with `anyone-present` leaves `shivyon` **strained** for them instead (the rule fell on someone who had no part in it). §6 says neither is the right answer, and the rights board now says so without a word of commentary.
+- **c4s4's no-rule copy had to be rewritten during verification.** It first read "the rule you wrote about the ground doesn't reach נעם", which is false when the child skipped writing one at c4s3 — the same outcome serves both silences. An engine test now pins both paths so the next person to touch that copy sees why it is worded the way it is.
+- **§7's line landed here as planned**, as `saysOverrideNote(state, overriding)` in `game.ts` plus `sawOverrideNote` on `GameState`. It is asked _before_ resolving, with whether this decision is an override, so the UI can show it beside that decision's outcome. Twice, not once: one override is a hard case, two is a pattern, and the village only names a pattern.
+- **`epilogue` is optional on a new `Chapter` type** in `types.ts`, so chapters 1–3 are unchanged and `chapters(lang)` doesn't become a union the UI can't read.

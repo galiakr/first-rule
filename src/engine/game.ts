@@ -33,6 +33,12 @@ export function initialState(chapter = 1): GameState {
     log: [],
     precedents: [],
     sawCollisionNote: false,
+    sawOverrideNote: false,
+    authority: null,
+    election: null,
+    decider: "you",
+    amendment: null,
+    bookClosed: false,
   };
 }
 
@@ -51,6 +57,7 @@ export type Prompt =
       precedentContext?: PrecedentContext;
     }
   | { kind: "rule-applies"; situation: Situation; rules: Rule[] }
+  | { kind: "write-authority"; situation: Situation }
   | {
       kind: "collision";
       situation: Situation;
@@ -81,6 +88,13 @@ export function promptFor(
   actors: Record<string, Actor>,
   situationsById: Record<string, Situation>,
 ): Prompt {
+  // The authority question comes before everything else. c5s2 exists only to
+  // ask it, and it must not be shadowed by an ordinary rule that happens to
+  // fire on the same scene (§9.5).
+  if (situation.invitesAuthority && !state.authority) {
+    return { kind: "write-authority", situation };
+  }
+
   const collision = fieldCollision(state.rules, situation, actors);
   if (collision) {
     return {
@@ -113,25 +127,49 @@ export function promptFor(
         source,
         differences: traitDifferences(precedent, situation),
       };
-      return situation.invitesRule
+      return situation.invitesRule && canWriteRules(state)
         ? { kind: "write-rule", situation, precedentContext }
         : { kind: "no-rule", situation, precedentContext };
     }
   }
 
-  if (situation.invitesRule) {
+  if (situation.invitesRule && canWriteRules(state)) {
     return { kind: "write-rule", situation };
   }
   return { kind: "no-rule", situation };
 }
 
-/** The outcome the village gets, given how the situation was settled. */
+/**
+ * May the child still put a rule in the book?
+ *
+ * No once someone else decides (§9.5 — losing is real, and the game goes on
+ * under it), and no once the book is closed (§10). Both collapse a
+ * write-rule prompt into no-rule rather than removing the situation: the
+ * thing still happens, the child just has nothing to do about it.
+ */
+export function canWriteRules(state: GameState): boolean {
+  return state.decider === "you" && !state.bookClosed;
+}
+
+/**
+ * The outcome the village gets, given how the situation was settled.
+ *
+ * `variant` is for situations that turn on something other than their WHAT
+ * clause — chapter 5's branch on which authority form was written. It wins
+ * over the WHAT-keyed outcomes when the situation defines one, because in
+ * those situations the WHAT clause is not what the scene is about.
+ */
 export function outcomeFor(
   situation: Situation,
   what: WhatClause | null,
   overrode: boolean,
+  variants: string[] = [],
 ): Outcome {
   if (overrode) return situation.overrideOutcome;
+  for (const key of variants) {
+    const found = situation.variantOutcomes?.[key];
+    if (found) return found;
+  }
   if (what === null) return situation.noRuleOutcome;
   return situation.outcomes[what] ?? situation.noRuleOutcome;
 }
@@ -143,6 +181,8 @@ export interface Resolution {
   appliedRuleIds: string[];
   /** The child went against a rule that did apply. */
   overrode: boolean;
+  /** Candidate `variantOutcomes` keys, most specific first — see outcomeFor. */
+  variants?: string[];
 }
 
 export function resolve(state: GameState, resolution: Resolution): GameState {
@@ -150,6 +190,7 @@ export function resolve(state: GameState, resolution: Resolution): GameState {
     resolution.situation,
     resolution.governedBy,
     resolution.overrode,
+    resolution.variants,
   );
 
   // Going against your own rule costs trust with whoever it was written to
@@ -188,11 +229,31 @@ export function resolve(state: GameState, resolution: Resolution): GameState {
     precedents: [...state.precedents, newPrecedent],
     sawCollisionNote:
       state.sawCollisionNote || resolution.appliedRuleIds.length > 1,
+    sawOverrideNote:
+      state.sawOverrideNote || saysOverrideNote(state, resolution.overrode),
   };
 }
 
 export function addRule(state: GameState, rule: Rule): GameState {
   return { ...state, rules: [...state.rules, rule] };
+}
+
+/**
+ * Swaps one rule for a rewritten version, in place (§10 — the child may
+ * change exactly one rule as the book closes). Order and length are kept, so
+ * the book still reads as the history of what was decided and when.
+ */
+export function replaceRule(
+  state: GameState,
+  ruleId: string,
+  next: Rule,
+): GameState {
+  return {
+    ...state,
+    rules: state.rules.map((r) =>
+      r.id === ruleId ? { ...next, id: r.id } : r,
+    ),
+  };
 }
 
 /**
@@ -221,4 +282,22 @@ export function advanceChapter(state: GameState): GameState {
 /** How many times the child has gone against a rule that applied. */
 export function overrideCount(state: GameState): number {
   return state.log.filter((e) => e.overrode).length;
+}
+
+/**
+ * Should §7's line be said now?
+ *
+ * The design doc builds the whole game around one sentence — "so the rules
+ * here are whatever you decide at the moment?" — said the second time the
+ * child goes against a rule that applied. Twice, not once: once is a hard
+ * case, twice is a pattern, and the village only names a pattern.
+ *
+ * Asked *before* resolving, with whether this decision is an override, so
+ * the UI can show it alongside that decision's outcome. Said once, ever.
+ */
+export function saysOverrideNote(
+  state: GameState,
+  overriding: boolean,
+): boolean {
+  return overriding && !state.sawOverrideNote && overrideCount(state) + 1 === 2;
 }

@@ -17,6 +17,7 @@ import {
   translator,
 } from "@/content/tokens";
 import { actors, childActor, groupBlurb } from "@/content/village";
+import { initialState } from "@/engine/game";
 import { ruleSentence } from "@/engine/match";
 import { groupLabel, subjectForms, whatOptions } from "@/engine/options";
 import { protectionLabel } from "@/engine/rights";
@@ -190,6 +191,7 @@ describe("the switcher", () => {
       <>
         <LanguageSwitcher />
         <RuleBook
+          state={initialState()}
           rules={[RULE]}
           precedents={[]}
           situationsById={{}}

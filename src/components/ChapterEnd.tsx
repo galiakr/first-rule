@@ -12,9 +12,12 @@ import type { GameState } from "@/engine/types";
  */
 export default function ChapterEnd({
   state,
+  epilogue,
   onContinue,
 }: {
   state: GameState;
+  /** The chapter's closing idea, named in words. Not every chapter has one. */
+  epilogue?: string;
   /** Present when there's a next chapter to move to; absent at the last built one. */
   onContinue?: () => void;
 }) {
@@ -102,6 +105,14 @@ export default function ChapterEnd({
             {t("chapter_end.protected_text", {
               groups: untouched.map((g) => labels[g]).join(", "),
             })}
+          </p>
+        </section>
+      ) : null}
+
+      {epilogue ? (
+        <section className="border-t border-moss pt-6">
+          <p className="max-w-read border-s-2 border-lamp pe-4 ps-3 text-lg leading-relaxed">
+            {epilogue}
           </p>
         </section>
       ) : null}
