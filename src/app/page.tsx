@@ -28,6 +28,7 @@ import {
   outcomeFor,
   promptFor,
   replaceRule,
+  resolutionKind,
   resolve,
   saysOverrideNote,
 } from "@/engine/game";
@@ -46,6 +47,7 @@ import type {
   AmendmentForm,
   AuthorityRule,
   GameState,
+  ResolutionKind,
   Rule,
   TraitKey,
   WhatClause,
@@ -67,7 +69,12 @@ interface Pending {
   overrode: boolean;
   /** Chapter 5's situations branch on the authority rule, not the WHAT clause. */
   variants?: string[];
+  /** Which of the three jobs this was — chapter 6 replays these by name. */
+  kind: ResolutionKind;
 }
+
+/** What `settle` is given; the kind is derived from the prompt on screen. */
+type Decision = Omit<Pending, "kind"> & { wrote?: boolean };
 
 /** How a group shows up, given how much it trusts you. Never a number (§7). */
 function opener(
@@ -196,9 +203,15 @@ export default function Page() {
    * outcome section appears below it. Captures `prompt` from this render's
    * closure, so the recap always matches what was actually on screen when
    * the child acted. */
-  function settle(next: Pending) {
+  function settle(next: Decision) {
+    if (!prompt) return;
+    const { wrote = false, ...rest } = next;
     setDecidedPrompt(prompt);
-    setPending({ variants: variantKeys(state), ...next });
+    setPending({
+      variants: variantKeys(state),
+      ...rest,
+      kind: resolutionKind(prompt.kind, { overrode: rest.overrode, wrote }),
+    });
   }
 
   function commit() {
@@ -228,6 +241,7 @@ export default function Page() {
       appliedRuleIds: [],
       overrode: false,
       variants: variantKeys(next),
+      kind: "wrote-authority",
     });
   }
 
@@ -237,6 +251,7 @@ export default function Page() {
       governedBy: rule.what,
       appliedRuleIds: [rule.id],
       overrode: false,
+      wrote: true,
     });
   }
 

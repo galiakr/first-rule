@@ -19,6 +19,7 @@ import type {
   Precedent,
   Rule,
   Situation,
+  ResolutionKind,
   TraitKey,
   WhatClause,
 } from "./types";
@@ -152,6 +153,41 @@ export function canWriteRules(state: GameState): boolean {
 }
 
 /**
+ * Which of the three jobs the child was doing, given the prompt in front of
+ * them and what they did with it (§9.6).
+ *
+ * `wrote` means the child put something in the book at this step — a rule,
+ * or the line about who decides. Declining either is not legislating; it is
+ * simply nothing being decided.
+ *
+ * Kept here, pure and derived from the prompt, rather than assembled at each
+ * call site: chapter 6 replays these moments back to the child by name, and
+ * a mislabelled one would put the wrong word on something they did.
+ */
+export function resolutionKind(
+  promptKind: Prompt["kind"],
+  decision: { overrode: boolean; wrote: boolean },
+): ResolutionKind {
+  switch (promptKind) {
+    case "write-rule":
+      return decision.wrote ? "wrote-rule" : "no-rule";
+    case "write-authority":
+      return decision.wrote ? "wrote-authority" : "no-rule";
+    case "rule-applies":
+      return decision.overrode ? "overrode" : "applied-rule";
+    case "precedent-reminder":
+      return decision.overrode ? "overrode" : "ruled-by-precedent";
+    case "collision":
+      return "chose-in-collision";
+    case "no-rule":
+    // precedent-choice never settles a situation — answering it re-runs
+    // promptFor, which then lands on one of the kinds above.
+    case "precedent-choice":
+      return "no-rule";
+  }
+}
+
+/**
  * The outcome the village gets, given how the situation was settled.
  *
  * `variant` is for situations that turn on something other than their WHAT
@@ -183,6 +219,8 @@ export interface Resolution {
   overrode: boolean;
   /** Candidate `variantOutcomes` keys, most specific first — see outcomeFor. */
   variants?: string[];
+  /** Which kind of work this was — see resolutionKind. */
+  kind: ResolutionKind;
 }
 
 export function resolve(state: GameState, resolution: Resolution): GameState {
@@ -224,6 +262,7 @@ export function resolve(state: GameState, resolution: Resolution): GameState {
         situationId: resolution.situation.id,
         appliedRuleIds: resolution.appliedRuleIds,
         overrode: resolution.overrode,
+        kind: resolution.kind,
       },
     ],
     precedents: [...state.precedents, newPrecedent],

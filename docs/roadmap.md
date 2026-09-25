@@ -6,11 +6,11 @@
 
 The remaining chapters are not independent. Three engine additions flow forward:
 
-| Introduced in            | What                                                                      | Consumed by                                                                                        |
-| ------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Chapter 5                | the **authority rule** (who decides) and the **election**                 | Chapter 6 (the three jobs are staffed against it), Chapter 7 (the finale shows who holds each job) |
-| Chapter 5 (book closing) | the **amendment rule** (how a rule may be changed), written behind a veil | Chapter 7 (the whole chapter branches on it)                                                       |
-| Before Chapter 6         | `LogEntry.kind` — _how_ each situation was resolved                       | Chapter 6's opening replays three of the child's own moments and can't find them without it        |
+| Introduced in                  | What                                                                      | Consumed by                                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Chapter 5                      | the **authority rule** (who decides) and the **election**                 | Chapter 6 (the three jobs are staffed against it), Chapter 7 (the finale shows who holds each job) |
+| Chapter 5 (book closing)       | the **amendment rule** (how a rule may be changed), written behind a veil | Chapter 7 (the whole chapter branches on it)                                                       |
+| ~~Before Chapter 6~~ _(built)_ | `LogEntry.kind` — _how_ each situation was resolved                       | Chapter 6's opening replays three of the child's own moments and can't find them without it        |
 
 So: **6 → 7, in order.** Chapters 4 and 5 are built. Chapter 5 delivered both things the later chapters need — the authority rule with its election, and the amendment rule written behind a veil — plus a general `variantOutcomes` mechanism chapter 6 can reuse for its three jobs without touching the engine.
 
@@ -18,8 +18,8 @@ So: **6 → 7, in order.** Chapters 4 and 5 are built. Chapter 5 delivered both 
 
 ## Cross-cutting backlog (not chapter-specific)
 
-- **§7's "two overrides" line is not built.** `overrideCount()` exists in `game.ts` and nothing calls it. After the child's second override, a character is meant to say _"אז הכללים כאן זה מה שאתה מחליט באותו רגע?"_ — the sentence the design doc says the whole game is built around. Cheap to add (a one-time note on the outcome screen, like the collision note); Chapter 4 is the natural place since it's otherwise light.
-- **Per-chapter epilogue.** `ChapterEnd` has one generic closing note. Chapters 4–7 each end by naming a concept (§6's "two halves", §9's constitution line, the finale). Add an `epilogue` string per chapter entry, shown at the end instead of the shared note.
+- ~~**§7's "two overrides" line.**~~ Built with chapter 4: `saysOverrideNote()` in `game.ts` and `sawOverrideNote` on `GameState`. The line is said beside the outcome of the child's _second_ override, once ever — one override is a hard case, two is a pattern, and the village only names a pattern.
+- ~~**Per-chapter epilogue.**~~ Built with chapter 4: an optional `epilogue` on the `Chapter` type in `types.ts`, rendered by `ChapterEnd` above the continue button. Chapters 1–3 have none and were left untouched.
 - ~~**The book closes at the end of Chapter 5**~~ Built: `closeBook()` sets `bookClosed`, and `canWriteRules()` collapses any later write-rule prompt to no-rule. A content test over chapters 6–7 should still assert no situation sets `invitesRule` once they exist.
 - **`chefetz`/`davar` still aren't pinched** (carried from Chapter 2's plan). Chapter 7's rule-that-starts-to-hurt is the natural place to finally collide with one of them.
 

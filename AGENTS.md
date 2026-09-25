@@ -63,6 +63,7 @@ These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test h
 - **The rule book is open the whole game**; the rights board is only revealed at the end of a chapter (§10) — don't leak rights state into the always-visible book.
 - **The notebook names a concept only after its chapter is finished** (§2: felt first, named afterwards). `src/content/notes.ts` holds one note per chapter, and it is the only place in the game that uses adult vocabulary ("תקדים", "שלטון החוק") — never put those words into playable chapter content.
 - **A situation's subject is inherited, never chosen** — this is what makes rules land narrower than the child expects, on purpose.
+- **Every resolution records which of the three jobs it was** (`LogEntry.kind`, via `resolutionKind`). Chapter 6 replays these moments back to the child by name, so a mislabelled one puts the wrong word on something they did. `resolve()` requires it deliberately — a new call site has to say what kind of moment it is rather than defaulting to a wrong one.
 - **The book is closed after chapter 5** (§10). `canWriteRules()` collapses any later write-rule prompt to no-rule; don't work around it.
 - **The amendment rule is written behind a veil** (§10) — the child writes it in chapter 5 without knowing chapter 7 will make them want to change something. Nothing in `BookClosing` may hint at that; the veil is the point.
 - **`ovrim` never speaks** (§4: "אין להם קול בכלל"). No situation may set `speakerGroup: "ovrim"` — someone else always reports what a passer-through did or had done to them. Their trust still moves; it matters for Chapter 5's election. Pinned by a content test.
@@ -97,8 +98,8 @@ Stack: **Vitest** + **React Testing Library** + **Playwright** (e2e)
 
 ### Current state
 
-- `src/engine/` has full behavioral coverage (108 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
-- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 141 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
+- `src/engine/` has full behavioral coverage (113 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
+- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 146 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
 - `e2e/` has five real Playwright specs: `home.spec.ts` (the about screen), `notes.spec.ts` (the notebook opens from the header and every chapter is still locked at the start), `language.spec.ts` (switching mid-chapter keeps your place, flips `dir`, and re-reads a Hebrew-written rule as an English sentence), and `situation-screen.spec.ts`, which drives a full situation through a real browser and asserts scene/decide/outcome/lesson all stay visible on one screen as they accumulate, rather than replacing each other — the actual behavior the single-screen redesign depends on, not just that the final state is reachable.
 - No coverage threshold is enforced yet (`vitest.config.ts` reports coverage but doesn't gate on it) — turn on the toolkit-default 80% lines/functions threshold once component tests exist, not before, or CI will fail on day one for the wrong reason.
 
@@ -167,6 +168,7 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 
 - [ ] Chapters 1–5 are built (see `docs/chapter-1-plan.md` … `docs/chapter-5-plan.md`); chapters 6–7 are planned but not built (see `docs/roadmap.md`, `docs/chapter-6-plan.md`, `docs/chapter-7-plan.md`); save state is still unplanned
 - [ ] **Open for chapter 6:** losing the election sets `decider: "other"` and that persists. Chapter 6 asks the child to staff three jobs — what that means for a child who no longer decides isn't settled. See `docs/roadmap.md`.
+- [ ] **`davar` is never pinched.** A rule about it is written at c2s2 and no later situation uses that subject, so it can never fire again — a real §7 violation. Chapter 7 is the planned home for it. `broke` is likewise the one unused `ActKind`, and nothing tests the §6/§7 claim that all 16 builder options get pinched across the game.
 - [ ] Chapter 2 introduced `chefetz` and `davar` as fresh subjects (c2s1/c2s2) that aren't pinched within Chapter 2 itself — a later chapter needs to eventually collide with rules written for them, same as Chapter 1 already does for `mayim`/`shvil`
 - [ ] Four of five `ActKind` values used (`took-without-asking`, `blocked`, `told-what-was-private`, `refused-to-share`); only `broke` remains unused
 - [ ] A situation's `noRuleOutcome` fires both when the book is empty and when a rule exists but doesn't reach the actor. Copy for it must never claim a rule exists — c4s4 shipped that bug and was caught in verification, not by a test (prose can't be linted); `initialState()` vs. a non-covering rule is pinned for c4s4 in the engine suite as a reminder
