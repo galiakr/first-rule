@@ -276,12 +276,39 @@ export type RightsBoard = Record<string, ProtectionState>;
 
 export type TrustLevel = "comes-to-you" | "comes-but" | "stops-coming";
 
+/**
+ * What the child actually did at a situation — not what happened to the
+ * village, but which *kind of work* they were doing (§9.6).
+ *
+ * Chapter 6 opens by replaying three of the child's own moments and giving
+ * each one a name: they have been legislating, judging and enforcing all
+ * game without noticing. None of that is recoverable from the rules or the
+ * rights board, so it has to be recorded as it happens.
+ *
+ *   wrote-rule / wrote-authority  → חקיקה, legislating
+ *   ruled-by-precedent /
+ *     chose-in-collision          → שפיטה, judging
+ *   applied-rule                  → ביצוע, making it actually happen
+ *   overrode                      → none of the three, and §7's whole subject
+ *   no-rule                       → nothing was decided
+ */
+export type ResolutionKind =
+  | "wrote-rule"
+  | "wrote-authority"
+  | "applied-rule"
+  | "overrode"
+  | "ruled-by-precedent"
+  | "chose-in-collision"
+  | "no-rule";
+
 export interface LogEntry {
   situationId: string;
   /** Rules that fired, if any. */
   appliedRuleIds: string[];
   /** The child went against a rule that applied. */
   overrode: boolean;
+  /** Which kind of work the child was doing here — see ResolutionKind. */
+  kind: ResolutionKind;
 }
 
 export interface GameState {

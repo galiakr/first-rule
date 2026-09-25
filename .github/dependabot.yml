@@ -14,6 +14,18 @@ updates:
         dependency-type: "development"
       production-dependencies:
         dependency-type: "production"
+    # These two have been auto-merged past what the toolchain supports three
+    # times now, each time breaking `npm run lint` on main:
+    #   - typescript-eslint does not support TS 7 yet, so TypeScript is held
+    #     at 6.x (see typescript-eslint#10940)
+    #   - eslint-config-next's plugins peer-depend on ESLint <=9, so ESLint 10
+    #     resolves to an invalid tree
+    # Drop each ignore once the ecosystem catches up, not before.
+    ignore:
+      - dependency-name: "typescript"
+        versions: [">=7"]
+      - dependency-name: "eslint"
+        versions: [">=10"]
     commit-message:
       prefix: "chore"
       include: "scope"

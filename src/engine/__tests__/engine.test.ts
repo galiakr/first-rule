@@ -22,6 +22,7 @@ import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
 import {
   activatePrecedent,
   addRule,
+  resolutionKind,
   advanceChapter,
   initialState,
   outcomeFor,
@@ -52,7 +53,7 @@ import {
   rightsKey,
   trustLevel,
 } from "../rights";
-import type { GameState, Precedent, Rule, Situation } from "../types";
+import type { GameState, LogEntry, Precedent, Rule, Situation } from "../types";
 
 // The engine is language-agnostic; these tests pin behaviour, so they run
 // against Hebrew (the default) unless a case is specifically about language.
@@ -417,6 +418,7 @@ describe("playing the chapter through", () => {
       governedBy: "forbidden",
       appliedRuleIds: [water.id],
       overrode: false,
+      kind: "applied-rule",
     });
 
     expect(state.rights[rightsKey("shayachut", "yeladim")]).toBe("broken");
@@ -432,6 +434,7 @@ describe("playing the chapter through", () => {
       governedBy: "ask-first",
       appliedRuleIds: ["water"],
       overrode: true,
+      kind: "overrode",
     });
 
     expect(state.rights[rightsKey("shivyon", "vatikim")]).toBe("strained");
@@ -506,6 +509,7 @@ describe("what the child is asked, with a precedent in play", () => {
       governedBy: "ask-first",
       appliedRuleIds: [],
       overrode: false,
+      kind: "wrote-rule",
     });
   }
 
@@ -540,6 +544,7 @@ describe("resolving a situation records a precedent", () => {
       governedBy: "ask-first",
       appliedRuleIds: [],
       overrode: false,
+      kind: "wrote-rule",
     });
     expect(state.precedents).toHaveLength(1);
     expect(state.precedents[0]).toMatchObject({
@@ -597,6 +602,7 @@ describe("playing chapter 2 through", () => {
       governedBy: "ask-first",
       appliedRuleIds: [],
       overrode: false,
+      kind: "wrote-rule",
     });
   }
 
@@ -616,6 +622,7 @@ describe("playing chapter 2 through", () => {
       governedBy: atC2s3.precedent.governedBy,
       appliedRuleIds: [],
       overrode: false,
+      kind: "ruled-by-precedent",
     });
 
     const atC2s4 = promptFor(state, c2s4, ACTORS, SITUATIONS_BY_ID);
@@ -638,6 +645,7 @@ describe("playing chapter 2 through", () => {
       governedBy: atC2s3.precedent.governedBy,
       appliedRuleIds: [],
       overrode: false,
+      kind: "ruled-by-precedent",
     });
 
     const atC2s4 = promptFor(state, c2s4, ACTORS, SITUATIONS_BY_ID);
@@ -956,6 +964,7 @@ describe("§7's line, said once, on the second override", () => {
       governedBy: "ask-first",
       appliedRuleIds: ["r"],
       overrode: true,
+      kind: "overrode",
     });
   }
 
@@ -1286,5 +1295,92 @@ describe("the book closes", () => {
     expect(
       promptFor(closed, situation, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
     ).toBe("no-rule");
+  });
+});
+
+describe("the log remembers which of the three jobs the child was doing", () => {
+  it("calls writing into the book legislating, and declining nothing at all", () => {
+    expect(resolutionKind("write-rule", { overrode: false, wrote: true })).toBe(
+      "wrote-rule",
+    );
+    expect(
+      resolutionKind("write-rule", { overrode: false, wrote: false }),
+    ).toBe("no-rule");
+    expect(
+      resolutionKind("write-authority", { overrode: false, wrote: true }),
+    ).toBe("wrote-authority");
+  });
+
+  it("separates enforcing a rule from going against it", () => {
+    expect(
+      resolutionKind("rule-applies", { overrode: false, wrote: false }),
+    ).toBe("applied-rule");
+    expect(
+      resolutionKind("rule-applies", { overrode: true, wrote: false }),
+    ).toBe("overrode");
+  });
+
+  it("calls settling between past rulings judging", () => {
+    expect(
+      resolutionKind("precedent-reminder", { overrode: false, wrote: false }),
+    ).toBe("ruled-by-precedent");
+    expect(resolutionKind("collision", { overrode: false, wrote: false })).toBe(
+      "chose-in-collision",
+    );
+    // Going against a precedent is the override, not a ruling.
+    expect(
+      resolutionKind("precedent-reminder", { overrode: true, wrote: false }),
+    ).toBe("overrode");
+  });
+
+  it("records the kind on the log entry, situation by situation", () => {
+    let state = resolve(initialState(), {
+      situation: s1,
+      governedBy: "ask-first",
+      appliedRuleIds: [],
+      overrode: false,
+      kind: "wrote-rule",
+    });
+    state = resolve(state, {
+      situation: c1s2,
+      governedBy: "ask-first",
+      appliedRuleIds: ["r"],
+      overrode: false,
+      kind: "applied-rule",
+    });
+    expect(state.log.map((e) => e.kind)).toEqual([
+      "wrote-rule",
+      "applied-rule",
+    ]);
+  });
+
+  it("can find one moment of each job — what chapter 6 replays", () => {
+    // The opening of chapter 6 needs a legislative, a judicial and an
+    // executive moment out of the child's own game. This is the lookup.
+    let state = initialState();
+    const play = (situation: Situation, kind: LogEntry["kind"]) => {
+      state = resolve(state, {
+        situation,
+        governedBy: "ask-first",
+        appliedRuleIds: [],
+        overrode: false,
+        kind,
+      });
+    };
+    play(s1, "wrote-rule");
+    play(c1s2, "applied-rule");
+    play(s3, "ruled-by-precedent");
+
+    const first = (kinds: LogEntry["kind"][]) =>
+      state.log.find((e) => kinds.includes(e.kind));
+
+    expect(first(["wrote-rule", "wrote-authority"])?.situationId).toBe(s1.id);
+    expect(first(["applied-rule"])?.situationId).toBe(c1s2.id);
+    expect(
+      first(["ruled-by-precedent", "chose-in-collision"])?.situationId,
+    ).toBe(s3.id);
+    // And it reports honestly when a kind never happened, rather than
+    // inventing a moment.
+    expect(first(["overrode"])).toBeUndefined();
   });
 });
