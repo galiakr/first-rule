@@ -1,13 +1,10 @@
+"use client";
+
 import CharacterName from "@/components/CharacterName";
-import { ACTORS } from "@/content/village";
-
-// Longest name first, so a name that happens to be a prefix of another
-// (none today, but content changes) never gets shadowed by a shorter match.
-const ACTOR_LIST = Object.values(ACTORS).sort(
-  (a, b) => b.name.length - a.name.length,
-);
-
-const NAME_BY_TEXT = new Map(ACTOR_LIST.map((a) => [a.name, a.id]));
+import { useLang } from "@/content/language";
+import { actors } from "@/content/village";
+import type { Lang } from "@/content/tokens";
+import { perLanguage } from "@/content/tokens";
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -17,11 +14,24 @@ function escapeRegExp(value: string): string {
 // space (e.g. "לשירה" = "to שירה"), so this matches the name as a plain
 // substring rather than requiring a word boundary — \b doesn't know Hebrew
 // letters are word characters anyway. The prefix stays as plain text before
-// the highlighted name.
-const PATTERN = new RegExp(
-  `(${ACTOR_LIST.map((a) => escapeRegExp(a.name)).join("|")})`,
-  "g",
-);
+// the highlighted name. English names match the same way.
+const matcher = perLanguage((lang: Lang) => {
+  // Longest name first, so a name that happens to be a prefix of another
+  // (none today, but content changes) never gets shadowed by a shorter match.
+  const list = Object.values(actors(lang)).sort(
+    (a, b) => b.name.length - a.name.length,
+  );
+  return {
+    idByName: new Map(list.map((a) => [a.name, a.id])),
+    pattern:
+      list.length === 0
+        ? null
+        : new RegExp(
+            `(${list.map((a) => escapeRegExp(a.name)).join("|")})`,
+            "g",
+          ),
+  };
+});
 
 /**
  * Renders prose with every character mention turned into a hoverable
@@ -29,13 +39,17 @@ const PATTERN = new RegExp(
  * copy) — never inside a button, since the mention itself is focusable.
  */
 export default function LinkedText({ text }: { text: string }) {
-  if (ACTOR_LIST.length === 0) return <>{text}</>;
+  const lang = useLang();
+  const { idByName, pattern } = matcher(lang);
+  if (!pattern) return <>{text}</>;
 
-  const parts = text.split(PATTERN);
+  // split() ignores a global regex's lastIndex, so the shared pattern is safe.
+  const parts = text.split(pattern);
+
   return (
     <>
       {parts.map((part, i) => {
-        const actorId = NAME_BY_TEXT.get(part);
+        const actorId = idByName.get(part);
         return actorId ? <CharacterName key={i} actorId={actorId} /> : part;
       })}
     </>

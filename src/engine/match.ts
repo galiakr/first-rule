@@ -6,11 +6,14 @@
  * which is what keeps it from feeling arbitrary (design doc §6).
  */
 
+import { translator } from "@/content/tokens";
+import type { Lang } from "@/content/tokens";
+
 import {
-  CONSEQUENCE_OPTIONS,
-  WHAT_OPTIONS,
-  WHEN_OPTIONS,
-  WHO_OPTIONS,
+  consequenceOptions,
+  whatOptions,
+  whenOptions,
+  whoOptions,
   fill,
   findOption,
 } from "./options";
@@ -72,19 +75,29 @@ export function applicableRules(
   return rules.filter((r) => ruleApplies(r, situation, actors));
 }
 
-/** The rule as one Hebrew sentence — this is what the book shows. */
-export function ruleSentence(rule: Rule): string {
+/** The rule as one sentence — this is what the book shows. */
+export function ruleSentence(rule: Rule, lang: Lang): string {
   const who = fill(
-    findOption(WHO_OPTIONS, rule.who.scope).template,
+    findOption(whoOptions(lang), rule.who.scope).template,
     rule.subject,
+    lang,
     rule.who.group,
   );
-  const what = fill(findOption(WHAT_OPTIONS, rule.what).template, rule.subject);
-  const when = fill(findOption(WHEN_OPTIONS, rule.when).template, rule.subject);
-  const consequence = fill(
-    findOption(CONSEQUENCE_OPTIONS, rule.consequence).template,
+  const what = fill(
+    findOption(whatOptions(lang), rule.what).template,
     rule.subject,
+    lang,
+  );
+  const when = fill(
+    findOption(whenOptions(lang), rule.when).template,
+    rule.subject,
+    lang,
+  );
+  const consequence = fill(
+    findOption(consequenceOptions(lang), rule.consequence).template,
+    rule.subject,
+    lang,
   );
 
-  return `${who} ${what}, ${when}. אם לא — ${consequence}.`;
+  return translator(lang)("rule.sentence", { who, what, when, consequence });
 }

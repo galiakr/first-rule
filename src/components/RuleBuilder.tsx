@@ -2,16 +2,16 @@
 
 import { useMemo, useState } from "react";
 
-import { t } from "@/content/tokens";
+import { useLanguage } from "@/content/language";
 import { textualConflict } from "@/engine/conflict";
 import { ruleSentence } from "@/engine/match";
 import {
-  CONSEQUENCE_OPTIONS,
-  GROUP_LABEL,
-  SUBJECT_FORMS,
-  WHAT_OPTIONS,
-  WHEN_OPTIONS,
-  WHO_OPTIONS,
+  consequenceOptions,
+  groupLabel,
+  subjectForms,
+  whatOptions,
+  whenOptions,
+  whoOptions,
   fill,
   findOption,
 } from "@/engine/options";
@@ -57,7 +57,7 @@ function Field<T extends string>({
               type="button"
               onClick={() => onPick(o.value)}
               aria-pressed={picked}
-              className={`rounded-sm px-3 py-2 text-right text-[0.95rem] transition-colors ${
+              className={`rounded-sm px-3 py-2 text-start text-[0.95rem] transition-colors ${
                 picked
                   ? "bg-lamp text-night"
                   : "bg-dusk text-paper hover:bg-moss"
@@ -79,6 +79,7 @@ export default function RuleBuilder({
   onWrite,
   onSkip,
 }: Props) {
+  const { lang, t } = useLanguage();
   const [scope, setScope] = useState<WhoScope | null>(null);
   const [group, setGroup] = useState<GroupId | null>(null);
   const [what, setWhat] = useState<WhatClause | null>(null);
@@ -125,15 +126,24 @@ export default function RuleBuilder({
   const parts = [
     scope
       ? fill(
-          findOption(WHO_OPTIONS, scope).template,
+          findOption(whoOptions(lang), scope).template,
           subject,
+          lang,
           group ?? undefined,
         )
       : null,
-    what ? fill(findOption(WHAT_OPTIONS, what).template, subject) : null,
-    when ? fill(findOption(WHEN_OPTIONS, when).template, subject) : null,
+    what
+      ? fill(findOption(whatOptions(lang), what).template, subject, lang)
+      : null,
+    when
+      ? fill(findOption(whenOptions(lang), when).template, subject, lang)
+      : null,
     consequence
-      ? fill(findOption(CONSEQUENCE_OPTIONS, consequence).template, subject)
+      ? fill(
+          findOption(consequenceOptions(lang), consequence).template,
+          subject,
+          lang,
+        )
       : null,
   ];
   const blanks = [
@@ -148,7 +158,7 @@ export default function RuleBuilder({
       <div className="rounded-sm bg-paper p-5 text-ink">
         <p className="mb-1 text-sm text-ink/60">
           {t("builder.subject_prefix", {
-            subject: SUBJECT_FORMS[subject].label,
+            subject: subjectForms(lang)[subject].label,
           })}
         </p>
         <p className="font-book text-[1.35rem] leading-relaxed">
@@ -166,7 +176,7 @@ export default function RuleBuilder({
 
       <Field
         legend={t("builder.legend_who")}
-        options={WHO_OPTIONS}
+        options={whoOptions(lang)}
         value={scope}
         onPick={(v) => {
           setScope(v);
@@ -177,7 +187,10 @@ export default function RuleBuilder({
       {needsGroup ? (
         <Field
           legend={t("builder.legend_group")}
-          options={GROUPS.map((g) => ({ value: g, label: GROUP_LABEL[g] }))}
+          options={GROUPS.map((g) => ({
+            value: g,
+            label: groupLabel(lang)[g],
+          }))}
           value={group}
           onPick={setGroup}
         />
@@ -185,28 +198,28 @@ export default function RuleBuilder({
 
       <Field
         legend={t("builder.legend_what")}
-        options={WHAT_OPTIONS}
+        options={whatOptions(lang)}
         value={what}
         onPick={setWhat}
       />
       <Field
         legend={t("builder.legend_when")}
-        options={WHEN_OPTIONS}
+        options={whenOptions(lang)}
         value={when}
         onPick={setWhen}
       />
       <Field
         legend={t("builder.legend_consequence")}
-        options={CONSEQUENCE_OPTIONS}
+        options={consequenceOptions(lang)}
         value={consequence}
         onPick={setConsequence}
       />
 
       {clashes.length > 0 ? (
-        <div className="settle rounded-sm border-r-2 border-harm bg-dusk p-4">
+        <div className="settle rounded-sm border-s-2 border-harm bg-dusk p-4">
           <p className="mb-2 text-[0.95rem]">{t("builder.clash_intro")}</p>
           <p className="font-book text-[1.05rem] text-lamp">
-            {ruleSentence(clashes[0])}
+            {ruleSentence(clashes[0], lang)}
           </p>
           <p className="mt-2 text-sm text-quiet">{t("builder.clash_note")}</p>
         </div>

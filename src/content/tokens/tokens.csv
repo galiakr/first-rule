@@ -1,232 +1,297 @@
 key,description,he,en
-common.close,Generic close button/label used in dialogs,לסגור,
-common.back_to_list,Back button inside the table of contents detail view,חזרה לרשימה,
-app.title,Game title shown in the header on every screen,כלל ראשון,
-app.chapter_progress,"Header progress indicator. {chapter}=chapter number, {n}=current situation number, {total}=situations in the chapter",פרק {chapter} · מצב {n} מתוך {total},
-app.toc_button,Header button that opens the table of contents,תוכן העניינים,
-app.rulebook_button,Header button that opens the rule book (also its dialog title),ספר הכללים,
-app.intro_continue,Button on the chapter intro screen,להתחיל,
-app.decide.write_rule_intro,Shown when no rule covers the situation and the child can write one,אין שום כלל שנוגע בזה. אתה יכול לכתוב אחד עכשיו — והוא יישאר בספר.,
-app.decide.rule_applies_intro,Shown when an existing rule the child wrote applies to this situation,יש כלל בספר שחל על זה. אתה כתבת אותו.,
-app.decide.apply_rule,Button to apply the existing rule as written,להפעיל את הכלל,
-app.decide.override_rule,Button to go against the rule that applies this time,להחליט אחרת הפעם,
-app.decide.collision_intro,Shown when two of the child's own rules contradict each other for this case,"שני כללים שכתבת חלים כאן, והם אומרים דברים הפוכים.",
-app.decide.collision_first_time_note,One-time explanatory note shown the first time a field collision happens,לפעמים רואים מראש שכלל חדש מתנגש בישן. לפעמים מגלים רק כשזה כבר קרה למישהו.,
-app.decide.no_rule_intro,Shown when no rule applies and the situation doesn't invite writing one,אין בספר שום כלל שנוגע בזה. אף אחד לא כתב אחד בזמנו.,
-app.decide.continue,Continue button on the no-rule-applies screen,להמשיך,
-app.outcome.continue,Continue button after reading the outcome of a decision,ואז,
-app.lesson.next,"Continue button after the lesson, more situations remain",הלאה,
-app.lesson.close_chapter,"Continue button after the lesson, on the chapter's last situation",לסגור את הפרק,
-app.opener.comes_to_you,How a group's approach is described when it trusts the child fully. {group}=group name,"{group} באו אליך ראשונים, וסיפרו הכול.",
-app.opener.comes_but,How a group's approach is described at medium trust. {group}=group name,"{group} התלבטו לפני שבאו, וסיפרו רק חלק.",
-app.opener.stops_coming,How a group's approach is described at low trust. {group}=group name,"{group} לא באו לספר לך. שמעת על זה אחר כך, ממישהו אחר.",
-rulebook.close_aria,Accessible label for the scrim button that closes the rule book,לסגור את הספר,
-rulebook.empty,Shown when no rules have been written yet,הספר ריק. בכפר הזה עוד לא כתבו אף כלל.,
-rulebook.rule_number,Numbered label before each rule in the book. {n}=1-based index,כלל {n},
-toc.not_reached,"Marker next to a situation the child hasn't reached yet, disabled in the list",(עוד לא הגעת),
-about.title,Title of the screen shown before the village opens,"הכפר, לפני שנכנסים",
-about.village_text,Intro paragraph introducing the village on the about screen,"כפר קטן, בלי חומה ובלי שער. שש קבוצות גרות בו, חוץ מאחת שרק עוברת דרכו — ולכל אחת יש דבר אחר שמטריד אותה.",
-about.me_text,"Paragraph explaining the child's own role, on the about screen","אף אחד לא מינה אותך לשום דבר. אין לך תואר, ואין שום דבר שמונע ממישהו אחר בכפר לעשות בדיוק את מה שאתה עושה. אתה פשוט מי שכולם באים אליו כשמשהו נתקע — וזה יימשך רק כל עוד הם ממשיכים לבוא.",
-about.enter_village,Button that leaves the about screen and enters the village,להיכנס לכפר,
-village.groups.vatikim.label,Name of the veterans group,הוותיקים,
-village.groups.vatikim.blurb,One-line description of what the veterans group cares about,"היו כאן ראשונים, ומרגישים שמגיע להם קודם",
-village.groups.hadashim.label,Name of the newcomers group,החדשים,
-village.groups.hadashim.blurb,One-line description of what the newcomers group cares about,"הגיעו לא מזמן, ואין להם עדיין כלום מוסכם",
-village.groups.roim.label,Name of the shepherds group,הרועים,
-village.groups.roim.blurb,One-line description of what the shepherds group cares about,"צריכים שטח ומים, ונעים בין המקומות",
-village.groups.banaim.label,Name of the builders group,הבנאים,
-village.groups.banaim.blurb,One-line description of what the builders group cares about,"רוצים לשנות דברים, ומהר",
-village.groups.yeladim.label,Name of the children group,הילדים,
-village.groups.yeladim.blurb,One-line description of what the children group cares about,אף אחד לא שואל אותם,
-village.groups.ovrim.label,"Name of the passers-through group (non-residents, no vote)",העוברים,
-village.groups.ovrim.blurb,One-line description of the passers-through group,לא גרים כאן. רק עוברים,
-rights.protections.kinyan,Protection name: property,קניין,
-rights.protections.bitui,Protection name: expression,ביטוי,
-rights.protections.shivyon,Protection name: equality before the law,שוויון בפני החוק,
-rights.protections.machse,Protection name: shelter,מחסה,
-rights.protections.halich,Protection name: due process (hearing both sides),הליך הוגן,
-rights.protections.shayachut,Protection name: belonging,שייכות,
-rights.states.intact,Protection state: untouched,שלמה,
-rights.states.strained,Protection state: strained by a rule,מתוחה,
-rights.states.broken,Protection state: actually taken away from someone,שבורה,
-builder.subject_prefix,Prefix above the assembling rule sentence. {subject}=the subject noun in its plain form,"הכלל שאתה כותב, על {subject}",
-builder.blank_who,Placeholder shown in the assembling sentence before the WHO field is picked,מי,
-builder.blank_what,Placeholder shown in the assembling sentence before the WHAT field is picked,מה,
-builder.blank_when,Placeholder shown in the assembling sentence before the WHEN field is picked,מתי,
-builder.blank_consequence,Placeholder shown in the assembling sentence before the CONSEQUENCE field is picked,ואם לא,
-builder.when_connector,Connector word inserted before the WHEN clause in the assembled sentence,אם לא — ,
-builder.legend_who,Field legend: who the rule applies to,על מי זה חל,
-builder.legend_group,"Field legend: which group, shown only when WHO needs a specific group",איזו קבוצה,
-builder.legend_what,Field legend: what the rule requires,מה,
-builder.legend_when,Field legend: when the rule applies,מתי,
-builder.legend_consequence,Field legend: what happens if the rule isn't followed,ואם לא,
-builder.clash_intro,Shown when the drafted rule textually contradicts one already written,זה לא יכול לחיות יחד עם כלל שכבר כתבת:,
-builder.clash_note,Explains that writing a contradicting rule anyway is allowed,"אפשר לכתוב אותו בכל זאת. שני הכללים יישארו בספר, ומישהו יצטרך להחליט איזה מהם עובד.",
-builder.write,Button that commits the drafted rule to the book,לכתוב את זה בספר,
-builder.skip,Button to skip writing a rule this time,לא לכתוב כלל הפעם,
-builder.who.residents,WHO option: people who live in the village,מי שגר בכפר,
-builder.who.anyone_present,WHO option: anyone present right now,כל מי שנמצא כאן עכשיו,
-builder.who.group,WHO option: a specific group,קבוצה מסוימת,
-builder.who.everyone_except,WHO option: everyone except a group,כולם חוץ מ־,
-builder.what.ask_first,WHAT option: must ask before taking,אסור לקחת בלי לבקש,
-builder.what.forbidden,WHAT option: forbidden entirely,אסור בכלל,
-builder.what.by_turn,"WHAT option: allowed, but by turn","מותר, אבל לפי תור",
-builder.what.share_equally,WHAT option: must share equally,חייבים לחלוק שווה,
-builder.when.always,WHEN option: always,תמיד,
-builder.when.when_scarce,WHEN option: only when there isn't enough for everyone,רק כשאין מספיק לכולם,
-builder.when.when_harmed,WHEN option: only if someone is harmed by it,רק אם מישהו נפגע מזה,
-builder.when.first_time_forgiven,WHEN option: forgiven the first time,בפעם הראשונה סולחים,
-builder.consequence.return_or_fix,CONSEQUENCE option: must return or fix,צריך להחזיר או לתקן,
-builder.consequence.help_victim,CONSEQUENCE option: must help the victim one day,צריך לעזור לנפגע יום אחד,
-builder.consequence.lose_next_turn,CONSEQUENCE option: loses the right to it next time,מפסיד את הזכות לזה בפעם הבאה,
-builder.consequence.village_decides,CONSEQUENCE option: the village decides case by case,הכפר מחליט בכל מקרה לגופו,
-chapter_end.subtitle,Small label above the chapter-end title. {chapter}=chapter number,סוף פרק {chapter},
-chapter_end.title,Chapter-end screen title,הכפר קורא את מה שכתבת,
-chapter_end.no_rules,Shown when the child wrote no rules all chapter,"לא נכתב אף כלל. הכפר נשאר בדיוק כמו שהיה, וכל דבר הוכרע מחדש בכל פעם.",
-chapter_end.left_out_heading,Heading over the list of harmed/strained protections,את מי הכללים האלה השאירו בחוץ,
-chapter_end.no_harm,Shown when no protection was strained or broken this chapter,אף הגנה לא נשברה ולא נמתחה בפרק הזה.,
-chapter_end.protection_prefix,Prefix before a protection's name in the harmed list. {protection}=protection name,הזכות ל{protection},
-chapter_end.group_prefix,Prefix before the group a harmed protection belongs to. {group}=group name,— אצל {group},
-chapter_end.protected_heading,Heading over the list of groups that left the chapter untouched,ואת מי הם הגנו,
-chapter_end.protected_text,Sentence listing untouched groups. {groups}=comma-joined group names,{groups} יצאו מהפרק הזה עם כל ההגנות שלמות.,
-chapter_end.closing_note,Closing note shown at the end of the last built chapter (no next chapter to continue to yet),"אלה שני הפרקים הראשונים. הכללים והתקדימים שכתבת ופסקת נשארים בספר, וימשיכו לחול בהמשך — גם כשלא יתאים לך.",
-chapter1.title,Chapter 1 title,אין כללים,
-chapter1.intro,Chapter 1 intro screen text,"הגעת לכפר לפני שבוע. אין כאן ראש כפר, אין מועצה, ואין שום כלל כתוב. אף אחד לא מינה אותך לכלום. פשוט, כשמשהו נתקע, מתחילים לבוא אליך.",
-chapter1.c1s1.title,Situation 1 title,הבאר של יותם,
-chapter1.c1s1.text,Situation 1 scene text,"יותם חפר באר לפני שנים, לבד, והיא בקצה השדה שלו. הבוקר הוא ראה את דנה ממלאת ממנה דלי בשביל העדר. «היא אפילו לא שאלה», הוא אומר. דנה עומדת שם עם הדלי ולא מבינה מה הבעיה — «יש שם מים לכולם, ולעדר שלי נגמרו».",
-chapter1.c1s1.lesson,"Situation 1 lesson, said after the outcome","עד עכשיו לא היה כאן שום כלל, ולכן לא היה גם מה להפר. ברגע שכתבת אחד, יש בכפר משהו שאפשר להצביע עליו — וזה עובד לשני הכיוונים.",
-chapter1.c1s1.no_rule_outcome,Situation 1 outcome when no rule covers it,"לא החלטת כלום. דנה הולכת עם הדלי, יותם נשאר ליד הבאר. למחרת בבוקר הוא מגלגל עליה אבן גדולה.",
-chapter1.c1s1.override_outcome,Situation 1 outcome when the child overrides their own applying rule,החלטת אחרת ממה שכתוב אצלך בספר. יותם מסתכל עליך ולא אומר כלום.,
-chapter1.c1s1.outcomes.ask_first,Situation 1 outcome under an ask-first rule,"דנה מחזירה את הדלי ושואלת. יותם מהנהן, קצת מופתע שבכלל שאלו אותו. בערב הוא מספר לשניים אחרים שהיה כאן משהו שהוסדר.",
-chapter1.c1s1.outcomes.forbidden,Situation 1 outcome under a forbidden rule,"דנה מרוקנת את הדלי בחזרה לבאר ומובילה את העדר משם. אחר הצהריים ראו אותה מחפשת מים בערוץ היבש, רחוק.",
-chapter1.c1s1.outcomes.by_turn,Situation 1 outcome under a by-turn rule,"קבעתם סדר: יותם ראשון, אחר כך העדר. זה עובד. לוקח לכולם יותר זמן, ואף אחד לא נשאר בלי.",
-chapter1.c1s1.outcomes.share_equally,Situation 1 outcome under a share-equally rule,"הבאר פתוחה לכולם בשווה. דנה ממלאת בלי לשאול, וגם עוד שניים אחריה. יותם עומד מהצד ומסתכל על הבאר שהוא חפר.",
-chapter1.c1s2.title,Situation 2 title,הדוכן על השביל,
-chapter1.c1s2.text,Situation 2 scene text,"ברק בנה דוכן עץ בדיוק על השביל הצר שיורד לבאר. הוא עשה את זה ביומיים, יפה, והוא גאה בזה. הילדים שיורדים לשאוב מים צריכים עכשיו להקיף מסביב לגבעה. שירה אומרת לך את זה בשקט, כי היא לא בטוחה שמותר להתלונן.",
-chapter1.c1s2.lesson,"Situation 2 lesson, said after the outcome","שים לב מי סיפר לך על זה, ומי לא. ברק היה בטוח שמותר כי אף אחד לא אמר לו שאסור. הילדים לא אמרו כלום כי הם לא היו בטוחים שמישהו יקשיב.",
-chapter1.c1s2.no_rule_outcome,Situation 2 outcome when no rule covers it,"הדוכן נשאר. הילדים מקיפים את הגבעה, וזה לוקח להם רבע שעה בכל כיוון. אחרי שבוע הם פשוט מפסיקים לרדת לבאר לבד.",
-chapter1.c1s2.override_outcome,Situation 2 outcome when the child overrides their own applying rule,החלטת אחרת ממה שכתוב אצלך בספר. שירה שואלת אותך למה כתבת את זה בכלל.,
-chapter1.c1s2.outcomes.ask_first,Situation 2 outcome under an ask-first rule,"ברק לא שאל אף אחד לפני שבנה, אז הוא מזיז את הדוכן שני מטרים הצידה. לוקח לו יום שלם. השביל חופשי.",
-chapter1.c1s2.outcomes.forbidden,Situation 2 outcome under a forbidden rule,"הדוכן יורד. ברק מפרק אותו לבד, לוקח את הקרשים ולא אומר מילה. השביל חופשי לגמרי, וכלום לא ייבנה עליו יותר.",
-chapter1.c1s2.outcomes.by_turn,Situation 2 outcome under a by-turn rule,"הדוכן פתוח רק בבקרים, ואחר הצהריים הוא מקופל והשביל פנוי. מסורבל, אבל שני הצדדים מקבלים משהו.",
-chapter1.c1s2.outcomes.share_equally,Situation 2 outcome under a share-equally rule,"השביל שייך לכולם בשווה, אז הדוכן נשאר וגם המעבר נשאר — ברק מצמצם אותו לחצי. עכשיו הוא צר, אבל אפשר לעבור.",
-chapter1.c1s3.title,Situation 3 title,שירה והעז,
-chapter1.c1s3.text,Situation 3 scene text,"השבוע יבש. בבאר נשאר מעט, ויותם סימן עד איפה מותר לרדת. הבוקר שירה מילאה משם דלי בלי לשאול — העז שלה חולה כבר שלושה ימים ולא שותה מכלום אחר. זו לא הפעם הראשונה שהיא לוקחת. שירה היא זו שמביאה לך מים כל בוקר לפני שאתה בכלל קם.",
-chapter1.c1s3.lesson,"Situation 3 lesson, said after the outcome","כלל הוא לא הבעת עמדה. הוא הבטחה, וההבטחה נבדקת בדיוק ברגע שבו לא נוח לקיים אותה.",
-chapter1.c1s3.no_rule_outcome,Situation 3 outcome when no rule covers it,"אין שום כלל שנוגע בזה. שירה ממשיכה למלא, ויותם מפסיק לספור. עד סוף השבוע ארבעה אנשים לוקחים מתחת לסימן.",
-chapter1.c1s3.override_outcome,Situation 3 outcome when the child overrides their own applying rule,"החלטת לא להפעיל את הכלל שלך הפעם. שירה מודה לך והולכת עם הדלי. יותם שותק, ואחר כך שואל בקול אם הכלל חל גם עליו או רק על מי שאתה בוחר.",
-chapter1.c1s3.outcomes.ask_first,Situation 3 outcome under an ask-first rule,"הכלל שכתבת חל עליה. שירה מחזירה את המים ומבקשת רשות. יותם אומר לא — נשאר מעט. היא הולכת בלי להסתכל עליך, ומחר בבוקר לא מחכה לך שם דלי.",
-chapter1.c1s3.outcomes.forbidden,Situation 3 outcome under a forbidden rule,"הכלל שכתבת חל עליה. לשירה אסור לגעת בבאר בכלל. היא לא מתווכחת. אחרי יומיים העז מתה, והיא לא מספרת לך.",
-chapter1.c1s3.outcomes.by_turn,Situation 3 outcome under a by-turn rule,הכלל שכתבת חל עליה. שירה מחכה לתור שלה — שלושה ימים. היא מחכה. העז לא.,
-chapter1.c1s3.outcomes.share_equally,Situation 3 outcome under a share-equally rule,"הכלל שכתבת חל עליה. מחלקים את מה שנשאר שווה בשווה, וגם שירה מקבלת. זה מספיק לעז, וזה לא מספיק לאף אחד אחר. יותם סופר בקול כמה נשאר.",
-chapter1.c1s4.title,Situation 4 title,המחסה של מיכל,
-chapter1.c1s4.text,Situation 4 scene text,"מיכל הגיעה לכפר לפני חודש וישנה מאז מתחת ליריעה. ברק אומר שהוא יכול לבנות לה מחסה עד סוף השבוע, אבל המקום היחיד שיש בו צל וקרקע ישרה הוא בדיוק על השביל. הוא בא לשאול אותך לפני שהוא מתחיל, וזה חדש — עד עכשיו הוא לא שאל.",
-chapter1.c1s4.lesson,"Situation 4 lesson, said after the outcome","כלל נכתב תמיד בתוך מצב אחד, ואחר כך פוגש מצבים שלא חשבת עליהם. זה לא אומר שהוא היה כלל רע. זה אומר שכלל הוא דבר שחיים איתו.",
-chapter1.c1s4.no_rule_outcome,Situation 4 outcome when no rule covers it,"אין כלל על השביל, אז ברק בונה. מיכל ישנה בפנים כבר בלילה הראשון. הילדים מקיפים שוב את הגבעה, ואף אחד לא שאל אותם.",
-chapter1.c1s4.override_outcome,Situation 4 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. המחסה נבנה. שירה אומרת שכשזה היה הדוכן של ברק הכלל דווקא כן עבד.,
-chapter1.c1s4.outcomes.ask_first,Situation 4 outcome under an ask-first rule,"ברק שאל, וזה בדיוק מה שהכלל דורש. אתם עומדים שלושתכם על השביל ומחליטים איפה בונים. המחסה עולה בקצה, והמעבר נשאר.",
-chapter1.c1s4.outcomes.forbidden,Situation 4 outcome under a forbidden rule,"הכלל שכתבת אוסר לגעת בשביל, נקודה. ברק מוריד את הכלים. מיכל נשארת מתחת ליריעה, וכשיורד הגשם הראשון היא לא בכפר בבוקר.",
-chapter1.c1s4.outcomes.by_turn,Situation 4 outcome under a by-turn rule,"מחסה זה לא דבר שאפשר לעשות בתורות. ברק בונה חצי, מפרק, ובונה שוב. אחרי שבוע הוא מוותר, ומיכל מקבלת גג חלקי.",
-chapter1.c1s4.outcomes.share_equally,Situation 4 outcome under a share-equally rule,"השביל של כולם בשווה, אז המחסה עולה בצד אחד והמעבר נשאר בשני. צר, אבל שניהם קיימים.",
-trait.act,Trait dimension label: what kind of act it was,סוג המעשה,
-trait.justification,Trait dimension label: the justification claimed,ההצדקה,
-trait.power,Trait dimension label: the power balance between the two sides,מאזן הכוחות,
-trait.subject,Trait dimension label: what the case was about,הנושא,
-trait.actor,Trait dimension label: who was involved,מי היה מעורב,
-precedent.choice_intro,"Shown the first time a precedent might apply, above the two cases side by side",זה מזכיר משהו. מה קבע את ההחלטה שלך אז?,
-precedent.choice_source_label,Label above the past case in the side-by-side comparison,מה שקרה אז,
-precedent.choice_new_label,Label above the new case in the side-by-side comparison,מה שקורה עכשיו,
-precedent.reminder_intro,Heading shown when a precedent fully matches the new situation,זה כבר קרה.,
-precedent.past_ruling,Recap of the past ruling. {ruling}=the WHAT-clause label the child chose then,בפעם הקודמת פסקת: {ruling},
-precedent.past_ruling_none,Recap line used when the past case had no rule governing it at all,"בפעם הקודמת שום כלל לא חל, וזה מה שקרה.",
-precedent.apply,Button: decide the same way as the past ruling,להחליט אותו דבר גם הפעם,
-precedent.raised_intro,Banner shown before write-rule/no-rule when a precedent partially matches,"זה לא בדיוק אותו דבר, אבל זה מזכיר את מה שכבר קרה.",
-precedent.differences_heading,Heading before the list of traits that differ from the precedent,מה שונה הפעם:,
-chapter2.title,Chapter 2 title,זה כבר קרה,
-chapter2.intro,Chapter 2 intro screen text,"עבר זמן. הספר כבר לא ריק — יש בו כללים שכתבת, ומקרים שפסקת עליהם. עכשיו זה מתחיל לחזור.",
-chapter2.c2s1.title,Situation 1 title,הפטיש של מיכל,
-chapter2.c2s1.text,Situation 1 scene text,"ברק צריך היה פטיש בשביל לתקן משהו בבוקר, וזה שקרוב אליו. הוא לקח את הפטיש של מיכל בלי לשאול — התכוון להחזיר אותו עד הערב. מיכל חיפשה אותו כל הבוקר ולא מצאה. הפטיש הזה הוא אחד הדברים היחידים שהיא הביאה איתה כשהגיעה.",
-chapter2.c2s1.lesson,Situation 1 lesson,להתכוון להחזיר זה לא אותו דבר כמו לשאול. מיכל לא ידעה שהפטיש יחזור — היא רק ידעה שהוא נעלם.,
-chapter2.c2s1.no_rule_outcome,Situation 1 outcome when no rule covers it,"ברק מחזיר את הפטיש בערב, בדיוק כמו שאמר. מיכל שמחה לקבל אותו בחזרה, אבל היא לא שוכחת את הבוקר שבו לא ידעה איפה הוא.",
-chapter2.c2s1.override_outcome,Situation 1 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. מיכל שמה לב שדווקא עכשיו זה לא חל.,
-chapter2.c2s1.outcomes.ask_first,Situation 1 outcome under an ask-first rule,"ברק שואל לפני שהוא לוקח. מיכל נותנת לו את הפטיש לשעה, ויודעת בדיוק לאן הוא הלך.",
-chapter2.c2s1.outcomes.forbidden,Situation 1 outcome under a forbidden rule,"ברק לא נוגע בפטיש של מיכל בכלל. הוא מסתדר בלעדיו, לאט יותר.",
-chapter2.c2s1.outcomes.by_turn,Situation 1 outcome under a by-turn rule,ברק לוקח את הפטיש בתורו. מיכל יודעת בדיוק מתי הוא יחזור.,
-chapter2.c2s1.outcomes.share_equally,Situation 1 outcome under a share-equally rule,הפטיש עובר בין כולם לפי הצורך. מיכל כבר לא תמיד יודעת איפה הוא.,
-chapter2.c2s2.title,Situation 2 title,מה שיותם סיפר,
-chapter2.c2s2.text,Situation 2 scene text,"יותם סיפר לדנה, רק לה, שהוא מפחד שהוא כבר לא מספיק חזק לתחזק את הבאר לבד. אתמול דנה סיפרה את זה לשניים אחרים, כשהיא התלוננה שהיא צריכה לעזור לו יותר. «כולם ככה מדברים», היא אומרת, «זה לא סוד גדול». יותם שמע את זה מאדם שלישי.",
-chapter2.c2s2.lesson,Situation 2 lesson,"מה שנאמר בסוד לא נמדד לפי כמה זה חמור, אלא לפי מי בחר לספר אותו הלאה.",
-chapter2.c2s2.no_rule_outcome,Situation 2 outcome when no rule covers it,דנה ממשיכה לספר כשזה עולה. עד סוף השבוע כל הכפר יודע שיותם מפחד שהוא לא מספיק.,
-chapter2.c2s2.override_outcome,Situation 2 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. יותם שומע את זה בכל זאת.,
-chapter2.c2s2.outcomes.ask_first,Situation 2 outcome under an ask-first rule,"דנה שואלת לפני שהיא מספרת. הפעם היא שואלת את יותם קודם, והוא אומר שזה בסדר.",
-chapter2.c2s2.outcomes.forbidden,Situation 2 outcome under a forbidden rule,"דנה לא מספרת שום דבר שיותם סיפר לה בסוד, אף פעם. היא שומרת את זה לעצמה, גם כשזה היה קל לספר.",
-chapter2.c2s2.outcomes.by_turn,Situation 2 outcome under a by-turn rule,"דנה מספרת רק אחרי שהיא מוודאת עם יותם, בכל פעם מחדש. זה לוקח זמן, אבל הוא תמיד יודע מראש.",
-chapter2.c2s2.outcomes.share_equally,Situation 2 outcome under a share-equally rule,מה שיותם סיפר הופך לידוע לכולם באותה מידה. הוא כבר לא היחיד שיודע מה הוא מרגיש.,
-chapter2.c2s3.title,Situation 3 title,הגדר של יותם,
-chapter2.c2s3.text,Situation 3 scene text,"יותם גידר רצועת אדמה ליד השדה שלו, בלי לשאול אף אחד. «זה תמיד היה שלי», הוא אומר, «הייתי כאן ראשון». מיכל נהגה להביא לשם את העדר הקטן שלה כל בוקר. עכשיו היא עומדת מול הגדר ולא יודעת לאן ללכת.",
-chapter2.c2s3.lesson,Situation 3 lesson,מה שקבעת עכשיו לא רק פותר את זה. הוא גם אומר מה יקרה בפעם הבאה שזה יחזור.,
-chapter2.c2s3.no_rule_outcome,Situation 3 outcome when nothing governs it,"אף כלל לא חל. יותם משאיר את הגדר, ומיכל מחפשת מקום אחר.",
-chapter2.c2s3.override_outcome,Situation 3 outcome when the child rules against their own precedent,החלטת לא ללכת לפי מה שפסקת בפעם הקודמת. יותם שואל אם זה אומר שהפעם זה שונה.,
-chapter2.c2s3.outcomes.ask_first,Situation 3 outcome — ask first,"מיכל צריכה לבקש לפני שהיא נכנסת לרצועה. יותם אומר כן הפעם. העדר חוזר לשם, אחרי בקשה.",
-chapter2.c2s3.outcomes.forbidden,Situation 3 outcome — forbidden,"האדמה סגורה לגמרי. מיכל מחפשת מקום אחר לעדר, רחוק יותר.",
-chapter2.c2s3.outcomes.by_turn,Situation 3 outcome — by turn,"יש תור לרצועה. מיכל מקבלת את הבוקר, יותם את שאר היום.",
-chapter2.c2s3.outcomes.share_equally,Situation 3 outcome — share equally,הרצועה פתוחה לשניהם בשווה. העדר של מיכל והגדר של יותם חולקים אותו מקום.,
-chapter2.c2s3.precedent_option_act,Precedent-choice option at c2s3: essential trait is the act itself,כי הוא חסם משהו בלי לשאול אף אחד,
-chapter2.c2s3.precedent_option_power,Precedent-choice option at c2s3: essential trait is the power imbalance,כי מי שנפגע מזה חלש יותר ממי שעשה את זה,
-chapter2.c2s4.title,Situation 4 title,יותם מהצד השני,
-chapter2.c2s4.text,Situation 4 scene text,"ברק צריך מקום לאחסן קורות עץ בשביל מבנה חדש, והמקום הכי טוב הוא בדיוק ברצועה שיותם עובר בה עם הצאן שלו. ברק פשוט מניח שם את הקורות, בלי לשאול. יותם מגיע בבוקר ורואה שהדרך שלו חסומה.",
-chapter2.c2s4.lesson,Situation 4 lesson,"הפעם זה יותם שעומד בצד השני. אם הכלל שלך היה עקבי, הוא עובד גם עליו. אם לא — עכשיו אתה יודע למה.",
-chapter2.c2s4.no_rule_outcome,Situation 4 outcome when nothing governs it,"אין כלל שחל. הקורות נשארות, ויותם מוצא דרך עוקפת ארוכה יותר.",
-chapter2.c2s4.override_outcome,Situation 4 outcome when the child rules against their own precedent,החלטת אחרת ממה שהיה קודם. יותם שם לב שהפעם זה לא אותו דבר.,
-chapter2.c2s4.outcomes.ask_first,Situation 4 outcome — ask first,"ברק שואל את יותם קודם. יותם נותן לו את הפינה הרחוקה, והדרך נשארת פתוחה.",
-chapter2.c2s4.outcomes.forbidden,Situation 4 outcome — forbidden,"ברק לא נוגע בדרך של יותם בכלל. הוא מוצא מקום אחר לקורות, רחוק יותר.",
-chapter2.c2s4.outcomes.by_turn,Situation 4 outcome — by turn,"הקורות שם רק בבוקר, ואחר הצהריים הדרך פנויה.",
-chapter2.c2s4.outcomes.share_equally,Situation 4 outcome — share equally,"הדרך משותפת. הקורות בצד אחד, יותם עובר בשני.",
-chapter_end.continue,Button shown at chapter-end when there is a next chapter to continue to,להמשיך לפרק הבא,
-rulebook.precedents_heading,Heading over the precedents section of the rule book,תקדימים,
-rulebook.precedent_entry,"One precedent in the rule book list. {title}=the past situation's title, {ruling}=what the child ruled",{title} — {ruling},
-rulebook.precedent_no_ruling,Shown in the rule book when a precedent's past case had no rule apply,שום כלל לא חל,
-toc.chapter_number,Small label above a chapter's title in the table of contents. {n}=chapter number,פרק {n},
-toc.situation_number,Small label above a situation's title in the table of contents. {n}=situation number within its chapter,מצב {n},
-about.name_prompt,Label above the village-naming input on the about screen,איך תרצה לקרוא לכפר הזה?,
-about.name_placeholder,"Placeholder in the village-naming input, and the fallback name used if left blank",הכפר,
-character.non_resident,Shown in a character's hover tooltip when they don't live in the village (only נעם today),לא גר בכפר,
-common.you,"The child, wherever a situation's actor/victim is the player themselves — never added to the shared ACTORS registry LinkedText scans, since it's one of the most common words in Hebrew",אתה,
-chapter3.title,Chapter 3 title,הכלל שלך נגדך,
-chapter3.intro,Chapter 3 intro screen text,עברו עוד כמה ימים. הכללים שכתבת כבר לא רק על אחרים — הם על כל מי שנמצא כאן. גם עליך.,
-chapter3.c3s1.title,Situation 1 title,המים שאתה צריך,
-chapter3.c3s1.text,Situation 1 scene text — the child themselves takes water without asking,"הבוקר אתה צריך מים בדחיפות — מישהו נחבל קרוב לשדה, וצריך לשטוף ולקרר. הבאר של יותם הכי קרובה. אין זמן לחפש אותו ולשאול. אתה ממלא דלי ורץ הלאה.",
-chapter3.c3s1.lesson,Situation 1 lesson,עד עכשיו הכלל היה משהו שאתה מפעיל על אחרים. עכשיו זו הפעם הראשונה שהוא נבדק עליך.,
-chapter3.c3s1.no_rule_outcome,Situation 1 outcome when no water rule exists,"אין כלל שחל על זה — לא על אחרים ולא עליך. אתה ממלא ורץ, בדיוק כמו שדנה עשתה לפני שהיה כלל בכלל.",
-chapter3.c3s1.override_outcome,Situation 1 outcome when the child overrides their own rule on themselves,"החלטת לא להפעיל את הכלל שלך על עצמך הפעם. יותם, שראה, לא אומר כלום — אבל הוא זוכר.",
-chapter3.c3s1.outcomes.ask_first,Situation 1 outcome under an ask-first rule,"אין זמן לחפש את יותם, אז אתה רץ הלאה בלי למלא — הכלל שלך לא מאפשר לך לקצר. אתה מוצא מים במקום אחר, לאט יותר.",
-chapter3.c3s1.outcomes.forbidden,Situation 1 outcome under a forbidden rule,"הכלל שלך אוסר על כולם, בלי יוצא מן הכלל — כולל אותך. אתה עומד ליד הבאר עם דלי ריק ומחפש פתרון אחר.",
-chapter3.c3s1.outcomes.by_turn,Situation 1 outcome under a by-turn rule,"אתה ממתין לתורך, בדיוק כמו כולם. זה לוקח כמה דקות יקרות.",
-chapter3.c3s1.outcomes.share_equally,Situation 1 outcome under a share-equally rule,"אתה ממלא את החלק שמגיע לך, לא יותר. זה כמעט לא מספיק, אבל זה מה שהכלל קובע.",
-chapter3.c3s2.title,Situation 2 title,התור של ברק,
-chapter3.c3s2.text,"Situation 2 scene text — שירה blocks the path, ברק is stuck behind her","שירה צריכה להעביר את העדר שלה בשביל, ובדיוק באמצע היא עוצרת אותו כדי לתקן פרסה שנשברה לאחת העיזים. ברק, שממהר להביא קורות לבנייה, נתקע מאחוריה ולא יכול לעבור. «זה ייקח רק כמה דקות», היא אומרת, בלי להביט אליו.",
-chapter3.c3s2.lesson,Situation 2 lesson,הכלל לא שאל אותה למה. הוא רק בדק אם היא גרה בכפר.,
-chapter3.c3s2.no_rule_outcome,Situation 2 outcome when no path rule exists,"אין כלל על השביל. שירה ממשיכה לתקן את הפרסה בקצב שלה, וברק מחכה, כועס יותר ויותר.",
-chapter3.c3s2.override_outcome,Situation 2 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. ברק שואל אם זה משנה שזאת שירה.,
-chapter3.c3s2.outcomes.ask_first,Situation 2 outcome under an ask-first rule,"שירה עוצרת ומבקשת רשות להמשיך לתקן במקום. ברק, שנשאל, מסכים לחכות כמה דקות.",
-chapter3.c3s2.outcomes.forbidden,Situation 2 outcome under a forbidden rule,"אסור לחסום את השביל, נקודה — גם לא כדי לתקן פרסה. שירה גוררת את העז הפצועה הצידה וממשיכה לתקן שם, לבד. אף אחד לא עוצר לשאול אותה למה זה לקח לה כל כך הרבה זמן.",
-chapter3.c3s2.outcomes.by_turn,Situation 2 outcome under a by-turn rule,"יש תור לשביל. שירה ממתינה לתורה, והעז ממשיכה לצלוע.",
-chapter3.c3s2.outcomes.share_equally,Situation 2 outcome under a share-equally rule,"השביל נשאר פתוח לחצי, ושירה מתקנת בצד. צר, אבל שניהם עוברים.",
-chapter3.c3s3.title,Situation 3 title,החבל של ברק,
-chapter3.c3s3.text,Situation 3 scene text — ברק refuses to share the village's one strong rope; the framing tells the child they use shared things too,"לכפר יש רק חבל אחד מספיק חזק למשוך איתו עגלה תקועה. ברק מצא אותו קודם והשתמש בו לבנייה. דנה צריכה אותו עכשיו כדי לחלץ עגלת מים תקועה בבוץ, אבל ברק לא מוכן לתת — «מצאתי אותו קודם, ואני עוד לא סיימתי». את הכלל הזה אתה בעצמך תזדקק לו יום אחד — גם אתה משתמש בדברים של הכפר.",
-chapter3.c3s3.lesson,Situation 3 lesson,כלל על מה ששייך לכולם הוא גם כלל על מה שאתה בעצמך תרצה להשתמש בו יום אחד.,
-chapter3.c3s3.no_rule_outcome,Situation 3 outcome when the child skips writing a rule,"אין כלל על זה. ברק מחליט לבד, ודנה נשארת עם עגלה תקועה.",
-chapter3.c3s3.override_outcome,Situation 3 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. ברק שם לב שדווקא עכשיו זה לא חל.,
-chapter3.c3s3.outcomes.ask_first,Situation 3 outcome under an ask-first rule,"ברק שואל את דנה כמה זמן היא צריכה, ומסכים לתת לה את החבל לזמן קצר. העגלה יוצאת מהבוץ.",
-chapter3.c3s3.outcomes.forbidden,Situation 3 outcome under a forbidden rule,"אסור לסרב לשתף, אף פעם. ברק נותן לדנה את החבל מיד, גם שהוא לא סיים.",
-chapter3.c3s3.outcomes.by_turn,Situation 3 outcome under a by-turn rule,"יש תור לחבל. דנה מחכה לתורה, והעגלה נשארת תקועה עד אז.",
-chapter3.c3s3.outcomes.share_equally,Situation 3 outcome under a share-equally rule,"החבל מתחלק ביניהם — חצי יום לכל אחד. שניהם מסתדרים, לאט יותר.",
-chapter3.c3s4.title,Situation 4 title,מה שגם אתה צריך,
-chapter3.c3s4.text,Situation 4 scene text — the child is using the rope themselves when מיכל needs it,אתה משתמש בחבל בשביל לתקן משהו ליד הבית שלך. מיכל מגיעה ומבקשת אותו — היא צריכה אותו כדי לחזק את הגג לפני הגשם. אתה עוד לא סיימת.,
-chapter3.c3s4.lesson,"Situation 4 lesson — closes the chapter, names the concept only now",כלל שלא חל עליך הוא בקשה. כלל שחל גם עליך הוא הבטחה.,
-chapter3.c3s4.no_rule_outcome,Situation 4 outcome when no chefetz rule exists,"אין כלל על זה — לא כשכתבת אותו, ולא עכשיו. אתה מחליט לבד, בדיוק כמו שברק החליט.",
-chapter3.c3s4.override_outcome,Situation 4 outcome when the child overrides their own rule on themselves,"החלטת לא להפעיל את הכלל שלך על עצמך הפעם. מיכל לא אומרת כלום, אבל היא זוכרת מי כתב את הכלל הזה.",
-chapter3.c3s4.outcomes.ask_first,Situation 4 outcome under an ask-first rule,"אתה שואל את מיכל כמה זמן היא צריכה, ונותן לה את החבל לזמן קצר. הגג מחוזק לפני הגשם.",
-chapter3.c3s4.outcomes.forbidden,Situation 4 outcome under a forbidden rule,"הכלל שלך אוסר לסרב לשתף — גם עליך. אתה נותן למיכל את החבל מיד, גם שאתה לא סיימת.",
-chapter3.c3s4.outcomes.by_turn,Situation 4 outcome under a by-turn rule,"יש תור לחבל, וגם אתה מחכה לתורך. מיכל מקבלת אותו קודם.",
-chapter3.c3s4.outcomes.share_equally,Situation 4 outcome under a share-equally rule,"החבל מתחלק — חצי יום לך, חצי יום למיכל. שניכם מסתדרים, לאט יותר.",
+common.close,Generic close button/label used in dialogs,לסגור,Close
+common.back_to_list,Back button inside the table of contents detail view,חזרה לרשימה,Back to the list
+app.title,Game title shown in the header on every screen,כלל ראשון,First Rule
+app.chapter_progress,"Header progress indicator. {chapter}=chapter number, {n}=current situation number, {total}=situations in the chapter",פרק {chapter} · מצב {n} מתוך {total},Chapter {chapter} · Situation {n} of {total}
+app.toc_button,Header button that opens the table of contents,תוכן העניינים,Contents
+app.rulebook_button,Header button that opens the rule book (also its dialog title),ספר הכללים,The Rule Book
+app.intro_continue,Button on the chapter intro screen,להתחיל,Begin
+app.decide.write_rule_intro,Shown when no rule covers the situation and the child can write one,אין שום כלל שנוגע בזה. אתה יכול לכתוב אחד עכשיו — והוא יישאר בספר.,There is no rule that touches this. You can write one now — and it will stay in the book.
+app.decide.rule_applies_intro,Shown when an existing rule the child wrote applies to this situation,יש כלל בספר שחל על זה. אתה כתבת אותו.,There is a rule in the book that covers this. You wrote it.
+app.decide.apply_rule,Button to apply the existing rule as written,להפעיל את הכלל,Apply the rule
+app.decide.override_rule,Button to go against the rule that applies this time,להחליט אחרת הפעם,Decide differently this time
+app.decide.collision_intro,Shown when two of the child's own rules contradict each other for this case,"שני כללים שכתבת חלים כאן, והם אומרים דברים הפוכים.","Two rules you wrote apply here, and they say opposite things."
+app.decide.collision_first_time_note,One-time explanatory note shown the first time a field collision happens,לפעמים רואים מראש שכלל חדש מתנגש בישן. לפעמים מגלים רק כשזה כבר קרה למישהו.,Sometimes you can see ahead of time that a new rule clashes with an old one. Sometimes you only find out once it has already happened to someone.
+app.decide.no_rule_intro,Shown when no rule applies and the situation doesn't invite writing one,אין בספר שום כלל שנוגע בזה. אף אחד לא כתב אחד בזמנו.,There is nothing in the book that touches this. Nobody wrote a rule for it at the time.
+app.decide.continue,Continue button on the no-rule-applies screen,להמשיך,Continue
+app.outcome.continue,Continue button after reading the outcome of a decision,ואז,And then
+app.lesson.next,"Continue button after the lesson, more situations remain",הלאה,Onward
+app.lesson.close_chapter,"Continue button after the lesson, on the chapter's last situation",לסגור את הפרק,Close the chapter
+app.opener.comes_to_you,How a group's approach is described when it trusts the child fully. {group}=group name,"{group} באו אליך ראשונים, וסיפרו הכול.","You heard it from {group} first, and they told you everything."
+app.opener.comes_but,How a group's approach is described at medium trust. {group}=group name,"{group} התלבטו לפני שבאו, וסיפרו רק חלק.","It took a while before {group} came, and they told you only part of it."
+app.opener.stops_coming,How a group's approach is described at low trust. {group}=group name,"{group} לא באו לספר לך. שמעת על זה אחר כך, ממישהו אחר.","Nobody from {group} came to tell you. You heard about it later, from someone else."
+rulebook.close_aria,Accessible label for the scrim button that closes the rule book,לסגור את הספר,Close the book
+rulebook.empty,Shown when no rules have been written yet,הספר ריק. בכפר הזה עוד לא כתבו אף כלל.,The book is empty. Nobody in this village has written a single rule yet.
+rulebook.rule_number,Numbered label before each rule in the book. {n}=1-based index,כלל {n},Rule {n}
+toc.not_reached,"Marker next to a situation the child hasn't reached yet, disabled in the list",(עוד לא הגעת),(not yet reached)
+about.title,Title of the screen shown before the village opens,"הכפר, לפני שנכנסים","The village, before you step in"
+about.village_text,Intro paragraph introducing the village on the about screen,"כפר קטן, בלי חומה ובלי שער. שש קבוצות גרות בו, חוץ מאחת שרק עוברת דרכו — ולכל אחת יש דבר אחר שמטריד אותה.","A small village, with no wall and no gate. Six groups live here — except one, which only passes through — and each of them is bothered by something different."
+about.me_text,"Paragraph explaining the child's own role, on the about screen","אף אחד לא מינה אותך לשום דבר. אין לך תואר, ואין שום דבר שמונע ממישהו אחר בכפר לעשות בדיוק את מה שאתה עושה. אתה פשוט מי שכולם באים אליו כשמשהו נתקע — וזה יימשך רק כל עוד הם ממשיכים לבוא.","Nobody appointed you to anything. You have no title, and there is nothing stopping anyone else in the village from doing exactly what you do. You are simply the one everybody comes to when something gets stuck — and that lasts only as long as they keep coming."
+about.enter_village,Button that leaves the about screen and enters the village,להיכנס לכפר,Enter the village
+village.groups.vatikim.label,Name of the veterans group,הוותיקים,the old-timers
+village.groups.vatikim.blurb,One-line description of what the veterans group cares about,"היו כאן ראשונים, ומרגישים שמגיע להם קודם","were here first, and feel they should come first"
+village.groups.hadashim.label,Name of the newcomers group,החדשים,the newcomers
+village.groups.hadashim.blurb,One-line description of what the newcomers group cares about,"הגיעו לא מזמן, ואין להם עדיין כלום מוסכם","arrived not long ago, and have nothing settled yet"
+village.groups.roim.label,Name of the shepherds group,הרועים,the shepherds
+village.groups.roim.blurb,One-line description of what the shepherds group cares about,"צריכים שטח ומים, ונעים בין המקומות","need land and water, and move between places"
+village.groups.banaim.label,Name of the builders group,הבנאים,the builders
+village.groups.banaim.blurb,One-line description of what the builders group cares about,"רוצים לשנות דברים, ומהר","want to change things, and fast"
+village.groups.yeladim.label,Name of the children group,הילדים,the children
+village.groups.yeladim.blurb,One-line description of what the children group cares about,אף אחד לא שואל אותם,nobody asks them
+village.groups.ovrim.label,"Name of the passers-through group (non-residents, no vote)",העוברים,the passers-through
+village.groups.ovrim.blurb,One-line description of the passers-through group,לא גרים כאן. רק עוברים,do not live here. Only passing through
+rights.protections.kinyan,Protection name: property,קניין,property
+rights.protections.bitui,Protection name: expression,ביטוי,expression
+rights.protections.shivyon,Protection name: equality before the law,שוויון בפני החוק,equality before the law
+rights.protections.machse,Protection name: shelter,מחסה,shelter
+rights.protections.halich,Protection name: due process (hearing both sides),הליך הוגן,a fair hearing
+rights.protections.shayachut,Protection name: belonging,שייכות,belonging
+rights.states.intact,Protection state: untouched,שלמה,whole
+rights.states.strained,Protection state: strained by a rule,מתוחה,strained
+rights.states.broken,Protection state: actually taken away from someone,שבורה,broken
+builder.subject_prefix,Prefix above the assembling rule sentence. {subject}=the subject noun in its plain form,"הכלל שאתה כותב, על {subject}","The rule you are writing, about {subject}"
+builder.blank_who,Placeholder shown in the assembling sentence before the WHO field is picked,מי,who
+builder.blank_what,Placeholder shown in the assembling sentence before the WHAT field is picked,מה,what
+builder.blank_when,Placeholder shown in the assembling sentence before the WHEN field is picked,מתי,when
+builder.blank_consequence,Placeholder shown in the assembling sentence before the CONSEQUENCE field is picked,ואם לא,and if not
+builder.when_connector,Connector word inserted before the WHEN clause in the assembled sentence,אם לא — ,If not — 
+builder.legend_who,Field legend: who the rule applies to,על מי זה חל,Who it applies to
+builder.legend_group,"Field legend: which group, shown only when WHO needs a specific group",איזו קבוצה,Which group
+builder.legend_what,Field legend: what the rule requires,מה,What
+builder.legend_when,Field legend: when the rule applies,מתי,When
+builder.legend_consequence,Field legend: what happens if the rule isn't followed,ואם לא,And if not
+builder.clash_intro,Shown when the drafted rule textually contradicts one already written,זה לא יכול לחיות יחד עם כלל שכבר כתבת:,This cannot live alongside a rule you have already written:
+builder.clash_note,Explains that writing a contradicting rule anyway is allowed,"אפשר לכתוב אותו בכל זאת. שני הכללים יישארו בספר, ומישהו יצטרך להחליט איזה מהם עובד.","You can write it anyway. Both rules will stay in the book, and someone will have to decide which one holds."
+builder.write,Button that commits the drafted rule to the book,לכתוב את זה בספר,Write this in the book
+builder.skip,Button to skip writing a rule this time,לא לכתוב כלל הפעם,Do not write a rule this time
+builder.who.residents.label,WHO option: people who live in the village,מי שגר בכפר,Whoever lives in the village
+builder.who.anyone_present.label,WHO option: anyone present right now,כל מי שנמצא כאן עכשיו,Anyone who is here right now
+builder.who.group.label,WHO option: a specific group,קבוצה מסוימת,A particular group
+builder.who.everyone_except.label,WHO option: everyone except a group,כולם חוץ מ־,Everyone except—
+builder.what.ask_first.label,WHAT option: must ask before taking,אסור לקחת בלי לבקש,Must not take without asking
+builder.what.forbidden.label,WHAT option: forbidden entirely,אסור בכלל,Not allowed at all
+builder.what.by_turn.label,"WHAT option: allowed, but by turn","מותר, אבל לפי תור","Allowed, but in turns"
+builder.what.share_equally.label,WHAT option: must share equally,חייבים לחלוק שווה,Must share equally
+builder.when.always.label,WHEN option: always,תמיד,Always
+builder.when.when_scarce.label,WHEN option: only when there isn't enough for everyone,רק כשאין מספיק לכולם,Only when there is not enough for everyone
+builder.when.when_harmed.label,WHEN option: only if someone is harmed by it,רק אם מישהו נפגע מזה,Only if someone is hurt by it
+builder.when.first_time_forgiven.label,WHEN option: forgiven the first time,בפעם הראשונה סולחים,The first time is forgiven
+builder.consequence.return_or_fix.label,CONSEQUENCE option: must return or fix,צריך להחזיר או לתקן,Must give it back or fix it
+builder.consequence.help_victim.label,CONSEQUENCE option: must help the victim one day,צריך לעזור לנפגע יום אחד,"Must help the one who was hurt, one day"
+builder.consequence.lose_next_turn.label,CONSEQUENCE option: loses the right to it next time,מפסיד את הזכות לזה בפעם הבאה,Loses the right to it next time
+builder.consequence.village_decides.label,CONSEQUENCE option: the village decides case by case,הכפר מחליט בכל מקרה לגופו,The village decides case by case
+chapter_end.subtitle,Small label above the chapter-end title. {chapter}=chapter number,סוף פרק {chapter},End of chapter {chapter}
+chapter_end.title,Chapter-end screen title,הכפר קורא את מה שכתבת,The village reads what you wrote
+chapter_end.no_rules,Shown when the child wrote no rules all chapter,"לא נכתב אף כלל. הכפר נשאר בדיוק כמו שהיה, וכל דבר הוכרע מחדש בכל פעם.","Not one rule was written. The village stayed exactly as it was, and everything was decided fresh every time."
+chapter_end.left_out_heading,Heading over the list of harmed/strained protections,את מי הכללים האלה השאירו בחוץ,Who these rules left out
+chapter_end.no_harm,Shown when no protection was strained or broken this chapter,אף הגנה לא נשברה ולא נמתחה בפרק הזה.,No protection was broken or strained in this chapter.
+chapter_end.protection_prefix,Prefix before a protection's name in the harmed list. {protection}=protection name,הזכות ל{protection},the right to {protection}
+chapter_end.group_prefix,Prefix before the group a harmed protection belongs to. {group}=group name,— אצל {group},— for {group}
+chapter_end.protected_heading,Heading over the list of groups that left the chapter untouched,ואת מי הם הגנו,And who they protected
+chapter_end.protected_text,Sentence listing untouched groups. {groups}=comma-joined group names,{groups} יצאו מהפרק הזה עם כל ההגנות שלמות.,Every protection stayed whole for {groups}.
+chapter_end.closing_note,Closing note shown at the end of the last built chapter (no next chapter to continue to yet),"אלה שלושת הפרקים הראשונים. הכללים והתקדימים שכתבת ופסקת נשארים בספר, וימשיכו לחול בהמשך — גם כשלא יתאים לך.","These are the first three chapters. The rules you wrote and the precedents you set stay in the book, and they will go on applying — including when they do not suit you."
+chapter1.title,Chapter 1 title,אין כללים,No Rules
+chapter1.intro,Chapter 1 intro screen text,"הגעת לכפר לפני שבוע. אין כאן ראש כפר, אין מועצה, ואין שום כלל כתוב. אף אחד לא מינה אותך לכלום. פשוט, כשמשהו נתקע, מתחילים לבוא אליך.","You arrived in the village a week ago. There is no village head here, no council, and not one written rule. Nobody appointed you to anything. It is just that when something gets stuck, people started coming to you."
+chapter1.c1s1.title,Situation 1 title,הבאר של יותם,Yotam's Well
+chapter1.c1s1.text,Situation 1 scene text,"יותם חפר באר לפני שנים, לבד, והיא בקצה השדה שלו. הבוקר הוא ראה את דנה ממלאת ממנה דלי בשביל העדר. «היא אפילו לא שאלה», הוא אומר. דנה עומדת שם עם הדלי ולא מבינה מה הבעיה — «יש שם מים לכולם, ולעדר שלי נגמרו».","Yotam dug a well years ago, on his own, and it sits at the edge of his field. This morning he saw Dana filling a bucket from it for the herd. “She did not even ask,” he says. Dana is standing there with the bucket and cannot see the problem — “there is water in there for everyone, and my herd ran out.”"
+chapter1.c1s1.lesson,"Situation 1 lesson, said after the outcome","עד עכשיו לא היה כאן שום כלל, ולכן לא היה גם מה להפר. ברגע שכתבת אחד, יש בכפר משהו שאפשר להצביע עליו — וזה עובד לשני הכיוונים.","Until now there was no rule here, so there was nothing to break either. The moment you wrote one, the village has something it can point at — and that works in both directions."
+chapter1.c1s1.no_rule_outcome,Situation 1 outcome when no rule covers it,"לא החלטת כלום. דנה הולכת עם הדלי, יותם נשאר ליד הבאר. למחרת בבוקר הוא מגלגל עליה אבן גדולה.","You decided nothing. Dana walks off with the bucket, Yotam stays by the well. The next morning he rolls a large stone over it."
+chapter1.c1s1.override_outcome,Situation 1 outcome when the child overrides their own applying rule,החלטת אחרת ממה שכתוב אצלך בספר. יותם מסתכל עליך ולא אומר כלום.,You decided differently from what is written in your own book. Yotam looks at you and says nothing.
+chapter1.c1s1.outcomes.ask_first,Situation 1 outcome under an ask-first rule,"דנה מחזירה את הדלי ושואלת. יותם מהנהן, קצת מופתע שבכלל שאלו אותו. בערב הוא מספר לשניים אחרים שהיה כאן משהו שהוסדר.","Dana brings the bucket back and asks. Yotam nods, a little surprised that anyone asked him at all. That evening he tells two other people that something here got settled."
+chapter1.c1s1.outcomes.forbidden,Situation 1 outcome under a forbidden rule,"דנה מרוקנת את הדלי בחזרה לבאר ומובילה את העדר משם. אחר הצהריים ראו אותה מחפשת מים בערוץ היבש, רחוק.","Dana empties the bucket back into the well and leads the herd away. In the afternoon she was seen looking for water in the dry riverbed, far off."
+chapter1.c1s1.outcomes.by_turn,Situation 1 outcome under a by-turn rule,"קבעתם סדר: יותם ראשון, אחר כך העדר. זה עובד. לוקח לכולם יותר זמן, ואף אחד לא נשאר בלי.","You set an order: Yotam first, then the herd. It works. It takes everyone longer, and nobody is left without."
+chapter1.c1s1.outcomes.share_equally,Situation 1 outcome under a share-equally rule,"הבאר פתוחה לכולם בשווה. דנה ממלאת בלי לשאול, וגם עוד שניים אחריה. יותם עומד מהצד ומסתכל על הבאר שהוא חפר.","The well is open to everyone equally. Dana fills without asking, and two more after her. Yotam stands to one side, looking at the well he dug."
+chapter1.c1s2.title,Situation 2 title,הדוכן על השביל,The Stall on the Path
+chapter1.c1s2.text,Situation 2 scene text,"ברק בנה דוכן עץ בדיוק על השביל הצר שיורד לבאר. הוא עשה את זה ביומיים, יפה, והוא גאה בזה. הילדים שיורדים לשאוב מים צריכים עכשיו להקיף מסביב לגבעה. שירה אומרת לך את זה בשקט, כי היא לא בטוחה שמותר להתלונן.","Barak built a wooden stall right on the narrow path down to the well. He did it in two days, nicely, and he is proud of it. The children going down to draw water now have to go all the way around the hill. Shira tells you this quietly, because she is not sure that complaining is allowed."
+chapter1.c1s2.lesson,"Situation 2 lesson, said after the outcome","שים לב מי סיפר לך על זה, ומי לא. ברק היה בטוח שמותר כי אף אחד לא אמר לו שאסור. הילדים לא אמרו כלום כי הם לא היו בטוחים שמישהו יקשיב.","Notice who told you about this, and who did not. Barak was certain it was allowed because nobody told him it was not. The children said nothing because they were not sure anyone would listen."
+chapter1.c1s2.no_rule_outcome,Situation 2 outcome when no rule covers it,"הדוכן נשאר. הילדים מקיפים את הגבעה, וזה לוקח להם רבע שעה בכל כיוון. אחרי שבוע הם פשוט מפסיקים לרדת לבאר לבד.","The stall stays. The children go around the hill, and it costs them a quarter of an hour each way. After a week they simply stop going down to the well on their own."
+chapter1.c1s2.override_outcome,Situation 2 outcome when the child overrides their own applying rule,החלטת אחרת ממה שכתוב אצלך בספר. שירה שואלת אותך למה כתבת את זה בכלל.,You decided differently from what is written in your own book. Shira asks you why you wrote it in the first place.
+chapter1.c1s2.outcomes.ask_first,Situation 2 outcome under an ask-first rule,"ברק לא שאל אף אחד לפני שבנה, אז הוא מזיז את הדוכן שני מטרים הצידה. לוקח לו יום שלם. השביל חופשי.","Barak did not ask anyone before he built, so he moves the stall two metres aside. It takes him a whole day. The path is clear."
+chapter1.c1s2.outcomes.forbidden,Situation 2 outcome under a forbidden rule,"הדוכן יורד. ברק מפרק אותו לבד, לוקח את הקרשים ולא אומר מילה. השביל חופשי לגמרי, וכלום לא ייבנה עליו יותר.","The stall comes down. Barak takes it apart himself, carries off the boards and does not say a word. The path is completely clear, and nothing will ever be built on it again."
+chapter1.c1s2.outcomes.by_turn,Situation 2 outcome under a by-turn rule,"הדוכן פתוח רק בבקרים, ואחר הצהריים הוא מקופל והשביל פנוי. מסורבל, אבל שני הצדדים מקבלים משהו.","The stall is open only in the mornings, and in the afternoon it is folded away and the path is free. Clumsy, but both sides get something."
+chapter1.c1s2.outcomes.share_equally,Situation 2 outcome under a share-equally rule,"השביל שייך לכולם בשווה, אז הדוכן נשאר וגם המעבר נשאר — ברק מצמצם אותו לחצי. עכשיו הוא צר, אבל אפשר לעבור.","The path belongs to everyone equally, so the stall stays and so does the way through — Barak cuts it down to half. Now it is narrow, but you can get past."
+chapter1.c1s3.title,Situation 3 title,שירה והעז,Shira and the Goat
+chapter1.c1s3.text,Situation 3 scene text,"השבוע יבש. בבאר נשאר מעט, ויותם סימן עד איפה מותר לרדת. הבוקר שירה מילאה משם דלי בלי לשאול — העז שלה חולה כבר שלושה ימים ולא שותה מכלום אחר. זו לא הפעם הראשונה שהיא לוקחת. שירה היא זו שמביאה לך מים כל בוקר לפני שאתה בכלל קם.","This week is dry. There is little left in the well, and Yotam marked how far down anyone may go. This morning Shira filled a bucket from below the mark without asking — her goat has been sick for three days and will not drink from anywhere else. This is not the first time she has taken. Shira is the one who brings you water every morning before you are even up."
+chapter1.c1s3.lesson,"Situation 3 lesson, said after the outcome","כלל הוא לא הבעת עמדה. הוא הבטחה, וההבטחה נבדקת בדיוק ברגע שבו לא נוח לקיים אותה.","A rule is not an opinion. It is a promise, and a promise is tested at exactly the moment when keeping it is inconvenient."
+chapter1.c1s3.no_rule_outcome,Situation 3 outcome when no rule covers it,"אין שום כלל שנוגע בזה. שירה ממשיכה למלא, ויותם מפסיק לספור. עד סוף השבוע ארבעה אנשים לוקחים מתחת לסימן.","There is no rule that touches this. Shira goes on filling, and Yotam stops counting. By the end of the week four people are taking from below the mark."
+chapter1.c1s3.override_outcome,Situation 3 outcome when the child overrides their own applying rule,"החלטת לא להפעיל את הכלל שלך הפעם. שירה מודה לך והולכת עם הדלי. יותם שותק, ואחר כך שואל בקול אם הכלל חל גם עליו או רק על מי שאתה בוחר.","You decided not to apply your own rule this time. Shira thanks you and walks off with the bucket. Yotam says nothing, and later asks out loud whether the rule applies to him too, or only to whoever you choose."
+chapter1.c1s3.outcomes.ask_first,Situation 3 outcome under an ask-first rule,"הכלל שכתבת חל עליה. שירה מחזירה את המים ומבקשת רשות. יותם אומר לא — נשאר מעט. היא הולכת בלי להסתכל עליך, ומחר בבוקר לא מחכה לך שם דלי.","The rule you wrote applies to her. Shira puts the water back and asks permission. Yotam says no — there is little left. She walks away without looking at you, and the next morning no bucket is waiting for you."
+chapter1.c1s3.outcomes.forbidden,Situation 3 outcome under a forbidden rule,"הכלל שכתבת חל עליה. לשירה אסור לגעת בבאר בכלל. היא לא מתווכחת. אחרי יומיים העז מתה, והיא לא מספרת לך.","The rule you wrote applies to her. Shira may not touch the well at all. She does not argue. Two days later the goat dies, and she does not tell you."
+chapter1.c1s3.outcomes.by_turn,Situation 3 outcome under a by-turn rule,הכלל שכתבת חל עליה. שירה מחכה לתור שלה — שלושה ימים. היא מחכה. העז לא.,The rule you wrote applies to her. Shira waits for her turn — three days. She waits. The goat does not.
+chapter1.c1s3.outcomes.share_equally,Situation 3 outcome under a share-equally rule,"הכלל שכתבת חל עליה. מחלקים את מה שנשאר שווה בשווה, וגם שירה מקבלת. זה מספיק לעז, וזה לא מספיק לאף אחד אחר. יותם סופר בקול כמה נשאר.","The rule you wrote applies to her. What is left is divided equally, and Shira gets her share too. It is enough for the goat, and it is not enough for anyone else. Yotam counts out loud how much is left."
+chapter1.c1s4.title,Situation 4 title,המחסה של מיכל,Michal's Shelter
+chapter1.c1s4.text,Situation 4 scene text,"מיכל הגיעה לכפר לפני חודש וישנה מאז מתחת ליריעה. ברק אומר שהוא יכול לבנות לה מחסה עד סוף השבוע, אבל המקום היחיד שיש בו צל וקרקע ישרה הוא בדיוק על השביל. הוא בא לשאול אותך לפני שהוא מתחיל, וזה חדש — עד עכשיו הוא לא שאל.","Michal arrived in the village a month ago and has slept under a sheet ever since. Barak says he can build her a shelter by the end of the week, but the only spot with shade and level ground is right on the path. He comes to ask you before he starts, and that is new — until now he did not ask."
+chapter1.c1s4.lesson,"Situation 4 lesson, said after the outcome","כלל נכתב תמיד בתוך מצב אחד, ואחר כך פוגש מצבים שלא חשבת עליהם. זה לא אומר שהוא היה כלל רע. זה אומר שכלל הוא דבר שחיים איתו.","A rule is always written inside one situation, and then it meets situations you never thought about. That does not mean it was a bad rule. It means a rule is something you live with."
+chapter1.c1s4.no_rule_outcome,Situation 4 outcome when no rule covers it,"אין כלל על השביל, אז ברק בונה. מיכל ישנה בפנים כבר בלילה הראשון. הילדים מקיפים שוב את הגבעה, ואף אחד לא שאל אותם.","There is no rule about the path, so Barak builds. Michal sleeps inside it the very first night. The children go around the hill again, and nobody asked them."
+chapter1.c1s4.override_outcome,Situation 4 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. המחסה נבנה. שירה אומרת שכשזה היה הדוכן של ברק הכלל דווקא כן עבד.,"You decided not to apply your own rule this time. The shelter goes up. Shira says that when it was Barak's stall, the rule did work."
+chapter1.c1s4.outcomes.ask_first,Situation 4 outcome under an ask-first rule,"ברק שאל, וזה בדיוק מה שהכלל דורש. אתם עומדים שלושתכם על השביל ומחליטים איפה בונים. המחסה עולה בקצה, והמעבר נשאר.","Barak asked, which is exactly what the rule requires. The three of you stand on the path and decide where to build. The shelter goes up at the edge, and the way through stays."
+chapter1.c1s4.outcomes.forbidden,Situation 4 outcome under a forbidden rule,"הכלל שכתבת אוסר לגעת בשביל, נקודה. ברק מוריד את הכלים. מיכל נשארת מתחת ליריעה, וכשיורד הגשם הראשון היא לא בכפר בבוקר.","The rule you wrote forbids touching the path, full stop. Barak puts down his tools. Michal stays under the sheet, and when the first rain comes she is not in the village in the morning."
+chapter1.c1s4.outcomes.by_turn,Situation 4 outcome under a by-turn rule,"מחסה זה לא דבר שאפשר לעשות בתורות. ברק בונה חצי, מפרק, ובונה שוב. אחרי שבוע הוא מוותר, ומיכל מקבלת גג חלקי.","A shelter is not something you can do in turns. Barak builds half, takes it down, and builds again. After a week he gives up, and Michal gets a partial roof."
+chapter1.c1s4.outcomes.share_equally,Situation 4 outcome under a share-equally rule,"השביל של כולם בשווה, אז המחסה עולה בצד אחד והמעבר נשאר בשני. צר, אבל שניהם קיימים.","The path belongs to everyone equally, so the shelter goes up on one side and the way through stays on the other. Narrow, but both exist."
+trait.act,Trait dimension label: what kind of act it was,סוג המעשה,the kind of act
+trait.justification,Trait dimension label: the justification claimed,ההצדקה,the justification
+trait.power,Trait dimension label: the power balance between the two sides,מאזן הכוחות,the balance of power
+trait.subject,Trait dimension label: what the case was about,הנושא,what it was about
+trait.actor,Trait dimension label: who was involved,מי היה מעורב,who was involved
+precedent.choice_intro,"Shown the first time a precedent might apply, above the two cases side by side",זה מזכיר משהו. מה קבע את ההחלטה שלך אז?,This reminds you of something. What decided it for you back then?
+precedent.choice_source_label,Label above the past case in the side-by-side comparison,מה שקרה אז,What happened then
+precedent.choice_new_label,Label above the new case in the side-by-side comparison,מה שקורה עכשיו,What is happening now
+precedent.reminder_intro,Heading shown when a precedent fully matches the new situation,זה כבר קרה.,This has happened before.
+precedent.past_ruling,Recap of the past ruling. {ruling}=the WHAT-clause label the child chose then,בפעם הקודמת פסקת: {ruling},Last time you ruled: {ruling}
+precedent.past_ruling_none,Recap line used when the past case had no rule governing it at all,"בפעם הקודמת שום כלל לא חל, וזה מה שקרה.","Last time no rule applied, and this is what happened."
+precedent.apply,Button: decide the same way as the past ruling,להחליט אותו דבר גם הפעם,Decide the same way this time
+precedent.raised_intro,Banner shown before write-rule/no-rule when a precedent partially matches,"זה לא בדיוק אותו דבר, אבל זה מזכיר את מה שכבר קרה.","It is not exactly the same thing, but it does bring back what already happened."
+precedent.differences_heading,Heading before the list of traits that differ from the precedent,מה שונה הפעם:,What is different this time:
+chapter2.title,Chapter 2 title,זה כבר קרה,This Already Happened
+chapter2.intro,Chapter 2 intro screen text,"עבר זמן. הספר כבר לא ריק — יש בו כללים שכתבת, ומקרים שפסקת עליהם. עכשיו זה מתחיל לחזור.","Time has passed. The book is no longer empty — it holds rules you wrote, and cases you ruled on. Now it is starting to come back around."
+chapter2.c2s1.title,Situation 1 title,הפטיש של מיכל,Michal's Hammer
+chapter2.c2s1.text,Situation 1 scene text,"ברק צריך היה פטיש בשביל לתקן משהו בבוקר, וזה שקרוב אליו. הוא לקח את הפטיש של מיכל בלי לשאול — התכוון להחזיר אותו עד הערב. מיכל חיפשה אותו כל הבוקר ולא מצאה. הפטיש הזה הוא אחד הדברים היחידים שהיא הביאה איתה כשהגיעה.","Barak needed a hammer this morning to fix something, and the nearest one was Michal's. He took it without asking — he meant to have it back by evening. Michal looked for it all morning and could not find it. That hammer is one of the only things she brought with her when she came."
+chapter2.c2s1.lesson,Situation 1 lesson,להתכוון להחזיר זה לא אותו דבר כמו לשאול. מיכל לא ידעה שהפטיש יחזור — היא רק ידעה שהוא נעלם.,Meaning to give something back is not the same as asking. Michal did not know the hammer would come back — she only knew it was gone.
+chapter2.c2s1.no_rule_outcome,Situation 1 outcome when no rule covers it,"ברק מחזיר את הפטיש בערב, בדיוק כמו שאמר. מיכל שמחה לקבל אותו בחזרה, אבל היא לא שוכחת את הבוקר שבו לא ידעה איפה הוא.","Barak brings the hammer back in the evening, exactly as he said. Michal is glad to have it again, but she does not forget the morning when she did not know where it was."
+chapter2.c2s1.override_outcome,Situation 1 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. מיכל שמה לב שדווקא עכשיו זה לא חל.,"You decided not to apply your own rule this time. Michal notices that of all times, now it does not apply."
+chapter2.c2s1.outcomes.ask_first,Situation 1 outcome under an ask-first rule,"ברק שואל לפני שהוא לוקח. מיכל נותנת לו את הפטיש לשעה, ויודעת בדיוק לאן הוא הלך.","Barak asks before he takes. Michal lends him the hammer for an hour, and knows exactly where it went."
+chapter2.c2s1.outcomes.forbidden,Situation 1 outcome under a forbidden rule,"ברק לא נוגע בפטיש של מיכל בכלל. הוא מסתדר בלעדיו, לאט יותר.","Barak does not touch Michal's hammer at all. He manages without it, more slowly."
+chapter2.c2s1.outcomes.by_turn,Situation 1 outcome under a by-turn rule,ברק לוקח את הפטיש בתורו. מיכל יודעת בדיוק מתי הוא יחזור.,Barak takes the hammer when his turn comes. Michal knows exactly when it will be back.
+chapter2.c2s1.outcomes.share_equally,Situation 1 outcome under a share-equally rule,הפטיש עובר בין כולם לפי הצורך. מיכל כבר לא תמיד יודעת איפה הוא.,The hammer passes between everyone as needed. Michal no longer always knows where it is.
+chapter2.c2s2.title,Situation 2 title,מה שיותם סיפר,What Yotam Said
+chapter2.c2s2.text,Situation 2 scene text,"יותם סיפר לדנה, רק לה, שהוא מפחד שהוא כבר לא מספיק חזק לתחזק את הבאר לבד. אתמול דנה סיפרה את זה לשניים אחרים, כשהיא התלוננה שהיא צריכה לעזור לו יותר. «כולם ככה מדברים», היא אומרת, «זה לא סוד גדול». יותם שמע את זה מאדם שלישי.","Yotam told Dana, and only her, that he is afraid he is no longer strong enough to keep the well up on his own. Yesterday Dana passed it on to two other people, while complaining that she has to help him more. “Everyone talks like that,” she says, “it is not some big secret.” Yotam heard about it from a third person."
+chapter2.c2s2.lesson,Situation 2 lesson,"מה שנאמר בסוד לא נמדד לפי כמה זה חמור, אלא לפי מי בחר לספר אותו הלאה.","Something said in confidence is not measured by how serious it is, but by who chose to pass it on."
+chapter2.c2s2.no_rule_outcome,Situation 2 outcome when no rule covers it,דנה ממשיכה לספר כשזה עולה. עד סוף השבוע כל הכפר יודע שיותם מפחד שהוא לא מספיק.,Dana keeps repeating it whenever it comes up. By the end of the week the whole village knows that Yotam is afraid he is not enough.
+chapter2.c2s2.override_outcome,Situation 2 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. יותם שומע את זה בכל זאת.,You decided not to apply your own rule this time. Yotam hears about it anyway.
+chapter2.c2s2.outcomes.ask_first,Situation 2 outcome under an ask-first rule,"דנה שואלת לפני שהיא מספרת. הפעם היא שואלת את יותם קודם, והוא אומר שזה בסדר.","Dana asks before she tells. This time she asks Yotam first, and he says it is fine."
+chapter2.c2s2.outcomes.forbidden,Situation 2 outcome under a forbidden rule,"דנה לא מספרת שום דבר שיותם סיפר לה בסוד, אף פעם. היא שומרת את זה לעצמה, גם כשזה היה קל לספר.","Dana never repeats anything Yotam told her in confidence, not once. She keeps it to herself, even when telling would have been easy."
+chapter2.c2s2.outcomes.by_turn,Situation 2 outcome under a by-turn rule,"דנה מספרת רק אחרי שהיא מוודאת עם יותם, בכל פעם מחדש. זה לוקח זמן, אבל הוא תמיד יודע מראש.","Dana only tells after she has checked with Yotam, every single time. It takes longer, but he always knows in advance."
+chapter2.c2s2.outcomes.share_equally,Situation 2 outcome under a share-equally rule,מה שיותם סיפר הופך לידוע לכולם באותה מידה. הוא כבר לא היחיד שיודע מה הוא מרגיש.,What Yotam said becomes equally known to everyone. He is no longer the only one who knows what he feels.
+chapter2.c2s3.title,Situation 3 title,הגדר של יותם,Yotam's Fence
+chapter2.c2s3.text,Situation 3 scene text,"יותם גידר רצועת אדמה ליד השדה שלו, בלי לשאול אף אחד. «זה תמיד היה שלי», הוא אומר, «הייתי כאן ראשון». מיכל נהגה להביא לשם את העדר הקטן שלה כל בוקר. עכשיו היא עומדת מול הגדר ולא יודעת לאן ללכת.","Yotam fenced off a strip of land beside his field, without asking anyone. “It was always mine,” he says, “I was here first.” Michal used to bring her small herd there every morning. Now she stands in front of the fence and does not know where to go."
+chapter2.c2s3.lesson,Situation 3 lesson,מה שקבעת עכשיו לא רק פותר את זה. הוא גם אומר מה יקרה בפעם הבאה שזה יחזור.,What you decided now does not only settle this. It also says what will happen the next time it comes back.
+chapter2.c2s3.no_rule_outcome,Situation 3 outcome when nothing governs it,"אף כלל לא חל. יותם משאיר את הגדר, ומיכל מחפשת מקום אחר.","No rule applies. Yotam leaves the fence up, and Michal looks for somewhere else."
+chapter2.c2s3.override_outcome,Situation 3 outcome when the child rules against their own precedent,החלטת לא ללכת לפי מה שפסקת בפעם הקודמת. יותם שואל אם זה אומר שהפעם זה שונה.,You decided not to go by what you ruled last time. Yotam asks whether that means this time is different.
+chapter2.c2s3.outcomes.ask_first,Situation 3 outcome — ask first,"מיכל צריכה לבקש לפני שהיא נכנסת לרצועה. יותם אומר כן הפעם. העדר חוזר לשם, אחרי בקשה.","Michal has to ask before she goes into the strip. Yotam says yes this time. The herd goes back there, after asking."
+chapter2.c2s3.outcomes.forbidden,Situation 3 outcome — forbidden,"האדמה סגורה לגמרי. מיכל מחפשת מקום אחר לעדר, רחוק יותר.","The land is closed completely. Michal finds somewhere else for the herd, further away."
+chapter2.c2s3.outcomes.by_turn,Situation 3 outcome — by turn,"יש תור לרצועה. מיכל מקבלת את הבוקר, יותם את שאר היום.","There is a turn for the strip. Michal gets the morning, Yotam the rest of the day."
+chapter2.c2s3.outcomes.share_equally,Situation 3 outcome — share equally,הרצועה פתוחה לשניהם בשווה. העדר של מיכל והגדר של יותם חולקים אותו מקום.,The strip is open to both of them equally. Michal's herd and Yotam's fence share the same ground.
+chapter2.c2s3.precedent_option_act,Precedent-choice option at c2s3: essential trait is the act itself,כי הוא חסם משהו בלי לשאול אף אחד,because he blocked something without asking anyone
+chapter2.c2s3.precedent_option_power,Precedent-choice option at c2s3: essential trait is the power imbalance,כי מי שנפגע מזה חלש יותר ממי שעשה את זה,because the one hurt by it is weaker than the one who did it
+chapter2.c2s4.title,Situation 4 title,יותם מהצד השני,Yotam on the Other Side
+chapter2.c2s4.text,Situation 4 scene text,"ברק צריך מקום לאחסן קורות עץ בשביל מבנה חדש, והמקום הכי טוב הוא בדיוק ברצועה שיותם עובר בה עם הצאן שלו. ברק פשוט מניח שם את הקורות, בלי לשאול. יותם מגיע בבוקר ורואה שהדרך שלו חסומה.","Barak needs somewhere to store wooden beams for a new building, and the best spot is exactly the strip Yotam crosses with his flock. Barak simply puts the beams down there, without asking. Yotam arrives in the morning and finds his way blocked."
+chapter2.c2s4.lesson,Situation 4 lesson,"הפעם זה יותם שעומד בצד השני. אם הכלל שלך היה עקבי, הוא עובד גם עליו. אם לא — עכשיו אתה יודע למה.","This time it is Yotam standing on the other side. If your rule was consistent, it works on him too. If it was not — now you know why."
+chapter2.c2s4.no_rule_outcome,Situation 4 outcome when nothing governs it,"אין כלל שחל. הקורות נשארות, ויותם מוצא דרך עוקפת ארוכה יותר.","No rule applies. The beams stay, and Yotam finds a longer way around."
+chapter2.c2s4.override_outcome,Situation 4 outcome when the child rules against their own precedent,החלטת אחרת ממה שהיה קודם. יותם שם לב שהפעם זה לא אותו דבר.,You decided differently from before. Yotam notices that this time it is not the same.
+chapter2.c2s4.outcomes.ask_first,Situation 4 outcome — ask first,"ברק שואל את יותם קודם. יותם נותן לו את הפינה הרחוקה, והדרך נשארת פתוחה.","Barak asks Yotam first. Yotam gives him the far corner, and the way stays open."
+chapter2.c2s4.outcomes.forbidden,Situation 4 outcome — forbidden,"ברק לא נוגע בדרך של יותם בכלל. הוא מוצא מקום אחר לקורות, רחוק יותר.","Barak does not touch Yotam's way at all. He finds somewhere else for the beams, further off."
+chapter2.c2s4.outcomes.by_turn,Situation 4 outcome — by turn,"הקורות שם רק בבוקר, ואחר הצהריים הדרך פנויה.","The beams are there only in the morning, and in the afternoon the way is clear."
+chapter2.c2s4.outcomes.share_equally,Situation 4 outcome — share equally,"הדרך משותפת. הקורות בצד אחד, יותם עובר בשני.","The way is shared. The beams on one side, Yotam passes on the other."
+chapter_end.continue,Button shown at chapter-end when there is a next chapter to continue to,להמשיך לפרק הבא,Continue to the next chapter
+rulebook.precedents_heading,Heading over the precedents section of the rule book,תקדימים,Precedents
+rulebook.precedent_entry,"One precedent in the rule book list. {title}=the past situation's title, {ruling}=what the child ruled",{title} — {ruling},{title} — {ruling}
+rulebook.precedent_no_ruling,Shown in the rule book when a precedent's past case had no rule apply,שום כלל לא חל,no rule applied
+toc.chapter_number,Small label above a chapter's title in the table of contents. {n}=chapter number,פרק {n},Chapter {n}
+toc.situation_number,Small label above a situation's title in the table of contents. {n}=situation number within its chapter,מצב {n},Situation {n}
+about.name_prompt,Label above the village-naming input on the about screen,איך תרצה לקרוא לכפר הזה?,What would you like to call this village?
+about.name_placeholder,"Placeholder in the village-naming input, and the fallback name used if left blank",הכפר,The village
+character.non_resident,Shown in a character's hover tooltip when they don't live in the village (only נעם today),לא גר בכפר,does not live in the village
+common.you,"The child, wherever a situation's actor/victim is the player themselves — never added to the shared ACTORS registry LinkedText scans, since it's one of the most common words in Hebrew",אתה,you
+chapter3.title,Chapter 3 title,הכלל שלך נגדך,Your Rule Against You
+chapter3.intro,Chapter 3 intro screen text,עברו עוד כמה ימים. הכללים שכתבת כבר לא רק על אחרים — הם על כל מי שנמצא כאן. גם עליך.,A few more days have passed. The rules you wrote are no longer only about other people — they are about everyone who is here. You included.
+chapter3.c3s1.title,Situation 1 title,המים שאתה צריך,The Water You Need
+chapter3.c3s1.text,Situation 1 scene text — the child themselves takes water without asking,"הבוקר אתה צריך מים בדחיפות — מישהו נחבל קרוב לשדה, וצריך לשטוף ולקרר. הבאר של יותם הכי קרובה. אין זמן לחפש אותו ולשאול. אתה ממלא דלי ורץ הלאה.","This morning you need water urgently — someone was hurt near the field, and it has to be washed and cooled. Yotam's well is the closest. There is no time to go looking for him and ask. You fill a bucket and run on."
+chapter3.c3s1.lesson,Situation 1 lesson,עד עכשיו הכלל היה משהו שאתה מפעיל על אחרים. עכשיו זו הפעם הראשונה שהוא נבדק עליך.,Until now a rule was something you applied to other people. This is the first time it has been tested on you.
+chapter3.c3s1.no_rule_outcome,Situation 1 outcome when no water rule exists,"אין כלל שחל על זה — לא על אחרים ולא עליך. אתה ממלא ורץ, בדיוק כמו שדנה עשתה לפני שהיה כלל בכלל.","There is no rule covering this — not for other people and not for you. You fill and run, exactly as Dana did before there was any rule at all."
+chapter3.c3s1.override_outcome,Situation 1 outcome when the child overrides their own rule on themselves,"החלטת לא להפעיל את הכלל שלך על עצמך הפעם. יותם, שראה, לא אומר כלום — אבל הוא זוכר.","You decided not to apply your own rule to yourself this time. Yotam, who saw, says nothing — but he remembers."
+chapter3.c3s1.outcomes.ask_first,Situation 1 outcome under an ask-first rule,"אין זמן לחפש את יותם, אז אתה רץ הלאה בלי למלא — הכלל שלך לא מאפשר לך לקצר. אתה מוצא מים במקום אחר, לאט יותר.","There is no time to look for Yotam, so you run on without filling — your own rule will not let you take the shortcut. You find water somewhere else, more slowly."
+chapter3.c3s1.outcomes.forbidden,Situation 1 outcome under a forbidden rule,"הכלל שלך אוסר על כולם, בלי יוצא מן הכלל — כולל אותך. אתה עומד ליד הבאר עם דלי ריק ומחפש פתרון אחר.","Your rule forbids everyone, with no exception — you included. You stand by the well with an empty bucket, looking for another way."
+chapter3.c3s1.outcomes.by_turn,Situation 1 outcome under a by-turn rule,"אתה ממתין לתורך, בדיוק כמו כולם. זה לוקח כמה דקות יקרות.","You wait for your turn, exactly like everyone else. It costs a few expensive minutes."
+chapter3.c3s1.outcomes.share_equally,Situation 1 outcome under a share-equally rule,"אתה ממלא את החלק שמגיע לך, לא יותר. זה כמעט לא מספיק, אבל זה מה שהכלל קובע.","You fill the share that is coming to you, no more. It is barely enough, but it is what the rule says."
+chapter3.c3s2.title,Situation 2 title,התור של ברק,Barak's Turn
+chapter3.c3s2.text,"Situation 2 scene text — שירה blocks the path, ברק is stuck behind her","שירה צריכה להעביר את העדר שלה בשביל, ובדיוק באמצע היא עוצרת אותו כדי לתקן פרסה שנשברה לאחת העיזים. ברק, שממהר להביא קורות לבנייה, נתקע מאחוריה ולא יכול לעבור. «זה ייקח רק כמה דקות», היא אומרת, בלי להביט אליו.","Shira needs to move her herd along the path, and right in the middle she stops to fix a goat's broken hoof. Barak, in a hurry to bring beams for building, is stuck behind her and cannot get past. “It will only take a few minutes,” she says, without looking at him."
+chapter3.c3s2.lesson,Situation 2 lesson,הכלל לא שאל אותה למה. הוא רק בדק אם היא גרה בכפר.,The rule did not ask her why. It only checked whether she lives in the village.
+chapter3.c3s2.no_rule_outcome,Situation 2 outcome when no path rule exists,"אין כלל על השביל. שירה ממשיכה לתקן את הפרסה בקצב שלה, וברק מחכה, כועס יותר ויותר.","There is no rule about the path. Shira goes on fixing the hoof at her own pace, and Barak waits, angrier and angrier."
+chapter3.c3s2.override_outcome,Situation 2 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. ברק שואל אם זה משנה שזאת שירה.,You decided not to apply your own rule this time. Barak asks whether it makes a difference that it is Shira.
+chapter3.c3s2.outcomes.ask_first,Situation 2 outcome under an ask-first rule,"שירה עוצרת ומבקשת רשות להמשיך לתקן במקום. ברק, שנשאל, מסכים לחכות כמה דקות.","Shira stops and asks permission to go on with the repair there. Barak, having been asked, agrees to wait a few minutes."
+chapter3.c3s2.outcomes.forbidden,Situation 2 outcome under a forbidden rule,"אסור לחסום את השביל, נקודה — גם לא כדי לתקן פרסה. שירה גוררת את העז הפצועה הצידה וממשיכה לתקן שם, לבד. אף אחד לא עוצר לשאול אותה למה זה לקח לה כל כך הרבה זמן.","Blocking the path is not allowed, full stop — not even to fix a hoof. Shira drags the injured goat aside and goes on with the repair there, alone. Nobody stops to ask her why it took her so long."
+chapter3.c3s2.outcomes.by_turn,Situation 2 outcome under a by-turn rule,"יש תור לשביל. שירה ממתינה לתורה, והעז ממשיכה לצלוע.","There is a turn for the path. Shira waits for hers, and the goat goes on limping."
+chapter3.c3s2.outcomes.share_equally,Situation 2 outcome under a share-equally rule,"השביל נשאר פתוח לחצי, ושירה מתקנת בצד. צר, אבל שניהם עוברים.","The path stays half open, and Shira does the repair off to the side. Narrow, but both get through."
+chapter3.c3s3.title,Situation 3 title,החבל של ברק,Barak's Rope
+chapter3.c3s3.text,Situation 3 scene text — ברק refuses to share the village's one strong rope; the framing tells the child they use shared things too,"לכפר יש רק חבל אחד מספיק חזק למשוך איתו עגלה תקועה. ברק מצא אותו קודם והשתמש בו לבנייה. דנה צריכה אותו עכשיו כדי לחלץ עגלת מים תקועה בבוץ, אבל ברק לא מוכן לתת — «מצאתי אותו קודם, ואני עוד לא סיימתי». את הכלל הזה אתה בעצמך תזדקק לו יום אחד — גם אתה משתמש בדברים של הכפר.","The village has only one rope strong enough to pull out a stuck cart. Barak found it first and used it for building. Dana needs it now to free a water cart stuck in the mud, but Barak will not hand it over — “I found it first, and I am not done yet.” This is a rule you will need yourself one day — you use the village's things too."
+chapter3.c3s3.lesson,Situation 3 lesson,כלל על מה ששייך לכולם הוא גם כלל על מה שאתה בעצמך תרצה להשתמש בו יום אחד.,A rule about what belongs to everyone is also a rule about what you yourself will want to use one day.
+chapter3.c3s3.no_rule_outcome,Situation 3 outcome when the child skips writing a rule,"אין כלל על זה. ברק מחליט לבד, ודנה נשארת עם עגלה תקועה.","There is no rule about this. Barak decides on his own, and Dana is left with a stuck cart."
+chapter3.c3s3.override_outcome,Situation 3 outcome when the child overrides their own applying rule,החלטת לא להפעיל את הכלל שלך הפעם. ברק שם לב שדווקא עכשיו זה לא חל.,"You decided not to apply your own rule this time. Barak notices that of all times, now it does not apply."
+chapter3.c3s3.outcomes.ask_first,Situation 3 outcome under an ask-first rule,"ברק שואל את דנה כמה זמן היא צריכה, ומסכים לתת לה את החבל לזמן קצר. העגלה יוצאת מהבוץ.","Barak asks Dana how long she needs, and agrees to give her the rope for a short while. The cart comes out of the mud."
+chapter3.c3s3.outcomes.forbidden,Situation 3 outcome under a forbidden rule,"אסור לסרב לשתף, אף פעם. ברק נותן לדנה את החבל מיד, גם שהוא לא סיים.","Refusing to share is never allowed. Barak gives Dana the rope at once, even though he has not finished."
+chapter3.c3s3.outcomes.by_turn,Situation 3 outcome under a by-turn rule,"יש תור לחבל. דנה מחכה לתורה, והעגלה נשארת תקועה עד אז.","There is a turn for the rope. Dana waits for hers, and the cart stays stuck until then."
+chapter3.c3s3.outcomes.share_equally,Situation 3 outcome under a share-equally rule,"החבל מתחלק ביניהם — חצי יום לכל אחד. שניהם מסתדרים, לאט יותר.","The rope is split between them — half a day each. They both manage, more slowly."
+chapter3.c3s4.title,Situation 4 title,מה שגם אתה צריך,What You Need Too
+chapter3.c3s4.text,Situation 4 scene text — the child is using the rope themselves when מיכל needs it,אתה משתמש בחבל בשביל לתקן משהו ליד הבית שלך. מיכל מגיעה ומבקשת אותו — היא צריכה אותו כדי לחזק את הגג לפני הגשם. אתה עוד לא סיימת.,You are using the rope to fix something beside your own house. Michal comes and asks for it — she needs it to strengthen her roof before the rain. You have not finished yet.
+chapter3.c3s4.lesson,"Situation 4 lesson — closes the chapter, names the concept only now",כלל שלא חל עליך הוא בקשה. כלל שחל גם עליך הוא הבטחה.,A rule that does not apply to you is a request. A rule that applies to you too is a promise.
+chapter3.c3s4.no_rule_outcome,Situation 4 outcome when no chefetz rule exists,"אין כלל על זה — לא כשכתבת אותו, ולא עכשיו. אתה מחליט לבד, בדיוק כמו שברק החליט.","There is no rule about this — there was not when you wrote it, and there is not now. You decide on your own, exactly as Barak did."
+chapter3.c3s4.override_outcome,Situation 4 outcome when the child overrides their own rule on themselves,"החלטת לא להפעיל את הכלל שלך על עצמך הפעם. מיכל לא אומרת כלום, אבל היא זוכרת מי כתב את הכלל הזה.","You decided not to apply your own rule to yourself this time. Michal says nothing, but she remembers who wrote that rule."
+chapter3.c3s4.outcomes.ask_first,Situation 4 outcome under an ask-first rule,"אתה שואל את מיכל כמה זמן היא צריכה, ונותן לה את החבל לזמן קצר. הגג מחוזק לפני הגשם.","You ask Michal how long she needs, and give her the rope for a short while. The roof is strengthened before the rain."
+chapter3.c3s4.outcomes.forbidden,Situation 4 outcome under a forbidden rule,"הכלל שלך אוסר לסרב לשתף — גם עליך. אתה נותן למיכל את החבל מיד, גם שאתה לא סיימת.","Your rule forbids refusing to share — you included. You give Michal the rope at once, even though you have not finished."
+chapter3.c3s4.outcomes.by_turn,Situation 4 outcome under a by-turn rule,"יש תור לחבל, וגם אתה מחכה לתורך. מיכל מקבלת אותו קודם.","There is a turn for the rope, and you wait for yours too. Michal gets it first."
+chapter3.c3s4.outcomes.share_equally,Situation 4 outcome under a share-equally rule,"החבל מתחלק — חצי יום לך, חצי יום למיכל. שניכם מסתדרים, לאט יותר.","The rope is split — half a day for you, half a day for Michal. You both manage, more slowly."
+app.notes_button,Header button that opens the concept notebook,מחברת,Notebook
+notes.heading,Title at the top of the notebook panel,מחברת המושגים,The Concept Notebook
+notes.close_aria,Accessible label for the scrim button that closes the notebook,לסגור את המחברת,Close the notebook
+notes.intro,Line under the notebook heading explaining what it is and why chapters unlock only after they're played,כאן נשמר מה שכל פרק היה בעצם עליו. כל פרק נפתח כאן אחרי שסיימת אותו — קודם מרגישים משהו ורק אחר כך נותנים לו שם.,"This is where what each chapter was really about is kept. Every chapter opens here after you have finished it — first you feel something, and only then does it get a name."
+notes.empty,Shown in the notebook when no chapter has been finished yet,המחברת עוד ריקה. הפרק הראשון ייפתח כאן כשתסיים אותו.,The notebook is still empty. The first chapter will open here when you finish it.
+notes.locked,"Marker next to a chapter whose note hasn't unlocked yet, shown in place of its content",נפתח בסוף הפרק,opens at the end of the chapter
+notes.grown_up_heading,Heading over the grown-up name for the chapter's concept,איך קוראים לזה אצל מבוגרים,What grown-ups call this
+notes.questions_heading,Heading over the discussion questions for a chapter,שאלות לדבר עליהן,Questions to talk about
+notes.c1.concept,Chapter 1 concept — the short name of the idea,כלל הוא החלטה שמחליטים מראש,A rule is a decision made in advance
+notes.c1.what_happened,Chapter 1 — what happened in the chapter that made the concept felt,"בהתחלה לא היה שום כלל, וכל מקרה הוכרע מחדש: לפי מי שדיבר חזק יותר, או לפי מה שהרגשת באותו רגע. כשכתבת את הכלל הראשון, החלטת משהו מראש — עוד לפני שידעת על מי הוא ייפול.","At first there was no rule at all, and every case was decided fresh: by whoever spoke loudest, or by whatever you felt at that moment. When you wrote the first rule, you decided something in advance — before you knew who it would land on."
+notes.c1.grown_up,Chapter 1 — the grown-up name for the concept,"שלטון החוק: ההחלטה באה מכלל שנכתב מראש, ולא ממי שמחליט ברגע. שווה לשים לב גם שכלל תמיד צר יותר משנדמה — כלל על מים לא חל על שביל.","The rule of law: the decision comes from a rule written in advance, and not from whoever happens to be deciding at the moment. Worth noticing too that a rule is always narrower than it seems — a rule about water does not cover a path."
+notes.c1.q1,Chapter 1 discussion question 1,מה ההבדל בין כלל לבין להחליט כל פעם מחדש?,What is the difference between a rule and deciding fresh every time?
+notes.c1.q2,Chapter 1 discussion question 2,"הכלל הראשון שכתבת — על מה הוא לא חל, בלי ששמת לב?","The first rule you wrote — what did it not cover, without you noticing?"
+notes.c1.q3,Chapter 1 discussion question 3,מה היה קורה יום אחד בבית בלי אף כלל?,What would happen at home for one day with no rules at all?
+notes.c2.concept,Chapter 2 concept — the short name of the idea,מה שהחלטת בפעם הקודמת נספר גם הפעם,What you decided last time counts this time too
+notes.c2.what_happened,Chapter 2 — what happened in the chapter that made the concept felt,"מקרה דומה חזר, והמשחק שאל אותך שאלה אחת: מה היה הדבר שבגללו החלטת ככה. מאז, מה שענית שם הוא מה שקובע אילו מקרים נחשבים דומים.","A similar case came back, and the game asked you one question: what was the thing that made you decide that way. From then on, what you answered there is what decides which cases count as similar."
+notes.c2.grown_up,Chapter 2 — the grown-up name for the concept,תקדים: מקרה שהוכרע פעם אחת מחייב מקרים דומים שיבואו אחריו. החלק הקשה הוא לא הפסיקה אלא ההחלטה מה הופך שני מקרים לדומים — ואיזה פרט הוא רק פרט.,Precedent: a case decided once binds the similar cases that come after it. The hard part is not the ruling but deciding what makes two cases similar — and which detail is only a detail.
+notes.c2.q1,Chapter 2 discussion question 1,מה אמרת שקבע? היית אומר את אותו דבר גם היום?,What did you say decided it? Would you say the same thing today?
+notes.c2.q2,Chapter 2 discussion question 2,שני מקרים שנראים אותו דבר — מה צריך להיות שונה ביניהם כדי שזה כבר לא יהיה אותו דבר?,Two cases that look like the same thing — what would have to be different between them for it to stop being the same thing?
+notes.c2.q3,Chapter 2 discussion question 3,אם אף אחד לא יכול לנחש מה תחליט בפעם הבאה — מה זה עושה לו?,If nobody can guess what you will decide next time — what does that do to them?
+notes.c3.concept,Chapter 3 concept — the short name of the idea,כלל חל גם על מי שכתב אותו,A rule applies to whoever wrote it too
+notes.c3.what_happened,Chapter 3 — what happened in the chapter that made the concept felt,"הכללים שכתבת קודם נפלו הפעם עליך, ועל מישהו שאתה מחבב. הם לא השתנו בכלל — רק מי שעמד בצד השני שלהם.","The rules you wrote earlier landed this time on you, and on someone you are fond of. They did not change at all — only who was standing on the other side of them."
+notes.c3.grown_up,Chapter 3 — the grown-up name for the concept,"שוויון בפני החוק: אותו חוק חל על כולם, כולל על מי שכתב אותו. כלל שלא חל עליך הוא בקשה. כלל שחל גם עליך הוא הבטחה.","Equality before the law: the same law applies to everyone, including whoever wrote it. A rule that does not apply to you is a request. A rule that applies to you too is a promise."
+notes.c3.q1,Chapter 3 discussion question 1,היה כלל שהיית כותב אחרת אילו ידעת שהוא ייפול גם עליך?,Was there a rule you would have written differently if you had known it would land on you too?
+notes.c3.q2,Chapter 3 discussion question 2,יש בבית כלל שחל רק על הילדים? ויש כלל שחל רק על המבוגרים?,Is there a rule at home that applies only to the children? And one that applies only to the grown-ups?
+notes.c3.q3,Chapter 3 discussion question 3,"כשהכלל פגע במישהו שאתה מחבב — רצית לשנות את הכלל, או רק את הפעם הזאת?","When the rule hurt someone you are fond of — did you want to change the rule, or only this one time?"
+village.actors.yotam.name,"Character name: dug the well, one of the old-timers",יותם,Yotam
+village.actors.dana.name,Character name: shepherd,דנה,Dana
+village.actors.shira.name,"Character name: a child and a shepherd, brings you water each morning",שירה,Shira
+village.actors.barak.name,Character name: builder,ברק,Barak
+village.actors.michal.name,Character name: newcomer,מיכל,Michal
+village.actors.noam.name,"Character name: passes through, does not live in the village",נעם,Noam
+rule.sentence,How the four picked clauses are assembled into one rule sentence in the book,"{who} {what}, {when}. אם לא — {consequence}.","{who} {what}, {when}. If not — {consequence}."
+builder.who.residents.template,WHO fragment inside the assembled rule sentence,מי שגר בכפר,Whoever lives in the village
+builder.who.anyone_present.template,WHO fragment inside the assembled rule sentence,כל מי שנמצא כאן עכשיו,Anyone who is here right now
+builder.who.group.template,WHO fragment inside the assembled rule sentence. {group}=group name,כל {group},Every one of {group}
+builder.who.everyone_except.template,WHO fragment inside the assembled rule sentence. {group}=group name,כולם חוץ מ{group},Everyone except {group}
+builder.what.ask_first.template,WHAT fragment. {et}=the subject in its accusative form (Hebrew); plain noun in English,לא ייקח {et} בלי לבקש,must not take {et} without asking
+builder.what.forbidden.template,WHAT fragment. {be}=the subject with the preposition ב (Hebrew); plain noun in English,לא ייגע {be} בכלל,must not touch {be} at all
+builder.what.by_turn.template,WHAT fragment. {et}=the subject in its accusative form,ייקח {et} לפי תור,must take {et} in turns
+builder.what.share_equally.template,WHAT fragment. {et}=the subject in its accusative form,יחלוק {et} שווה בשווה,must share {et} equally
+builder.when.always.template,WHEN fragment inside the assembled rule sentence,תמיד,always
+builder.when.when_scarce.template,WHEN fragment inside the assembled rule sentence,רק כשאין מספיק לכולם,only when there is not enough for everyone
+builder.when.when_harmed.template,WHEN fragment inside the assembled rule sentence,רק אם מישהו נפגע מזה,only if someone is hurt by it
+builder.when.first_time_forgiven.template,WHEN fragment inside the assembled rule sentence,מהפעם השנייה והלאה,from the second time on
+builder.consequence.return_or_fix.template,CONSEQUENCE fragment inside the assembled rule sentence,יצטרך להחזיר או לתקן,they have to give it back or fix it
+builder.consequence.help_victim.template,CONSEQUENCE fragment inside the assembled rule sentence,יצטרך לעזור לנפגע יום אחד,"they have to help the one who was hurt, one day"
+builder.consequence.lose_next_turn.template,CONSEQUENCE fragment inside the assembled rule sentence,יפסיד את הזכות לזה בפעם הבאה,they lose the right to it next time
+builder.consequence.village_decides.template,CONSEQUENCE fragment inside the assembled rule sentence,הכפר יחליט בכל מקרה לגופו,the village decides case by case
+subject.mayim.label,"Subject noun, plain form: water",המים,the water
+subject.mayim.et,Subject noun in the accusative (Hebrew 'את'); same plain noun in English,את המים,the water
+subject.mayim.be,Subject noun with the preposition ב (Hebrew); same plain noun in English,במים,the water
+subject.shetach.label,"Subject noun, plain form: land",השטח,the land
+subject.shetach.et,Subject noun in the accusative,את השטח,the land
+subject.shetach.be,Subject noun with the preposition ב,בשטח,the land
+subject.shvil.label,"Subject noun, plain form: path",השביל,the path
+subject.shvil.et,Subject noun in the accusative,את השביל,the path
+subject.shvil.be,Subject noun with the preposition ב,בשביל,the path
+subject.chefetz.label,"Subject noun, plain form: something belonging to someone else",חפץ של מישהו אחר,something that belongs to someone else
+subject.chefetz.et,Subject noun in the accusative,את החפץ של מישהו אחר,something that belongs to someone else
+subject.chefetz.be,Subject noun with the preposition ב,בחפץ של מישהו אחר,something that belongs to someone else
+subject.davar.label,"Subject noun, plain form: something someone said",דבר שמישהו סיפר,something someone said
+subject.davar.et,Subject noun in the accusative,את מה שמישהו סיפר לו,what someone told them
+subject.davar.be,Subject noun with the preposition ב,במה שמישהו סיפר לו,what someone told them
+app.language_label,Accessible label on the header language switcher,שפה,Language

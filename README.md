@@ -6,20 +6,43 @@ rules, writes the rules themselves — and then lives with them.
 This is **Chapters 1–3** ("No Rules", "This Already Happened", "Your Rule
 Against You"), out of seven. The full design is in `docs/design.md`;
 per-chapter implementation notes are in `docs/chapter-1-plan.md`,
-`docs/chapter-2-plan.md`, and `docs/chapter-3-plan.md`.
+`docs/chapter-2-plan.md`, and `docs/chapter-3-plan.md`. Chapters 4–7 are
+planned but not built — see `docs/roadmap.md` for build order and
+`docs/chapter-4-plan.md` … `docs/chapter-7-plan.md` for each.
 
 ## Running it
 
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 68 tests over the engine and content
+npm test        # 98 tests over the engine, content and components
 npm run build
 ```
 
 Fonts load via `next/font/google` (Frank Ruhl Libre for the rulebook and
 headings, Assistant for the interface), so the first build requires an
 internet connection.
+
+## Languages
+
+The game ships in Hebrew and English, switchable from the header at any
+point. Switching is live — it keeps your rules, your precedents and your
+place in the chapter, and only the words change. The page direction follows
+(`rtl` / `ltr`), and the choice is remembered.
+
+All text, including the character names and the fragments the rule book
+assembles into a sentence, lives in `src/content/tokens/tokens.csv` — one row
+per string, one column per language. A non-coder can edit that file in Excel
+or Sheets. After editing, regenerate the JSON the app reads:
+
+```bash
+python3 src/content/tokens/generate.py src/content/tokens/tokens.csv \
+  --out src/content/tokens/locales
+```
+
+Adding a third language is a new column plus its code in `LANGUAGES`
+(`src/content/tokens/index.ts`); nothing else in the app changes. Any string
+left blank falls back to Hebrew rather than rendering empty.
 
 ## Structure
 
@@ -36,9 +59,9 @@ src/
   content/         the village, chapters 1–3 — data only
     situations.ts  every situation keyed by id, for precedent source lookup
     tokens/        language tokens: tokens.csv is the source of truth, generate.py builds
-                   locales/*.json from it, t() reads them (he complete, en blank)
-  components/      rule builder, rule book, table of contents, chapter end, about screen,
-                   precedent choice
+                   locales/*.json from it (he and en both complete)
+  components/      rule builder, rule book, notebook, table of contents, chapter end,
+                   about screen, precedent choice, language switcher
   app/             a single screen driving the whole game across chapters
 ```
 
@@ -68,8 +91,8 @@ through in a test without rendering anything — see
 
 ## What's not here yet
 
-Elections, separation of powers, constitutional amendment, save state,
-English localization (chapters 4–7). `chefetz` and `davar`, the two subjects
+Elections, separation of powers, constitutional amendment, save state
+(chapters 4–7). `chefetz` and `davar`, the two subjects
 Chapter 2 introduces, aren't pinched within Chapter 2 itself — a later
 chapter needs to eventually collide with rules written for them.
 

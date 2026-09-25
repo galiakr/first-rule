@@ -1,1 +1,478 @@
-{}
+{
+  "about": {
+    "enter_village": "Enter the village",
+    "me_text": "Nobody appointed you to anything. You have no title, and there is nothing stopping anyone else in the village from doing exactly what you do. You are simply the one everybody comes to when something gets stuck — and that lasts only as long as they keep coming.",
+    "name_placeholder": "The village",
+    "name_prompt": "What would you like to call this village?",
+    "title": "The village, before you step in",
+    "village_text": "A small village, with no wall and no gate. Six groups live here — except one, which only passes through — and each of them is bothered by something different."
+  },
+  "app": {
+    "chapter_progress": "Chapter {chapter} · Situation {n} of {total}",
+    "decide": {
+      "apply_rule": "Apply the rule",
+      "collision_first_time_note": "Sometimes you can see ahead of time that a new rule clashes with an old one. Sometimes you only find out once it has already happened to someone.",
+      "collision_intro": "Two rules you wrote apply here, and they say opposite things.",
+      "continue": "Continue",
+      "no_rule_intro": "There is nothing in the book that touches this. Nobody wrote a rule for it at the time.",
+      "override_rule": "Decide differently this time",
+      "rule_applies_intro": "There is a rule in the book that covers this. You wrote it.",
+      "write_rule_intro": "There is no rule that touches this. You can write one now — and it will stay in the book."
+    },
+    "intro_continue": "Begin",
+    "language_label": "Language",
+    "lesson": {
+      "close_chapter": "Close the chapter",
+      "next": "Onward"
+    },
+    "notes_button": "Notebook",
+    "opener": {
+      "comes_but": "It took a while before {group} came, and they told you only part of it.",
+      "comes_to_you": "You heard it from {group} first, and they told you everything.",
+      "stops_coming": "Nobody from {group} came to tell you. You heard about it later, from someone else."
+    },
+    "outcome": {
+      "continue": "And then"
+    },
+    "rulebook_button": "The Rule Book",
+    "title": "First Rule",
+    "toc_button": "Contents"
+  },
+  "builder": {
+    "blank_consequence": "and if not",
+    "blank_what": "what",
+    "blank_when": "when",
+    "blank_who": "who",
+    "clash_intro": "This cannot live alongside a rule you have already written:",
+    "clash_note": "You can write it anyway. Both rules will stay in the book, and someone will have to decide which one holds.",
+    "consequence": {
+      "help_victim": {
+        "label": "Must help the one who was hurt, one day",
+        "template": "they have to help the one who was hurt, one day"
+      },
+      "lose_next_turn": {
+        "label": "Loses the right to it next time",
+        "template": "they lose the right to it next time"
+      },
+      "return_or_fix": {
+        "label": "Must give it back or fix it",
+        "template": "they have to give it back or fix it"
+      },
+      "village_decides": {
+        "label": "The village decides case by case",
+        "template": "the village decides case by case"
+      }
+    },
+    "legend_consequence": "And if not",
+    "legend_group": "Which group",
+    "legend_what": "What",
+    "legend_when": "When",
+    "legend_who": "Who it applies to",
+    "skip": "Do not write a rule this time",
+    "subject_prefix": "The rule you are writing, about {subject}",
+    "what": {
+      "ask_first": {
+        "label": "Must not take without asking",
+        "template": "must not take {et} without asking"
+      },
+      "by_turn": {
+        "label": "Allowed, but in turns",
+        "template": "must take {et} in turns"
+      },
+      "forbidden": {
+        "label": "Not allowed at all",
+        "template": "must not touch {be} at all"
+      },
+      "share_equally": {
+        "label": "Must share equally",
+        "template": "must share {et} equally"
+      }
+    },
+    "when": {
+      "always": {
+        "label": "Always",
+        "template": "always"
+      },
+      "first_time_forgiven": {
+        "label": "The first time is forgiven",
+        "template": "from the second time on"
+      },
+      "when_harmed": {
+        "label": "Only if someone is hurt by it",
+        "template": "only if someone is hurt by it"
+      },
+      "when_scarce": {
+        "label": "Only when there is not enough for everyone",
+        "template": "only when there is not enough for everyone"
+      }
+    },
+    "when_connector": "If not —",
+    "who": {
+      "anyone_present": {
+        "label": "Anyone who is here right now",
+        "template": "Anyone who is here right now"
+      },
+      "everyone_except": {
+        "label": "Everyone except—",
+        "template": "Everyone except {group}"
+      },
+      "group": {
+        "label": "A particular group",
+        "template": "Every one of {group}"
+      },
+      "residents": {
+        "label": "Whoever lives in the village",
+        "template": "Whoever lives in the village"
+      }
+    },
+    "write": "Write this in the book"
+  },
+  "chapter1": {
+    "c1s1": {
+      "lesson": "Until now there was no rule here, so there was nothing to break either. The moment you wrote one, the village has something it can point at — and that works in both directions.",
+      "no_rule_outcome": "You decided nothing. Dana walks off with the bucket, Yotam stays by the well. The next morning he rolls a large stone over it.",
+      "outcomes": {
+        "ask_first": "Dana brings the bucket back and asks. Yotam nods, a little surprised that anyone asked him at all. That evening he tells two other people that something here got settled.",
+        "by_turn": "You set an order: Yotam first, then the herd. It works. It takes everyone longer, and nobody is left without.",
+        "forbidden": "Dana empties the bucket back into the well and leads the herd away. In the afternoon she was seen looking for water in the dry riverbed, far off.",
+        "share_equally": "The well is open to everyone equally. Dana fills without asking, and two more after her. Yotam stands to one side, looking at the well he dug."
+      },
+      "override_outcome": "You decided differently from what is written in your own book. Yotam looks at you and says nothing.",
+      "text": "Yotam dug a well years ago, on his own, and it sits at the edge of his field. This morning he saw Dana filling a bucket from it for the herd. “She did not even ask,” he says. Dana is standing there with the bucket and cannot see the problem — “there is water in there for everyone, and my herd ran out.”",
+      "title": "Yotam's Well"
+    },
+    "c1s2": {
+      "lesson": "Notice who told you about this, and who did not. Barak was certain it was allowed because nobody told him it was not. The children said nothing because they were not sure anyone would listen.",
+      "no_rule_outcome": "The stall stays. The children go around the hill, and it costs them a quarter of an hour each way. After a week they simply stop going down to the well on their own.",
+      "outcomes": {
+        "ask_first": "Barak did not ask anyone before he built, so he moves the stall two metres aside. It takes him a whole day. The path is clear.",
+        "by_turn": "The stall is open only in the mornings, and in the afternoon it is folded away and the path is free. Clumsy, but both sides get something.",
+        "forbidden": "The stall comes down. Barak takes it apart himself, carries off the boards and does not say a word. The path is completely clear, and nothing will ever be built on it again.",
+        "share_equally": "The path belongs to everyone equally, so the stall stays and so does the way through — Barak cuts it down to half. Now it is narrow, but you can get past."
+      },
+      "override_outcome": "You decided differently from what is written in your own book. Shira asks you why you wrote it in the first place.",
+      "text": "Barak built a wooden stall right on the narrow path down to the well. He did it in two days, nicely, and he is proud of it. The children going down to draw water now have to go all the way around the hill. Shira tells you this quietly, because she is not sure that complaining is allowed.",
+      "title": "The Stall on the Path"
+    },
+    "c1s3": {
+      "lesson": "A rule is not an opinion. It is a promise, and a promise is tested at exactly the moment when keeping it is inconvenient.",
+      "no_rule_outcome": "There is no rule that touches this. Shira goes on filling, and Yotam stops counting. By the end of the week four people are taking from below the mark.",
+      "outcomes": {
+        "ask_first": "The rule you wrote applies to her. Shira puts the water back and asks permission. Yotam says no — there is little left. She walks away without looking at you, and the next morning no bucket is waiting for you.",
+        "by_turn": "The rule you wrote applies to her. Shira waits for her turn — three days. She waits. The goat does not.",
+        "forbidden": "The rule you wrote applies to her. Shira may not touch the well at all. She does not argue. Two days later the goat dies, and she does not tell you.",
+        "share_equally": "The rule you wrote applies to her. What is left is divided equally, and Shira gets her share too. It is enough for the goat, and it is not enough for anyone else. Yotam counts out loud how much is left."
+      },
+      "override_outcome": "You decided not to apply your own rule this time. Shira thanks you and walks off with the bucket. Yotam says nothing, and later asks out loud whether the rule applies to him too, or only to whoever you choose.",
+      "text": "This week is dry. There is little left in the well, and Yotam marked how far down anyone may go. This morning Shira filled a bucket from below the mark without asking — her goat has been sick for three days and will not drink from anywhere else. This is not the first time she has taken. Shira is the one who brings you water every morning before you are even up.",
+      "title": "Shira and the Goat"
+    },
+    "c1s4": {
+      "lesson": "A rule is always written inside one situation, and then it meets situations you never thought about. That does not mean it was a bad rule. It means a rule is something you live with.",
+      "no_rule_outcome": "There is no rule about the path, so Barak builds. Michal sleeps inside it the very first night. The children go around the hill again, and nobody asked them.",
+      "outcomes": {
+        "ask_first": "Barak asked, which is exactly what the rule requires. The three of you stand on the path and decide where to build. The shelter goes up at the edge, and the way through stays.",
+        "by_turn": "A shelter is not something you can do in turns. Barak builds half, takes it down, and builds again. After a week he gives up, and Michal gets a partial roof.",
+        "forbidden": "The rule you wrote forbids touching the path, full stop. Barak puts down his tools. Michal stays under the sheet, and when the first rain comes she is not in the village in the morning.",
+        "share_equally": "The path belongs to everyone equally, so the shelter goes up on one side and the way through stays on the other. Narrow, but both exist."
+      },
+      "override_outcome": "You decided not to apply your own rule this time. The shelter goes up. Shira says that when it was Barak's stall, the rule did work.",
+      "text": "Michal arrived in the village a month ago and has slept under a sheet ever since. Barak says he can build her a shelter by the end of the week, but the only spot with shade and level ground is right on the path. He comes to ask you before he starts, and that is new — until now he did not ask.",
+      "title": "Michal's Shelter"
+    },
+    "intro": "You arrived in the village a week ago. There is no village head here, no council, and not one written rule. Nobody appointed you to anything. It is just that when something gets stuck, people started coming to you.",
+    "title": "No Rules"
+  },
+  "chapter2": {
+    "c2s1": {
+      "lesson": "Meaning to give something back is not the same as asking. Michal did not know the hammer would come back — she only knew it was gone.",
+      "no_rule_outcome": "Barak brings the hammer back in the evening, exactly as he said. Michal is glad to have it again, but she does not forget the morning when she did not know where it was.",
+      "outcomes": {
+        "ask_first": "Barak asks before he takes. Michal lends him the hammer for an hour, and knows exactly where it went.",
+        "by_turn": "Barak takes the hammer when his turn comes. Michal knows exactly when it will be back.",
+        "forbidden": "Barak does not touch Michal's hammer at all. He manages without it, more slowly.",
+        "share_equally": "The hammer passes between everyone as needed. Michal no longer always knows where it is."
+      },
+      "override_outcome": "You decided not to apply your own rule this time. Michal notices that of all times, now it does not apply.",
+      "text": "Barak needed a hammer this morning to fix something, and the nearest one was Michal's. He took it without asking — he meant to have it back by evening. Michal looked for it all morning and could not find it. That hammer is one of the only things she brought with her when she came.",
+      "title": "Michal's Hammer"
+    },
+    "c2s2": {
+      "lesson": "Something said in confidence is not measured by how serious it is, but by who chose to pass it on.",
+      "no_rule_outcome": "Dana keeps repeating it whenever it comes up. By the end of the week the whole village knows that Yotam is afraid he is not enough.",
+      "outcomes": {
+        "ask_first": "Dana asks before she tells. This time she asks Yotam first, and he says it is fine.",
+        "by_turn": "Dana only tells after she has checked with Yotam, every single time. It takes longer, but he always knows in advance.",
+        "forbidden": "Dana never repeats anything Yotam told her in confidence, not once. She keeps it to herself, even when telling would have been easy.",
+        "share_equally": "What Yotam said becomes equally known to everyone. He is no longer the only one who knows what he feels."
+      },
+      "override_outcome": "You decided not to apply your own rule this time. Yotam hears about it anyway.",
+      "text": "Yotam told Dana, and only her, that he is afraid he is no longer strong enough to keep the well up on his own. Yesterday Dana passed it on to two other people, while complaining that she has to help him more. “Everyone talks like that,” she says, “it is not some big secret.” Yotam heard about it from a third person.",
+      "title": "What Yotam Said"
+    },
+    "c2s3": {
+      "lesson": "What you decided now does not only settle this. It also says what will happen the next time it comes back.",
+      "no_rule_outcome": "No rule applies. Yotam leaves the fence up, and Michal looks for somewhere else.",
+      "outcomes": {
+        "ask_first": "Michal has to ask before she goes into the strip. Yotam says yes this time. The herd goes back there, after asking.",
+        "by_turn": "There is a turn for the strip. Michal gets the morning, Yotam the rest of the day.",
+        "forbidden": "The land is closed completely. Michal finds somewhere else for the herd, further away.",
+        "share_equally": "The strip is open to both of them equally. Michal's herd and Yotam's fence share the same ground."
+      },
+      "override_outcome": "You decided not to go by what you ruled last time. Yotam asks whether that means this time is different.",
+      "precedent_option_act": "because he blocked something without asking anyone",
+      "precedent_option_power": "because the one hurt by it is weaker than the one who did it",
+      "text": "Yotam fenced off a strip of land beside his field, without asking anyone. “It was always mine,” he says, “I was here first.” Michal used to bring her small herd there every morning. Now she stands in front of the fence and does not know where to go.",
+      "title": "Yotam's Fence"
+    },
+    "c2s4": {
+      "lesson": "This time it is Yotam standing on the other side. If your rule was consistent, it works on him too. If it was not — now you know why.",
+      "no_rule_outcome": "No rule applies. The beams stay, and Yotam finds a longer way around.",
+      "outcomes": {
+        "ask_first": "Barak asks Yotam first. Yotam gives him the far corner, and the way stays open.",
+        "by_turn": "The beams are there only in the morning, and in the afternoon the way is clear.",
+        "forbidden": "Barak does not touch Yotam's way at all. He finds somewhere else for the beams, further off.",
+        "share_equally": "The way is shared. The beams on one side, Yotam passes on the other."
+      },
+      "override_outcome": "You decided differently from before. Yotam notices that this time it is not the same.",
+      "text": "Barak needs somewhere to store wooden beams for a new building, and the best spot is exactly the strip Yotam crosses with his flock. Barak simply puts the beams down there, without asking. Yotam arrives in the morning and finds his way blocked.",
+      "title": "Yotam on the Other Side"
+    },
+    "intro": "Time has passed. The book is no longer empty — it holds rules you wrote, and cases you ruled on. Now it is starting to come back around.",
+    "title": "This Already Happened"
+  },
+  "chapter3": {
+    "c3s1": {
+      "lesson": "Until now a rule was something you applied to other people. This is the first time it has been tested on you.",
+      "no_rule_outcome": "There is no rule covering this — not for other people and not for you. You fill and run, exactly as Dana did before there was any rule at all.",
+      "outcomes": {
+        "ask_first": "There is no time to look for Yotam, so you run on without filling — your own rule will not let you take the shortcut. You find water somewhere else, more slowly.",
+        "by_turn": "You wait for your turn, exactly like everyone else. It costs a few expensive minutes.",
+        "forbidden": "Your rule forbids everyone, with no exception — you included. You stand by the well with an empty bucket, looking for another way.",
+        "share_equally": "You fill the share that is coming to you, no more. It is barely enough, but it is what the rule says."
+      },
+      "override_outcome": "You decided not to apply your own rule to yourself this time. Yotam, who saw, says nothing — but he remembers.",
+      "text": "This morning you need water urgently — someone was hurt near the field, and it has to be washed and cooled. Yotam's well is the closest. There is no time to go looking for him and ask. You fill a bucket and run on.",
+      "title": "The Water You Need"
+    },
+    "c3s2": {
+      "lesson": "The rule did not ask her why. It only checked whether she lives in the village.",
+      "no_rule_outcome": "There is no rule about the path. Shira goes on fixing the hoof at her own pace, and Barak waits, angrier and angrier.",
+      "outcomes": {
+        "ask_first": "Shira stops and asks permission to go on with the repair there. Barak, having been asked, agrees to wait a few minutes.",
+        "by_turn": "There is a turn for the path. Shira waits for hers, and the goat goes on limping.",
+        "forbidden": "Blocking the path is not allowed, full stop — not even to fix a hoof. Shira drags the injured goat aside and goes on with the repair there, alone. Nobody stops to ask her why it took her so long.",
+        "share_equally": "The path stays half open, and Shira does the repair off to the side. Narrow, but both get through."
+      },
+      "override_outcome": "You decided not to apply your own rule this time. Barak asks whether it makes a difference that it is Shira.",
+      "text": "Shira needs to move her herd along the path, and right in the middle she stops to fix a goat's broken hoof. Barak, in a hurry to bring beams for building, is stuck behind her and cannot get past. “It will only take a few minutes,” she says, without looking at him.",
+      "title": "Barak's Turn"
+    },
+    "c3s3": {
+      "lesson": "A rule about what belongs to everyone is also a rule about what you yourself will want to use one day.",
+      "no_rule_outcome": "There is no rule about this. Barak decides on his own, and Dana is left with a stuck cart.",
+      "outcomes": {
+        "ask_first": "Barak asks Dana how long she needs, and agrees to give her the rope for a short while. The cart comes out of the mud.",
+        "by_turn": "There is a turn for the rope. Dana waits for hers, and the cart stays stuck until then.",
+        "forbidden": "Refusing to share is never allowed. Barak gives Dana the rope at once, even though he has not finished.",
+        "share_equally": "The rope is split between them — half a day each. They both manage, more slowly."
+      },
+      "override_outcome": "You decided not to apply your own rule this time. Barak notices that of all times, now it does not apply.",
+      "text": "The village has only one rope strong enough to pull out a stuck cart. Barak found it first and used it for building. Dana needs it now to free a water cart stuck in the mud, but Barak will not hand it over — “I found it first, and I am not done yet.” This is a rule you will need yourself one day — you use the village's things too.",
+      "title": "Barak's Rope"
+    },
+    "c3s4": {
+      "lesson": "A rule that does not apply to you is a request. A rule that applies to you too is a promise.",
+      "no_rule_outcome": "There is no rule about this — there was not when you wrote it, and there is not now. You decide on your own, exactly as Barak did.",
+      "outcomes": {
+        "ask_first": "You ask Michal how long she needs, and give her the rope for a short while. The roof is strengthened before the rain.",
+        "by_turn": "There is a turn for the rope, and you wait for yours too. Michal gets it first.",
+        "forbidden": "Your rule forbids refusing to share — you included. You give Michal the rope at once, even though you have not finished.",
+        "share_equally": "The rope is split — half a day for you, half a day for Michal. You both manage, more slowly."
+      },
+      "override_outcome": "You decided not to apply your own rule to yourself this time. Michal says nothing, but she remembers who wrote that rule.",
+      "text": "You are using the rope to fix something beside your own house. Michal comes and asks for it — she needs it to strengthen her roof before the rain. You have not finished yet.",
+      "title": "What You Need Too"
+    },
+    "intro": "A few more days have passed. The rules you wrote are no longer only about other people — they are about everyone who is here. You included.",
+    "title": "Your Rule Against You"
+  },
+  "chapter_end": {
+    "closing_note": "These are the first three chapters. The rules you wrote and the precedents you set stay in the book, and they will go on applying — including when they do not suit you.",
+    "continue": "Continue to the next chapter",
+    "group_prefix": "— for {group}",
+    "left_out_heading": "Who these rules left out",
+    "no_harm": "No protection was broken or strained in this chapter.",
+    "no_rules": "Not one rule was written. The village stayed exactly as it was, and everything was decided fresh every time.",
+    "protected_heading": "And who they protected",
+    "protected_text": "Every protection stayed whole for {groups}.",
+    "protection_prefix": "the right to {protection}",
+    "subtitle": "End of chapter {chapter}",
+    "title": "The village reads what you wrote"
+  },
+  "character": {
+    "non_resident": "does not live in the village"
+  },
+  "common": {
+    "back_to_list": "Back to the list",
+    "close": "Close",
+    "you": "you"
+  },
+  "notes": {
+    "c1": {
+      "concept": "A rule is a decision made in advance",
+      "grown_up": "The rule of law: the decision comes from a rule written in advance, and not from whoever happens to be deciding at the moment. Worth noticing too that a rule is always narrower than it seems — a rule about water does not cover a path.",
+      "q1": "What is the difference between a rule and deciding fresh every time?",
+      "q2": "The first rule you wrote — what did it not cover, without you noticing?",
+      "q3": "What would happen at home for one day with no rules at all?",
+      "what_happened": "At first there was no rule at all, and every case was decided fresh: by whoever spoke loudest, or by whatever you felt at that moment. When you wrote the first rule, you decided something in advance — before you knew who it would land on."
+    },
+    "c2": {
+      "concept": "What you decided last time counts this time too",
+      "grown_up": "Precedent: a case decided once binds the similar cases that come after it. The hard part is not the ruling but deciding what makes two cases similar — and which detail is only a detail.",
+      "q1": "What did you say decided it? Would you say the same thing today?",
+      "q2": "Two cases that look like the same thing — what would have to be different between them for it to stop being the same thing?",
+      "q3": "If nobody can guess what you will decide next time — what does that do to them?",
+      "what_happened": "A similar case came back, and the game asked you one question: what was the thing that made you decide that way. From then on, what you answered there is what decides which cases count as similar."
+    },
+    "c3": {
+      "concept": "A rule applies to whoever wrote it too",
+      "grown_up": "Equality before the law: the same law applies to everyone, including whoever wrote it. A rule that does not apply to you is a request. A rule that applies to you too is a promise.",
+      "q1": "Was there a rule you would have written differently if you had known it would land on you too?",
+      "q2": "Is there a rule at home that applies only to the children? And one that applies only to the grown-ups?",
+      "q3": "When the rule hurt someone you are fond of — did you want to change the rule, or only this one time?",
+      "what_happened": "The rules you wrote earlier landed this time on you, and on someone you are fond of. They did not change at all — only who was standing on the other side of them."
+    },
+    "close_aria": "Close the notebook",
+    "empty": "The notebook is still empty. The first chapter will open here when you finish it.",
+    "grown_up_heading": "What grown-ups call this",
+    "heading": "The Concept Notebook",
+    "intro": "This is where what each chapter was really about is kept. Every chapter opens here after you have finished it — first you feel something, and only then does it get a name.",
+    "locked": "opens at the end of the chapter",
+    "questions_heading": "Questions to talk about"
+  },
+  "precedent": {
+    "apply": "Decide the same way this time",
+    "choice_intro": "This reminds you of something. What decided it for you back then?",
+    "choice_new_label": "What is happening now",
+    "choice_source_label": "What happened then",
+    "differences_heading": "What is different this time:",
+    "past_ruling": "Last time you ruled: {ruling}",
+    "past_ruling_none": "Last time no rule applied, and this is what happened.",
+    "raised_intro": "It is not exactly the same thing, but it does bring back what already happened.",
+    "reminder_intro": "This has happened before."
+  },
+  "rights": {
+    "protections": {
+      "bitui": "expression",
+      "halich": "a fair hearing",
+      "kinyan": "property",
+      "machse": "shelter",
+      "shayachut": "belonging",
+      "shivyon": "equality before the law"
+    },
+    "states": {
+      "broken": "broken",
+      "intact": "whole",
+      "strained": "strained"
+    }
+  },
+  "rule": {
+    "sentence": "{who} {what}, {when}. If not — {consequence}."
+  },
+  "rulebook": {
+    "close_aria": "Close the book",
+    "empty": "The book is empty. Nobody in this village has written a single rule yet.",
+    "precedent_entry": "{title} — {ruling}",
+    "precedent_no_ruling": "no rule applied",
+    "precedents_heading": "Precedents",
+    "rule_number": "Rule {n}"
+  },
+  "subject": {
+    "chefetz": {
+      "be": "something that belongs to someone else",
+      "et": "something that belongs to someone else",
+      "label": "something that belongs to someone else"
+    },
+    "davar": {
+      "be": "what someone told them",
+      "et": "what someone told them",
+      "label": "something someone said"
+    },
+    "mayim": {
+      "be": "the water",
+      "et": "the water",
+      "label": "the water"
+    },
+    "shetach": {
+      "be": "the land",
+      "et": "the land",
+      "label": "the land"
+    },
+    "shvil": {
+      "be": "the path",
+      "et": "the path",
+      "label": "the path"
+    }
+  },
+  "toc": {
+    "chapter_number": "Chapter {n}",
+    "not_reached": "(not yet reached)",
+    "situation_number": "Situation {n}"
+  },
+  "trait": {
+    "act": "the kind of act",
+    "actor": "who was involved",
+    "justification": "the justification",
+    "power": "the balance of power",
+    "subject": "what it was about"
+  },
+  "village": {
+    "actors": {
+      "barak": {
+        "name": "Barak"
+      },
+      "dana": {
+        "name": "Dana"
+      },
+      "michal": {
+        "name": "Michal"
+      },
+      "noam": {
+        "name": "Noam"
+      },
+      "shira": {
+        "name": "Shira"
+      },
+      "yotam": {
+        "name": "Yotam"
+      }
+    },
+    "groups": {
+      "banaim": {
+        "blurb": "want to change things, and fast",
+        "label": "the builders"
+      },
+      "hadashim": {
+        "blurb": "arrived not long ago, and have nothing settled yet",
+        "label": "the newcomers"
+      },
+      "ovrim": {
+        "blurb": "do not live here. Only passing through",
+        "label": "the passers-through"
+      },
+      "roim": {
+        "blurb": "need land and water, and move between places",
+        "label": "the shepherds"
+      },
+      "vatikim": {
+        "blurb": "were here first, and feel they should come first",
+        "label": "the old-timers"
+      },
+      "yeladim": {
+        "blurb": "nobody asks them",
+        "label": "the children"
+      }
+    }
+  }
+}

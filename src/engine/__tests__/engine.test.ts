@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { CHAPTER_1 } from "@/content/chapter1";
-import { CHAPTER_2 } from "@/content/chapter2";
-import { CHAPTER_3 } from "@/content/chapter3";
-import { SITUATIONS_BY_ID } from "@/content/situations";
-import { ACTORS, CHILD_ACTOR } from "@/content/village";
+import { chapter1 } from "@/content/chapter1";
+import { chapter2 } from "@/content/chapter2";
+import { chapter3 } from "@/content/chapter3";
+import { chapterNotes } from "@/content/notes";
+import { situationsById } from "@/content/situations";
+import { actors, actorsWithChild, childActor } from "@/content/village";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
 import {
   activatePrecedent,
@@ -23,10 +24,10 @@ import {
   whoCovers,
 } from "../match";
 import {
-  CONSEQUENCE_OPTIONS,
-  WHAT_OPTIONS,
-  WHEN_OPTIONS,
-  WHO_OPTIONS,
+  consequenceOptions,
+  whatOptions,
+  whenOptions,
+  whoOptions,
 } from "../options";
 import { TRAIT_KEYS, traitDifferences, traitsMatch } from "../precedent";
 import {
@@ -39,6 +40,17 @@ import {
 } from "../rights";
 import type { GameState, Precedent, Rule, Situation } from "../types";
 
+// The engine is language-agnostic; these tests pin behaviour, so they run
+// against Hebrew (the default) unless a case is specifically about language.
+const LANG = "he" as const;
+const CHAPTER_1 = chapter1(LANG).situations;
+const CHAPTER_2 = chapter2(LANG).situations;
+const CHAPTER_3 = chapter3(LANG).situations;
+const CHAPTER_NOTES = chapterNotes(LANG);
+const SITUATIONS_BY_ID = situationsById(LANG);
+const ACTORS = actors(LANG);
+const CHILD_ACTOR = childActor(LANG);
+
 const s1 = CHAPTER_1[0];
 const s3 = CHAPTER_1[2];
 const c1s2 = CHAPTER_1[1];
@@ -48,7 +60,7 @@ const c2s4 = CHAPTER_2[3];
 const c3s1 = CHAPTER_3[0];
 const c3s3 = CHAPTER_3[2];
 const c3s4 = CHAPTER_3[3];
-const ACTORS_WITH_CHILD = { ...ACTORS, you: CHILD_ACTOR };
+const ACTORS_WITH_CHILD = actorsWithChild(LANG);
 
 function rule(over: Partial<Rule> = {}): Rule {
   return {
@@ -65,10 +77,10 @@ function rule(over: Partial<Rule> = {}): Rule {
 
 describe("the builder stays closed at 16", () => {
   it("has exactly four options in each field", () => {
-    expect(WHO_OPTIONS).toHaveLength(4);
-    expect(WHAT_OPTIONS).toHaveLength(4);
-    expect(WHEN_OPTIONS).toHaveLength(4);
-    expect(CONSEQUENCE_OPTIONS).toHaveLength(4);
+    expect(whoOptions(LANG)).toHaveLength(4);
+    expect(whatOptions(LANG)).toHaveLength(4);
+    expect(whenOptions(LANG)).toHaveLength(4);
+    expect(consequenceOptions(LANG)).toHaveLength(4);
   });
 });
 
@@ -146,6 +158,7 @@ describe("the rule reads as a sentence", () => {
   it("renders the four picks with the inherited subject", () => {
     const text = ruleSentence(
       rule({ who: { scope: "residents" }, what: "ask-first", when: "always" }),
+      LANG,
     );
     expect(text).toBe(
       "מי שגר בכפר לא ייקח את המים בלי לבקש, תמיד. אם לא — יצטרך להחזיר או לתקן.",
@@ -159,16 +172,18 @@ describe("the rule reads as a sentence", () => {
         subject: "shvil",
         what: "forbidden",
       }),
+      LANG,
     );
     expect(text).toContain("כולם חוץ מהרועים");
     expect(text).toContain("לא ייגע בשביל בכלל");
   });
 
   it("leaves no placeholder unfilled", () => {
-    for (const who of WHO_OPTIONS) {
-      for (const what of WHAT_OPTIONS) {
+    for (const who of whoOptions(LANG)) {
+      for (const what of whatOptions(LANG)) {
         const text = ruleSentence(
           rule({ who: { scope: who.value, group: "roim" }, what: what.value }),
+          LANG,
         );
         expect(text).not.toContain("{");
       }
@@ -343,7 +358,7 @@ describe("chapter 1 content holds up", () => {
 
   it("gives every situation an outcome for all four WHAT clauses", () => {
     for (const s of CHAPTER_1) {
-      for (const what of WHAT_OPTIONS) {
+      for (const what of whatOptions(LANG)) {
         expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
       }
     }
@@ -352,7 +367,7 @@ describe("chapter 1 content holds up", () => {
   it("pinches: every WHAT clause hurts someone in situation 3 or 4", () => {
     // §7 — for each rule the child can write there is a later situation where
     // applying it costs something. Checked here rather than trusted.
-    for (const what of WHAT_OPTIONS) {
+    for (const what of whatOptions(LANG)) {
       const costs = [CHAPTER_1[2], CHAPTER_1[3]].some((s: Situation) => {
         const outcome = s.outcomes[what.value]!;
         return (
@@ -524,7 +539,7 @@ describe("chapter 2 content holds up", () => {
 
   it("gives every situation an outcome for all four WHAT clauses", () => {
     for (const s of CHAPTER_2) {
-      for (const what of WHAT_OPTIONS) {
+      for (const what of whatOptions(LANG)) {
         expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
       }
     }
@@ -667,7 +682,7 @@ describe("chapter 3 content holds up", () => {
 
   it("gives every situation an outcome for all four WHAT clauses", () => {
     for (const s of CHAPTER_3) {
-      for (const what of WHAT_OPTIONS) {
+      for (const what of whatOptions(LANG)) {
         expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
       }
     }
@@ -728,5 +743,37 @@ describe("playing chapter 3 through", () => {
     );
     const prompt = promptFor(state, c3s4, ACTORS_WITH_CHILD, SITUATIONS_BY_ID);
     expect(prompt.kind).toBe("no-rule");
+  });
+});
+
+describe("the notebook holds up", () => {
+  const BUILT_CHAPTERS = [CHAPTER_1, CHAPTER_2, CHAPTER_3];
+
+  it("has exactly one note per built chapter, numbered in order", () => {
+    expect(CHAPTER_NOTES).toHaveLength(BUILT_CHAPTERS.length);
+    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3]);
+  });
+
+  it("fills every field — a missing token would surface as its own key", () => {
+    for (const note of CHAPTER_NOTES) {
+      const strings = [
+        note.concept,
+        note.whatHappened,
+        note.grownUp,
+        ...note.questions,
+      ];
+      for (const s of strings) {
+        expect(s.length).toBeGreaterThan(0);
+        // t() falls back to the key itself when a token is missing.
+        expect(s).not.toMatch(/^notes\./);
+      }
+    }
+  });
+
+  it("gives every chapter at least two questions to talk about", () => {
+    for (const note of CHAPTER_NOTES) {
+      expect(note.questions.length).toBeGreaterThanOrEqual(2);
+      expect(new Set(note.questions).size).toBe(note.questions.length);
+    }
   });
 });

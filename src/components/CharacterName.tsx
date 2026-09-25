@@ -1,8 +1,8 @@
 "use client";
 
-import { t } from "@/content/tokens";
-import { ACTORS } from "@/content/village";
-import { GROUP_LABEL } from "@/engine/options";
+import { useLanguage } from "@/content/language";
+import { actors } from "@/content/village";
+import { groupLabel } from "@/engine/options";
 
 /**
  * A character's name, wherever it's mentioned in prose. Hover or focus shows
@@ -12,10 +12,12 @@ import { GROUP_LABEL } from "@/engine/options";
  * problem, not a style choice, so titles stay plain text everywhere.
  */
 export default function CharacterName({ actorId }: { actorId: string }) {
-  const actor = ACTORS[actorId];
+  const { lang, t } = useLanguage();
+  const actor = actors(lang)[actorId];
   if (!actor) return null;
 
-  const groups = actor.groups.map((g) => GROUP_LABEL[g]).join(", ");
+  const labels = groupLabel(lang);
+  const groups = actor.groups.map((g) => labels[g]).join(", ");
   const info = actor.resident
     ? groups
     : `${groups} — ${t("character.non_resident")}`;

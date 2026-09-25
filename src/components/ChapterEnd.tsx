@@ -1,9 +1,9 @@
 "use client";
 
-import { t } from "@/content/tokens";
+import { useLanguage } from "@/content/language";
 import { ruleSentence } from "@/engine/match";
-import { GROUP_LABEL } from "@/engine/options";
-import { GROUPS, PROTECTION_LABEL, STATE_LABEL, harmed } from "@/engine/rights";
+import { groupLabel } from "@/engine/options";
+import { GROUPS, harmed, protectionLabel, stateLabel } from "@/engine/rights";
 import type { GameState } from "@/engine/types";
 
 /**
@@ -18,6 +18,10 @@ export default function ChapterEnd({
   /** Present when there's a next chapter to move to; absent at the last built one. */
   onContinue?: () => void;
 }) {
+  const { lang, t } = useLanguage();
+  const labels = groupLabel(lang);
+  const protections = protectionLabel(lang);
+  const states = stateLabel(lang);
   const harm = harmed(state.rights);
   const harmedGroups = new Set(harm.map((h) => h.group));
   const untouched = GROUPS.filter((g) => !harmedGroups.has(g));
@@ -46,7 +50,7 @@ export default function ChapterEnd({
                 className="font-book text-[1.15rem] leading-relaxed"
               >
                 <span className="ms-2 text-ink/45">{i + 1}.</span>
-                {ruleSentence(rule)}
+                {ruleSentence(rule, lang)}
               </li>
             ))}
           </ol>
@@ -71,16 +75,16 @@ export default function ChapterEnd({
                     h.state === "broken" ? "text-harm" : "text-lamp"
                   }`}
                 >
-                  {STATE_LABEL[h.state]}
+                  {states[h.state]}
                 </span>
                 <span className="font-book text-lg">
                   {t("chapter_end.protection_prefix", {
-                    protection: PROTECTION_LABEL[h.protection],
+                    protection: protections[h.protection],
                   })}
                 </span>
                 <span className="text-quiet">
                   {t("chapter_end.group_prefix", {
-                    group: GROUP_LABEL[h.group],
+                    group: labels[h.group],
                   })}
                 </span>
               </li>
@@ -96,7 +100,7 @@ export default function ChapterEnd({
           </h3>
           <p className="text-quiet">
             {t("chapter_end.protected_text", {
-              groups: untouched.map((g) => GROUP_LABEL[g]).join(", "),
+              groups: untouched.map((g) => labels[g]).join(", "),
             })}
           </p>
         </section>
