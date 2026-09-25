@@ -1,33 +1,22 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import AboutVillage from "@/components/AboutVillage";
 import ChapterEnd from "@/components/ChapterEnd";
 import LinkedText from "@/components/LinkedText";
+import Notes from "@/components/Notes";
 import PrecedentChoice from "@/components/PrecedentChoice";
 import RuleBook from "@/components/RuleBook";
 import RuleBuilder from "@/components/RuleBuilder";
 import TableOfContents from "@/components/TableOfContents";
 import type { ChapterEntry } from "@/components/TableOfContents";
-import { t } from "@/content/tokens";
-import {
-  CHAPTER_1,
-  CHAPTER_1_INTRO,
-  CHAPTER_1_TITLE,
-} from "@/content/chapter1";
-import {
-  CHAPTER_2,
-  CHAPTER_2_INTRO,
-  CHAPTER_2_TITLE,
-} from "@/content/chapter2";
-import {
-  CHAPTER_3,
-  CHAPTER_3_INTRO,
-  CHAPTER_3_TITLE,
-} from "@/content/chapter3";
-import { SITUATIONS_BY_ID } from "@/content/situations";
-import { ACTORS, CHILD_ACTOR } from "@/content/village";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage, useT } from "@/content/language";
+import type { Lang, Translate } from "@/content/tokens";
+import { chapterNotes } from "@/content/notes";
+import { chapters, situationsById } from "@/content/situations";
+import { actorsWithChild } from "@/content/village";
 import {
   activatePrecedent,
   addRule,
@@ -39,7 +28,7 @@ import {
 } from "@/engine/game";
 import type { Prompt } from "@/engine/game";
 import { ruleSentence } from "@/engine/match";
-import { findOption, GROUP_LABEL, WHAT_OPTIONS } from "@/engine/options";
+import { findOption, groupLabel, whatOptions } from "@/engine/options";
 import { trustLevel } from "@/engine/rights";
 import type { GameState, Rule, TraitKey, WhatClause } from "@/engine/types";
 
@@ -56,20 +45,14 @@ interface Pending {
   overrode: boolean;
 }
 
-const CHAPTERS = [
-  { title: CHAPTER_1_TITLE, intro: CHAPTER_1_INTRO, situations: CHAPTER_1 },
-  { title: CHAPTER_2_TITLE, intro: CHAPTER_2_INTRO, situations: CHAPTER_2 },
-  { title: CHAPTER_3_TITLE, intro: CHAPTER_3_INTRO, situations: CHAPTER_3 },
-];
-
-// promptFor needs the child visible for WHO-scope matching (Chapter 3), but
-// CHILD_ACTOR must never reach LinkedText's ACTORS scan — see its doc
-// comment in content/village.ts. Combine only here, at the point of use.
-const ACTORS_WITH_CHILD = { ...ACTORS, you: CHILD_ACTOR };
-
 /** How a group shows up, given how much it trusts you. Never a number (§7). */
-function opener(state: GameState, group: keyof GameState["trust"]): string {
-  const vars = { group: GROUP_LABEL[group] };
+function opener(
+  state: GameState,
+  group: keyof GameState["trust"],
+  lang: Lang,
+  t: Translate,
+): string {
+  const vars = { group: groupLabel(lang)[group] };
   switch (trustLevel(state.trust[group])) {
     case "comes-to-you":
       return t("app.opener.comes_to_you", vars);
@@ -81,10 +64,14 @@ function opener(state: GameState, group: keyof GameState["trust"]): string {
 }
 
 /** Recap line for a precedent's past ruling — null governedBy means no rule fired. */
-function pastRuling(governedBy: WhatClause | null): string {
+function pastRuling(
+  governedBy: WhatClause | null,
+  lang: Lang,
+  t: Translate,
+): string {
   if (governedBy === null) return t("precedent.past_ruling_none");
   return t("precedent.past_ruling", {
-    ruling: findOption(WHAT_OPTIONS, governedBy).label,
+    ruling: findOption(whatOptions(lang), governedBy).label,
   });
 }
 
@@ -119,8 +106,10 @@ function Confirmed({ children }: { children: React.ReactNode }) {
 
 /** The banner shown atop write-rule/no-rule when a precedent partially matches. */
 function PrecedentContextBanner({ differences }: { differences: TraitKey[] }) {
+  const t = useT();
+
   return (
-    <div className="settle rounded-sm border-r-2 border-lamp bg-dusk p-4">
+    <div className="settle rounded-sm border-s-2 border-lamp bg-dusk p-4">
       <p className="text-[0.95rem]">{t("precedent.raised_intro")}</p>
       <p className="mt-2 text-sm text-quiet">
         {t("precedent.differences_heading")}{" "}
@@ -131,6 +120,7 @@ function PrecedentContextBanner({ differences }: { differences: TraitKey[] }) {
 }
 
 export default function Page() {
+  const { lang, t } = useLanguage();
   const [state, setState] = useState<GameState>(initialState);
   const [villageName, setVillageName] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("about");
@@ -141,19 +131,20 @@ export default function Page() {
   const [lessonRevealed, setLessonRevealed] = useState(false);
   const [bookOpen, setBookOpen] = useState(false);
   const [tocOpen, setTocOpen] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(false);
 
-  const currentChapter = CHAPTERS[chapterIndex];
-  const hasNextChapter = chapterIndex + 1 < CHAPTERS.length;
+  // Content is rebuilt for whichever language is active; nothing above this
+  // line depends on it, so switching mid-chapter keeps rules, precedents and
+  // position exactly where they were.
+  const allChapters = chapters(lang);
+  const currentChapter = allChapters[chapterIndex];
+  const hasNextChapter = chapterIndex + 1 < allChapters.length;
   const situation = currentChapter.situations[index];
-  const prompt = useMemo(
-    () =>
-      situation
-        ? promptFor(state, situation, ACTORS_WITH_CHILD, SITUATIONS_BY_ID)
-        : null,
-    [state, situation],
-  );
+  const prompt = situation
+    ? promptFor(state, situation, actorsWithChild(lang), situationsById(lang))
+    : null;
 
-  const chapterEntries: ChapterEntry[] = CHAPTERS.map((c, i) => ({
+  const chapterEntries: ChapterEntry[] = allChapters.map((c, i) => ({
     title: c.title,
     intro: c.intro,
     situations: c.situations,
@@ -166,6 +157,16 @@ export default function Page() {
             ? 0
             : index + 1,
   }));
+
+  // A chapter's note is earned by *finishing* the chapter, not by reaching
+  // it: the concept is named only once it's been felt (§2). The chapter the
+  // child is inside counts only at its end screen.
+  const unlockedNoteChapters = allChapters
+    .map((_, i) => i + 1)
+    .filter(
+      (n) =>
+        n - 1 < chapterIndex || (n - 1 === chapterIndex && phase === "end"),
+    );
 
   /** Locks in a decision — the live decide UI freezes into a recap, and the
    * outcome section appears below it. Captures `prompt` from this render's
@@ -208,7 +209,7 @@ export default function Page() {
   return (
     <main className="lamplight min-h-screen px-5 py-10 sm:px-8 sm:py-16">
       <div className="mx-auto w-full max-w-read space-y-8">
-        <div className="flex items-baseline justify-between">
+        <div className="flex flex-wrap items-baseline justify-between gap-y-2">
           <div className="flex items-baseline gap-3">
             <p className="font-book text-lg text-lamp">{t("app.title")}</p>
             {villageName ? (
@@ -224,7 +225,7 @@ export default function Page() {
               </p>
             ) : null}
           </div>
-          <div className="flex items-baseline gap-4">
+          <div className="flex flex-wrap items-baseline gap-4">
             <button
               type="button"
               onClick={() => setTocOpen(true)}
@@ -240,6 +241,17 @@ export default function Page() {
               {t("app.rulebook_button")}
               {state.rules.length > 0 ? ` (${state.rules.length})` : ""}
             </button>
+            <button
+              type="button"
+              onClick={() => setNotesOpen(true)}
+              className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
+            >
+              {t("app.notes_button")}
+              {unlockedNoteChapters.length > 0
+                ? ` (${unlockedNoteChapters.length})`
+                : ""}
+            </button>
+            <LanguageSwitcher />
           </div>
         </div>
 
@@ -268,7 +280,7 @@ export default function Page() {
           <section className="settle space-y-6">
             {/* Scene — always visible while this situation is open. */}
             <p className="text-sm text-quiet">
-              {opener(state, situation.speakerGroup)}
+              {opener(state, situation.speakerGroup, lang, t)}
             </p>
             <h2 className="font-book text-2xl">{situation.title}</h2>
             <p className="text-lg leading-relaxed">
@@ -299,7 +311,7 @@ export default function Page() {
                       {t("precedent.reminder_intro")}
                     </p>
                     <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
-                      {pastRuling(prompt.precedent.governedBy)}
+                      {pastRuling(prompt.precedent.governedBy, lang, t)}
                     </div>
                     <div className="flex flex-wrap gap-3">
                       <Action
@@ -361,7 +373,7 @@ export default function Page() {
                       {t("app.decide.rule_applies_intro")}
                     </p>
                     <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
-                      {ruleSentence(prompt.rules[0])}
+                      {ruleSentence(prompt.rules[0], lang)}
                     </div>
                     <div className="flex flex-wrap gap-3">
                       <Action
@@ -408,14 +420,14 @@ export default function Page() {
                               overrode: false,
                             })
                           }
-                          className="block w-full rounded-sm bg-paper p-5 text-right font-book text-[1.1rem] leading-relaxed text-ink hover:bg-white"
+                          className="block w-full rounded-sm bg-paper p-5 text-start font-book text-[1.1rem] leading-relaxed text-ink hover:bg-white"
                         >
-                          {ruleSentence(rule)}
+                          {ruleSentence(rule, lang)}
                         </button>
                       ))}
                     </div>
                     {prompt.firstTime ? (
-                      <p className="border-r-2 border-lamp ps-1 pe-4 text-quiet">
+                      <p className="border-s-2 border-lamp ps-1 pe-4 text-quiet">
                         {t("app.decide.collision_first_time_note")}
                       </p>
                     ) : null}
@@ -453,7 +465,7 @@ export default function Page() {
                 {decidedPrompt.kind === "precedent-reminder" ? (
                   <>
                     <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
-                      {pastRuling(decidedPrompt.precedent.governedBy)}
+                      {pastRuling(decidedPrompt.precedent.governedBy, lang, t)}
                     </div>
                     <Confirmed>
                       {pending.overrode
@@ -477,6 +489,7 @@ export default function Page() {
                             state.rules.find(
                               (r) => r.id === pending.appliedRuleIds[0],
                             )!,
+                            lang,
                           )}
                         </div>
                         <Confirmed>{t("builder.write")}</Confirmed>
@@ -490,7 +503,7 @@ export default function Page() {
                 {decidedPrompt.kind === "rule-applies" ? (
                   <>
                     <div className="rounded-sm bg-paper p-5 font-book text-[1.15rem] leading-relaxed text-ink">
-                      {ruleSentence(decidedPrompt.rules[0])}
+                      {ruleSentence(decidedPrompt.rules[0], lang)}
                     </div>
                     <Confirmed>
                       {pending.overrode
@@ -506,6 +519,7 @@ export default function Page() {
                       decidedPrompt.rules.find(
                         (r) => r.what === pending.governedBy,
                       ) ?? decidedPrompt.rules[0],
+                      lang,
                     )}
                   </div>
                 ) : null}
@@ -548,7 +562,7 @@ export default function Page() {
             {/* Lesson — appears once the outcome above has been read. */}
             {lessonRevealed ? (
               <div className="settle space-y-6 border-t border-moss pt-6">
-                <p className="border-r-2 border-lamp pe-4 ps-1 text-lg leading-relaxed">
+                <p className="border-s-2 border-lamp pe-4 ps-1 text-lg leading-relaxed">
                   <LinkedText text={situation.lesson} />
                 </p>
                 <Action onClick={commit}>
@@ -572,7 +586,7 @@ export default function Page() {
       <RuleBook
         rules={state.rules}
         precedents={state.precedents}
-        situationsById={SITUATIONS_BY_ID}
+        situationsById={situationsById(lang)}
         open={bookOpen}
         onClose={() => setBookOpen(false)}
       />
@@ -581,6 +595,14 @@ export default function Page() {
         open={tocOpen}
         onClose={() => setTocOpen(false)}
         chapters={chapterEntries}
+      />
+
+      <Notes
+        notes={chapterNotes(lang)}
+        titles={allChapters.map((c) => c.title)}
+        unlocked={unlockedNoteChapters}
+        open={notesOpen}
+        onClose={() => setNotesOpen(false)}
       />
     </main>
   );

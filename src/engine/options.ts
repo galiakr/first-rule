@@ -3,19 +3,19 @@
  *
  * `label` is what the child taps. `template` is how the option reads inside the
  * assembled rule; `{et}`, `{be}` and `{group}` are filled in, so the four picks
- * together form one Hebrew sentence.
+ * together form one sentence.
  *
- * `label` and `GROUP_LABEL` come from the language tokens (src/content/tokens)
- * since they're plain text. `template` and `SUBJECT_FORMS` stay hardcoded
- * Hebrew — they encode Hebrew grammatical case (accusative/prepositional
- * forms of the subject), not just wording, so translating them is a sentence-
- * composer redesign, not a token swap. Out of scope until a second language
- * is actually being wired up.
+ * Everything here is a function of the language, including the templates and
+ * the subject forms. Hebrew needs the subject in an accusative ({et}) and a
+ * prepositional ({be}) form where English just repeats the plain noun, so the
+ * two forms stay in the token table per language rather than being hardcoded.
+ * `rule.sentence` carries the punctuation and connector that join the four.
  *
  * Do not add a fifth option to any field without a situation that pinches it.
  */
 
-import { t } from "@/content/tokens";
+import { perLanguage, translator } from "@/content/tokens";
+import type { Lang } from "@/content/tokens";
 
 import type {
   ConsequenceClause,
@@ -33,123 +33,98 @@ export interface Option<T extends string> {
   template: string;
 }
 
-export const WHO_OPTIONS: Option<WhoScope>[] = [
-  {
-    value: "residents",
-    label: t("builder.who.residents"),
-    template: "מי שגר בכפר",
-  },
-  {
-    value: "anyone-present",
-    label: t("builder.who.anyone_present"),
-    template: "כל מי שנמצא כאן עכשיו",
-  },
-  { value: "group", label: t("builder.who.group"), template: "כל {group}" },
-  {
-    value: "everyone-except",
-    label: t("builder.who.everyone_except"),
-    template: "כולם חוץ מ{group}",
-  },
-];
+function option<T extends string>(
+  t: (key: string) => string,
+  field: string,
+  value: T,
+  key: string,
+): Option<T> {
+  return {
+    value,
+    label: t(`builder.${field}.${key}.label`),
+    template: t(`builder.${field}.${key}.template`),
+  };
+}
 
-export const WHAT_OPTIONS: Option<WhatClause>[] = [
-  {
-    value: "ask-first",
-    label: t("builder.what.ask_first"),
-    template: "לא ייקח {et} בלי לבקש",
-  },
-  {
-    value: "forbidden",
-    label: t("builder.what.forbidden"),
-    template: "לא ייגע {be} בכלל",
-  },
-  {
-    value: "by-turn",
-    label: t("builder.what.by_turn"),
-    template: "ייקח {et} לפי תור",
-  },
-  {
-    value: "share-equally",
-    label: t("builder.what.share_equally"),
-    template: "יחלוק {et} שווה בשווה",
-  },
-];
+export const whoOptions = perLanguage((lang: Lang): Option<WhoScope>[] => {
+  const t = translator(lang);
+  return [
+    option(t, "who", "residents", "residents"),
+    option(t, "who", "anyone-present", "anyone_present"),
+    option(t, "who", "group", "group"),
+    option(t, "who", "everyone-except", "everyone_except"),
+  ];
+});
 
-export const WHEN_OPTIONS: Option<WhenClause>[] = [
-  { value: "always", label: t("builder.when.always"), template: "תמיד" },
-  {
-    value: "when-scarce",
-    label: t("builder.when.when_scarce"),
-    template: "רק כשאין מספיק לכולם",
-  },
-  {
-    value: "when-harmed",
-    label: t("builder.when.when_harmed"),
-    template: "רק אם מישהו נפגע מזה",
-  },
-  {
-    value: "first-time-forgiven",
-    label: t("builder.when.first_time_forgiven"),
-    template: "מהפעם השנייה והלאה",
-  },
-];
+export const whatOptions = perLanguage((lang: Lang): Option<WhatClause>[] => {
+  const t = translator(lang);
+  return [
+    option(t, "what", "ask-first", "ask_first"),
+    option(t, "what", "forbidden", "forbidden"),
+    option(t, "what", "by-turn", "by_turn"),
+    option(t, "what", "share-equally", "share_equally"),
+  ];
+});
 
-export const CONSEQUENCE_OPTIONS: Option<ConsequenceClause>[] = [
-  {
-    value: "return-or-fix",
-    label: t("builder.consequence.return_or_fix"),
-    template: "יצטרך להחזיר או לתקן",
+export const whenOptions = perLanguage((lang: Lang): Option<WhenClause>[] => {
+  const t = translator(lang);
+  return [
+    option(t, "when", "always", "always"),
+    option(t, "when", "when-scarce", "when_scarce"),
+    option(t, "when", "when-harmed", "when_harmed"),
+    option(t, "when", "first-time-forgiven", "first_time_forgiven"),
+  ];
+});
+
+export const consequenceOptions = perLanguage(
+  (lang: Lang): Option<ConsequenceClause>[] => {
+    const t = translator(lang);
+    return [
+      option(t, "consequence", "return-or-fix", "return_or_fix"),
+      option(t, "consequence", "help-victim", "help_victim"),
+      option(t, "consequence", "lose-next-turn", "lose_next_turn"),
+      option(t, "consequence", "village-decides", "village_decides"),
+    ];
   },
-  {
-    value: "help-victim",
-    label: t("builder.consequence.help_victim"),
-    template: "יצטרך לעזור לנפגע יום אחד",
-  },
-  {
-    value: "lose-next-turn",
-    label: t("builder.consequence.lose_next_turn"),
-    template: "יפסיד את הזכות לזה בפעם הבאה",
-  },
-  {
-    value: "village-decides",
-    label: t("builder.consequence.village_decides"),
-    template: "הכפר יחליט בכל מקרה לגופו",
-  },
-];
+);
 
 /** The subject is inherited from the situation, never chosen (§6). */
 export interface SubjectForms {
   label: string;
-  /** Accusative: "את המים". */
+  /** Accusative in Hebrew ("את המים"); the plain noun in English. */
   et: string;
-  /** With ב: "במים". */
+  /** With the preposition ב in Hebrew ("במים"); the plain noun in English. */
   be: string;
 }
 
-export const SUBJECT_FORMS: Record<Subject, SubjectForms> = {
-  mayim: { label: "המים", et: "את המים", be: "במים" },
-  shetach: { label: "השטח", et: "את השטח", be: "בשטח" },
-  shvil: { label: "השביל", et: "את השביל", be: "בשביל" },
-  chefetz: {
-    label: "חפץ של מישהו אחר",
-    et: "את החפץ של מישהו אחר",
-    be: "בחפץ של מישהו אחר",
-  },
-  davar: {
-    label: "דבר שמישהו סיפר",
-    et: "את מה שמישהו סיפר לו",
-    be: "במה שמישהו סיפר לו",
-  },
-};
+const SUBJECTS: Subject[] = ["mayim", "shetach", "shvil", "chefetz", "davar"];
 
-export const GROUP_LABEL: Record<GroupId, string> = {
-  vatikim: t("village.groups.vatikim.label"),
-  hadashim: t("village.groups.hadashim.label"),
-  roim: t("village.groups.roim.label"),
-  banaim: t("village.groups.banaim.label"),
-  yeladim: t("village.groups.yeladim.label"),
-  ovrim: t("village.groups.ovrim.label"),
-};
+export const subjectForms = perLanguage(
+  (lang: Lang): Record<Subject, SubjectForms> => {
+    const t = translator(lang);
+    const forms = {} as Record<Subject, SubjectForms>;
+    for (const s of SUBJECTS) {
+      forms[s] = {
+        label: t(`subject.${s}.label`),
+        et: t(`subject.${s}.et`),
+        be: t(`subject.${s}.be`),
+      };
+    }
+    return forms;
+  },
+);
+
+export const groupLabel = perLanguage((lang: Lang): Record<GroupId, string> => {
+  const t = translator(lang);
+  return {
+    vatikim: t("village.groups.vatikim.label"),
+    hadashim: t("village.groups.hadashim.label"),
+    roim: t("village.groups.roim.label"),
+    banaim: t("village.groups.banaim.label"),
+    yeladim: t("village.groups.yeladim.label"),
+    ovrim: t("village.groups.ovrim.label"),
+  };
+});
 
 export function findOption<T extends string>(
   options: Option<T>[],
@@ -164,14 +139,15 @@ export function findOption<T extends string>(
 export function fill(
   template: string,
   subject: Subject,
+  lang: Lang,
   group?: GroupId,
 ): string {
-  const forms = SUBJECT_FORMS[subject];
+  const forms = subjectForms(lang)[subject];
   return template
     .split("{et}")
     .join(forms.et)
     .split("{be}")
     .join(forms.be)
     .split("{group}")
-    .join(group ? GROUP_LABEL[group] : "");
+    .join(group ? groupLabel(lang)[group] : "");
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Assistant, Frank_Ruhl_Libre } from "next/font/google";
 
+import { LanguageProvider } from "@/content/language";
+
 import "./globals.css";
 
 // Frank Ruhl is a Hebrew book face — the rulebook is set in it, and so are the
@@ -29,9 +31,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // lang/dir start at the default language and are updated on the client by
+  // LanguageProvider when a stored preference says otherwise, so the markup
+  // rendered here and the first client render always agree.
   return (
     <html lang="he" dir="rtl" className={`${book.variable} ${ui.variable}`}>
-      <body className="font-ui antialiased">{children}</body>
+      <body className="font-ui antialiased">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }

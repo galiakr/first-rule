@@ -1,0 +1,73 @@
+# Chapter 5 — "מי מחליט מי מחליט" (Who Decides Who Decides)
+
+> Status: planned, not yet built. The heaviest remaining chapter; see `roadmap.md`.
+
+## Context
+
+Design doc §9.5: someone else starts ruling, and the child has nothing to point to that says it's _their_ job — because it never was (§4: nobody appointed them). The only way to settle it is to write a rule about who decides, and that rule applies to the child too. One of its options is elections; the child can lose, and losing is real: the game continues with someone else applying the rules the child wrote. Fence (§9): one voting round, no campaign, no promises.
+
+Then §10: at the end of this chapter the book **closes**. The village reads the rules aloud with two lists (who they protect, who they leave out — `ChapterEnd` already shows exactly these), the child may change one rule, and then writes one last rule behind a veil: **how a rule may be changed.** Chapter 7 is built on it.
+
+Two new mechanics, one ceremony. This is the chapter where the hidden trust number finally does something.
+
+## Key design decisions
+
+1. **The authority rule is a second, separate builder — not a fifth option in the 4×4.** §11 forbids opening the rule builder past four per field; the authority rule is a different structure the design lists with five forms (_אני מחליט · מי שהכי ותיק · שניים יחד · כל אחד לעצמו · הכפר בוחר_). Model it as `AuthorityRule = { form: AuthorityForm; who: RuleWho }`, reusing `WHO_OPTIONS` for the second field — because §9 says who _votes_ is determined by that WHO field, which is how the chapter hooks back into the passers-through question.
+2. **The election is decided by trust, deterministically.** Eligible groups = those covered by the authority rule's WHO scope (`residents` → all but `ovrim`, etc.). Each eligible group casts one vote: `comes-to-you` → for the child, `stops-coming` → against, `comes-but` → abstains. The child keeps the role if for > against; otherwise loses. No randomness — every vote traces to a trust level the child earned or burned, which is the whole point. **Open: tie-breaking** (incumbent keeps? lean yes) and whether `comes-but` should count against.
+3. **Losing means the child stops deciding, not that the game stops.** New `GameState.decider: "you" | "other"`. When `"other"`: `rule-applies` prompts lose their override button (the other authority applies the child's rules literally), and `write-rule` prompts collapse to `no-rule` (the child can't legislate). The child watches their own rules applied to them by someone else — §9's exact sentence. Cheapest faithful reading; the rival is יותם (`vatikim`, "were here first"), who is also what _מי שהכי ותיק_ resolves to.
+4. **"Two together" = the child and the most senior.** No character picker; keeps the builder to two fields.
+5. **The book closing is a ChapterEnd variant, not a new phase.** `ChapterEnd` already reads the rules and the two lists. For Chapter 5 it additionally (a) lets the child change exactly one rule — reopen `RuleBuilder` on a chosen rule, replacing it via a new `replaceRule()` — and (b) then asks for the amendment rule: a third small builder with the four forms from §10 (_מי שכתב אותו · שניים צריכים להסכים · כל הכפר · אי אפשר לשנות_). Stored as `GameState.amendment`. Written before the child knows what Chapter 7 will do with it — the doc is explicit that this veil is the point, so the UI must not hint.
+
+## Content
+
+| id   | role                                                                          | invitesRule        | notes                                                                                                                                                                                                                                         |
+| ---- | ----------------------------------------------------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| c5s1 | יותם rules on a dispute (shvil) without the child; the child hears afterwards | false              | trust-flavoured: the group that went to him instead. Nothing in the book says who decides                                                                                                                                                     |
+| c5s2 | a second self-appointed ruling (dana, on mayim) contradicts יותם's — pressure | **authority rule** | this is where the authority builder appears instead of `RuleBuilder`                                                                                                                                                                          |
+| c5s3 | the authority rule bites, per form                                            | false              | _I decide_ → a character asks who decided _that_; _most senior_ → יותם rules against the child's own preference; _two together_ → יותם won't agree; _each for themselves_ → someone gets hurt; _village chooses_ → **the election runs here** |
+| c5s4 | living with it                                                                | false              | if lost: a rule the child wrote is applied to them by יותם, no override offered; if kept: their authority is now formal — and whoever the WHO field excluded (`ovrim`, if `residents`) can't appeal                                           |
+
+Then the book-closing ceremony.
+
+## Data model
+
+```ts
+export type AuthorityForm =
+  "you" | "most-senior" | "two-together" | "each-alone" | "village-chooses";
+export interface AuthorityRule {
+  form: AuthorityForm;
+  who: RuleWho;
+}
+export type AmendmentForm = "author" | "two-agree" | "whole-village" | "cannot";
+export interface Election {
+  eligible: GroupId[];
+  for: GroupId[];
+  against: GroupId[];
+  won: boolean;
+}
+
+// GameState additions
+authority: AuthorityRule | null;
+election: Election | null;
+decider: "you" | "other";
+amendment: AmendmentForm | null;
+bookClosed: boolean;
+```
+
+## Engine changes
+
+- `src/engine/authority.ts` (new, pure): `eligibleGroups(who)`, `runElection(state, who): Election`, `setAuthority(state, rule): GameState` (runs the election when `form === "village-chooses"` and sets `decider`).
+- `game.ts`: `promptFor` respects `decider` (decision #3); `replaceRule(state, ruleId, next)`; `closeBook(state, amendment)`.
+- Tests: election math (for/against/abstain, tie), `decider: "other"` removes override and blocks writing, `replaceRule` keeps the book's order and length, `closeBook` sets `bookClosed` and `amendment`.
+
+## UI
+
+- `AuthorityBuilder` (form + WHO), `AmendmentBuilder` (four forms), an election result screen that shows _which groups_ voted which way — no percentages, names only (§7's rule that trust is never a number holds here too).
+- `ChapterEnd` for Chapter 5: change-one-rule step, then the amendment step, then the usual continue.
+- `RuleBook` shows the authority rule and, after closing, the amendment rule.
+
+## Open questions
+
+- Tie-breaking and `comes-but` (decision #2).
+- Whether _each for themselves_ should also set `decider: "other"` (nobody decides) or stay `"you"` with worse outcomes. Lean: stays `"you"`, the cost is in the outcomes.
+- Exact phrasing of the authority options for an 8-year-old — same caution §13 raises about Chapter 2's question.

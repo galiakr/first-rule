@@ -1,8 +1,8 @@
 "use client";
 
-import { t } from "@/content/tokens";
+import { useLanguage } from "@/content/language";
 import { ruleSentence } from "@/engine/match";
-import { findOption, WHAT_OPTIONS } from "@/engine/options";
+import { findOption, whatOptions } from "@/engine/options";
 import type { Precedent, Rule, Situation } from "@/engine/types";
 
 interface Props {
@@ -24,6 +24,7 @@ export default function RuleBook({
   open,
   onClose,
 }: Props) {
+  const { lang, t } = useLanguage();
   if (!open) return null;
 
   // Only precedents the child has actually explained (§6.1) — one still
@@ -66,7 +67,7 @@ export default function RuleBook({
                   {t("rulebook.rule_number", { n: i + 1 })}
                 </p>
                 <p className="font-book text-[1.15rem] leading-relaxed">
-                  {ruleSentence(rule)}
+                  {ruleSentence(rule, lang)}
                 </p>
               </li>
             ))}
@@ -82,7 +83,7 @@ export default function RuleBook({
               {activated.map((p) => {
                 const source = situationsById[p.situationId];
                 const ruling = p.governedBy
-                  ? findOption(WHAT_OPTIONS, p.governedBy).label
+                  ? findOption(whatOptions(lang), p.governedBy).label
                   : t("rulebook.precedent_no_ruling");
                 return (
                   <li key={p.id} className="text-[1.05rem] leading-relaxed">

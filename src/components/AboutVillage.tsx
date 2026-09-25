@@ -2,14 +2,9 @@
 
 import { useState } from "react";
 
-import { t } from "@/content/tokens";
-import {
-  ABOUT_ME_TEXT,
-  ABOUT_TITLE,
-  ABOUT_VILLAGE_TEXT,
-  GROUP_BLURB,
-} from "@/content/village";
-import { GROUP_LABEL } from "@/engine/options";
+import { useLanguage } from "@/content/language";
+import { about, groupBlurb } from "@/content/village";
+import { groupLabel } from "@/engine/options";
 import { GROUPS } from "@/engine/rights";
 
 /**
@@ -27,13 +22,17 @@ export default function AboutVillage({
 }: {
   onContinue: (villageName: string) => void;
 }) {
+  const { lang, t } = useLanguage();
   const [name, setName] = useState("");
+  const copy = about(lang);
+  const labels = groupLabel(lang);
+  const blurbs = groupBlurb(lang);
 
   return (
     <section className="space-y-8">
       <header className="space-y-3">
-        <h1 className="font-book text-4xl leading-tight">{ABOUT_TITLE}</h1>
-        <p className="text-lg leading-relaxed">{ABOUT_VILLAGE_TEXT}</p>
+        <h1 className="font-book text-4xl leading-tight">{copy.title}</h1>
+        <p className="text-lg leading-relaxed">{copy.villageText}</p>
       </header>
 
       <ul className="space-y-2">
@@ -42,14 +41,14 @@ export default function AboutVillage({
             key={g}
             className="flex flex-wrap items-baseline gap-x-3 border-b border-moss pb-2"
           >
-            <span className="font-book text-lg">{GROUP_LABEL[g]}</span>
-            <span className="text-quiet">— {GROUP_BLURB[g]}</span>
+            <span className="font-book text-lg">{labels[g]}</span>
+            <span className="text-quiet">— {blurbs[g]}</span>
           </li>
         ))}
       </ul>
 
-      <p className="border-r-2 border-lamp ps-1 pe-4 text-lg leading-relaxed">
-        {ABOUT_ME_TEXT}
+      <p className="border-s-2 border-lamp ps-1 pe-4 text-lg leading-relaxed">
+        {copy.meText}
       </p>
 
       <div className="space-y-2">

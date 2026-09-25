@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/content/tokens";
+import { useT } from "@/content/language";
 import type { PrecedentOption, Situation, TraitKey } from "@/engine/types";
 
 interface Props {
@@ -21,6 +21,8 @@ export default function PrecedentChoice({
   options,
   onPick,
 }: Props) {
+  const t = useT();
+
   return (
     <div className="space-y-6">
       <p className="text-lg leading-relaxed">{t("precedent.choice_intro")}</p>
@@ -50,7 +52,7 @@ export default function PrecedentChoice({
             key={i}
             type="button"
             onClick={() => onPick(option.traits)}
-            className="block w-full rounded-sm bg-dusk p-4 text-right text-[0.95rem] text-paper hover:bg-moss"
+            className="block w-full rounded-sm bg-dusk p-4 text-start text-[0.95rem] text-paper hover:bg-moss"
           >
             {option.label}
           </button>

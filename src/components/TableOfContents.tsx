@@ -3,14 +3,9 @@
 import { useState } from "react";
 
 import LinkedText from "@/components/LinkedText";
-import { t } from "@/content/tokens";
-import {
-  ABOUT_ME_TEXT,
-  ABOUT_TITLE,
-  ABOUT_VILLAGE_TEXT,
-  GROUP_BLURB,
-} from "@/content/village";
-import { GROUP_LABEL } from "@/engine/options";
+import { useLanguage } from "@/content/language";
+import { about, groupBlurb } from "@/content/village";
+import { groupLabel } from "@/engine/options";
 import { GROUPS } from "@/engine/rights";
 import type { Situation } from "@/engine/types";
 
@@ -55,7 +50,11 @@ interface Props {
  * It exists only so a scene, once read, isn't gone.
  */
 export default function TableOfContents({ open, onClose, chapters }: Props) {
+  const { lang, t } = useLanguage();
   const [selected, setSelected] = useState<Entry | null>(null);
+  const copy = about(lang);
+  const labels = groupLabel(lang);
+  const blurbs = groupBlurb(lang);
 
   if (!open) return null;
 
@@ -98,9 +97,9 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                 <button
                   type="button"
                   onClick={() => setSelected({ key: "about" })}
-                  className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                  className="block w-full rounded-sm p-3 text-start font-book text-lg leading-relaxed hover:bg-white"
                 >
-                  {ABOUT_TITLE}
+                  {copy.title}
                 </button>
               </li>
               {chapters.map((chapter, chapterIndex) => (
@@ -112,7 +111,7 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                         onClick={() =>
                           setSelected({ key: "intro", chapterIndex })
                         }
-                        className="block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
+                        className="block w-full rounded-sm p-3 text-start font-book text-lg leading-relaxed hover:bg-white"
                       >
                         <span className="block text-xs font-ui text-ink/50">
                           {t("toc.chapter_number", { n: chapterIndex + 1 })}
@@ -132,8 +131,8 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                             }
                             className={
                               read
-                                ? "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed hover:bg-white"
-                                : "block w-full rounded-sm p-3 text-right font-book text-lg leading-relaxed text-ink/35"
+                                ? "block w-full rounded-sm p-3 text-start font-book text-lg leading-relaxed hover:bg-white"
+                                : "block w-full rounded-sm p-3 text-start font-book text-lg leading-relaxed text-ink/35"
                             }
                           >
                             <span className="block text-xs font-ui text-ink/40">
@@ -166,17 +165,17 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
 
             {selected.key === "about" ? (
               <div className="space-y-5">
-                <h3 className="font-book text-xl">{ABOUT_TITLE}</h3>
-                <p className="leading-relaxed">{ABOUT_VILLAGE_TEXT}</p>
+                <h3 className="font-book text-xl">{copy.title}</h3>
+                <p className="leading-relaxed">{copy.villageText}</p>
                 <ul className="space-y-2">
                   {GROUPS.map((g) => (
                     <li key={g} className="border-b border-ink/15 pb-2">
-                      <span className="font-book">{GROUP_LABEL[g]}</span>
-                      <span className="text-ink/60"> — {GROUP_BLURB[g]}</span>
+                      <span className="font-book">{labels[g]}</span>
+                      <span className="text-ink/60"> — {blurbs[g]}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="leading-relaxed">{ABOUT_ME_TEXT}</p>
+                <p className="leading-relaxed">{copy.meText}</p>
               </div>
             ) : null}
 

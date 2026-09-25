@@ -6,7 +6,8 @@
  * only as one of three ways a group behaves toward the child.
  */
 
-import { t } from "@/content/tokens";
+import { perLanguage, translator } from "@/content/tokens";
+import type { Lang } from "@/content/tokens";
 
 import type {
   GroupId,
@@ -27,14 +28,19 @@ export const PROTECTIONS: Protection[] = [
   "shayachut",
 ];
 
-export const PROTECTION_LABEL: Record<Protection, string> = {
-  kinyan: t("rights.protections.kinyan"),
-  bitui: t("rights.protections.bitui"),
-  shivyon: t("rights.protections.shivyon"),
-  machse: t("rights.protections.machse"),
-  halich: t("rights.protections.halich"),
-  shayachut: t("rights.protections.shayachut"),
-};
+export const protectionLabel = perLanguage(
+  (lang: Lang): Record<Protection, string> => {
+    const t = translator(lang);
+    return {
+      kinyan: t("rights.protections.kinyan"),
+      bitui: t("rights.protections.bitui"),
+      shivyon: t("rights.protections.shivyon"),
+      machse: t("rights.protections.machse"),
+      halich: t("rights.protections.halich"),
+      shayachut: t("rights.protections.shayachut"),
+    };
+  },
+);
 
 export const GROUPS: GroupId[] = [
   "vatikim",
@@ -45,11 +51,16 @@ export const GROUPS: GroupId[] = [
   "ovrim",
 ];
 
-export const STATE_LABEL: Record<ProtectionState, string> = {
-  intact: t("rights.states.intact"),
-  strained: t("rights.states.strained"),
-  broken: t("rights.states.broken"),
-};
+export const stateLabel = perLanguage(
+  (lang: Lang): Record<ProtectionState, string> => {
+    const t = translator(lang);
+    return {
+      intact: t("rights.states.intact"),
+      strained: t("rights.states.strained"),
+      broken: t("rights.states.broken"),
+    };
+  },
+);
 
 export function rightsKey(protection: Protection, group: GroupId): string {
   return `${protection}:${group}`;

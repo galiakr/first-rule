@@ -6,7 +6,7 @@
 
 ## What this project is
 
-A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew, RTL, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–3 ("אין כללים", "זה כבר קרה") of a planned seven.
+A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew (RTL) and English (LTR), switchable in place at any time, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–3 ("אין כללים", "זה כבר קרה", "הכלל שלך נגדך") of a planned seven; 4–7 are planned in `docs/roadmap.md` and `docs/chapter-4-plan.md` … `docs/chapter-7-plan.md`.
 
 ## Stack
 
@@ -26,10 +26,12 @@ src/
     precedent.ts   does a past ruling apply to a new situation (trait matching)
     rights.ts      the rights board and trust
     game.ts        the reducer: what's asked, what happens, what's saved, chapter transitions
-  content/         the village, chapters 1–2 — data only (chapter1.ts, chapter2.ts, village.ts)
+  content/         the village, chapters 1–3 — data only (chapter1.ts … chapter3.ts, village.ts)
+    notes.ts       one concept note per chapter for the notebook (unlocked only after a chapter ends)
+    language.tsx   LanguageProvider + useLang/useT — the current language, and <html lang/dir>
     situations.ts  every situation keyed by id, for precedent source lookup
     tokens/        language tokens: tokens.csv (source), generate.py, locales/*.json (generated), t()
-  components/      rule builder, rule book, table of contents, chapter end, about screen, precedent choice
+  components/      rule builder, rule book, notebook, table of contents, chapter end, about screen, precedent choice, language switcher
   app/             single-screen state machine driving the whole game across chapters (src/app/page.tsx)
 ```
 
@@ -43,7 +45,9 @@ The engine is intentionally React-free and I/O-free — a whole chapter can be p
 - TypeScript strict mode — no `any`
 - Components use one default export per file (Next.js/React convention already in use here — not the toolkit-default "named exports only" rule)
 - Styling via Tailwind utility classes against the custom palette in `tailwind.config.ts` (`night`, `paper`, `lamp`, `moss`, `quiet`, `ink`, `harm`, `dusk`) — no inline styles
-- All UI text is Hebrew, RTL (`dir="rtl"` set at the root layout) — every string faces the child, never the parent
+- **No user-facing string is ever written in a component.** Everything goes through a token: `useT()` in components, `translator(lang)` inside a content/option factory. Every string faces the child, never the parent.
+- **Anything built from tokens is a function of the language**, wrapped in `perLanguage(...)` so each language is built once and keeps a stable identity. Never a module-level `const` built from `t()` — that freezes one language at import time and the switcher can't move it.
+- Layout must use logical properties, not physical ones: `text-start`/`ms-`/`ps-`/`border-s-` rather than `text-right`/`mr-`/`pr-`/`border-r-`. `dir` flips per language, and physical classes then point the wrong way.
 - Component files: `PascalCase.tsx`. Engine files: `camelCase.ts`. Test files: `*.test.ts`
 - Default to no comments. Only add one when the _why_ is genuinely non-obvious (a design-doc constraint, a subtle invariant) — the existing engine files' file-header comments are the model to follow, not inline narration
 
@@ -56,6 +60,7 @@ These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test h
 - **Rights are states, not points** — `intact` / `strained` / `broken`, always attached to a named group. A strain never quietly heals a break.
 - **Trust is never shown as a number** — it only surfaces through which of three ways a group approaches the child (`comes-to-you` / `comes-but` / `stops-coming`).
 - **The rule book is open the whole game**; the rights board is only revealed at the end of a chapter (§10) — don't leak rights state into the always-visible book.
+- **The notebook names a concept only after its chapter is finished** (§2: felt first, named afterwards). `src/content/notes.ts` holds one note per chapter, and it is the only place in the game that uses adult vocabulary ("תקדים", "שלטון החוק") — never put those words into playable chapter content.
 - **A situation's subject is inherited, never chosen** — this is what makes rules land narrower than the child expects, on purpose.
 
 ## What to avoid
@@ -89,8 +94,8 @@ Stack: **Vitest** + **React Testing Library** + **Playwright** (e2e)
 ### Current state
 
 - `src/engine/` has full behavioral coverage (68 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
-- One component has tests (`LinkedText`). Most of `src/components/` and `src/app/page.tsx` don't yet — write one the next time a component changes, don't let the tooling sit unused.
-- `e2e/` has two real Playwright specs: `home.spec.ts` (the about screen) and `situation-screen.spec.ts`, which drives a full situation through a real browser and asserts scene/decide/outcome/lesson all stay visible on one screen as they accumulate, rather than replacing each other — the actual behavior the single-screen redesign depends on, not just that the final state is reachable.
+- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 98 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
+- `e2e/` has five real Playwright specs: `home.spec.ts` (the about screen), `notes.spec.ts` (the notebook opens from the header and every chapter is still locked at the start), `language.spec.ts` (switching mid-chapter keeps your place, flips `dir`, and re-reads a Hebrew-written rule as an English sentence), and `situation-screen.spec.ts`, which drives a full situation through a real browser and asserts scene/decide/outcome/lesson all stay visible on one screen as they accumulate, rather than replacing each other — the actual behavior the single-screen redesign depends on, not just that the final state is reachable.
 - No coverage threshold is enforced yet (`vitest.config.ts` reports coverage but doesn't gate on it) — turn on the toolkit-default 80% lines/functions threshold once component tests exist, not before, or CI will fail on day one for the wrong reason.
 
 ### Rules
@@ -147,7 +152,8 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 - Suggest before refactoring — don't restructure without asking
 - If something is unclear, ask rather than assume
 - When writing tests, follow the testing rules above
-- Keep Hebrew copy in the tone already established in `src/content/chapter1.ts` — concrete, never moralizing, never naming a concept before the child has felt it (design doc §2)
+- Keep copy in the tone already established in `chapter1.*` — concrete, never moralizing, never naming a concept before the child has felt it (design doc §2). This holds in every language; the English is a translation of that tone, not a looser retelling.
+- Character names are tokens (`village.actors.*.name`). `LinkedText` finds a mention by matching the name as a substring of the prose, so translated scene text must use the translated name or the hover tooltip silently stops appearing.
 
 ---
 
@@ -155,12 +161,13 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
-- [ ] Chapters 1–3 are built (see `docs/chapter-1-plan.md`, `docs/chapter-2-plan.md`, `docs/chapter-3-plan.md`); chapters 4–7 are not (passers-through, elections, separation of powers, constitutional amendment, save state — see README "מה עוד לא כאן")
+- [ ] Chapters 1–3 are built (see `docs/chapter-1-plan.md`, `docs/chapter-2-plan.md`, `docs/chapter-3-plan.md`); chapters 4–7 are planned but not built (see `docs/roadmap.md` for build order and engine dependencies, and `docs/chapter-4-plan.md` … `docs/chapter-7-plan.md`); save state is still unplanned
 - [ ] Chapter 2 introduced `chefetz` and `davar` as fresh subjects (c2s1/c2s2) that aren't pinched within Chapter 2 itself — a later chapter needs to eventually collide with rules written for them, same as Chapter 1 already does for `mayim`/`shvil`
 - [ ] Four of five `ActKind` values used (`took-without-asking`, `blocked`, `told-what-was-private`, `refused-to-share`); only `broke` remains unused
 - [x] All six protections now exercised at least once — `halich` (due process) was the last, via c3s2's `forbidden` outcome
-- [ ] No English localization yet. UI chrome and Chapters 1–3 content are centralized in `src/content/tokens/tokens.csv` (he complete, en blank) — a translator can fill the `en` column and regenerate `locales/en.json`. `options.ts`'s rule-sentence `template` fields and `SUBJECT_FORMS` are deliberately still hardcoded Hebrew (grammatical case, not just wording) and need a sentence-composer redesign before a second language can actually ship
-- [ ] One component has tests (`LinkedText`, in `src/components/__tests__/`); the rest of `src/components/` and `src/app/page.tsx` still don't. `e2e/` now has two real Playwright specs (see Testing section above)
+- [x] Hebrew and English both ship complete (296 tokens each, `src/content/tokens/tokens.csv`), switchable in place without losing the game. The rule-sentence `template` fields and the subject's `{et}`/`{be}` forms are now tokens too, so adding a third language is a CSV column plus `LANGUAGES` in `src/content/tokens/index.ts` — no code change. A language with different word order would still need `rule.sentence` reshaped, which is why that whole sentence is one token.
+- [ ] Only the `en` copy has had one pass. It reads naturally, but no native-speaking 8-year-old has seen it — the Hebrew is the copy that's been thought about hardest, and the English should be read aloud before it's shown to a child.
+- [ ] Two components have tests (`LinkedText`, `Notes`, in `src/components/__tests__/`); the rest of `src/components/` and `src/app/page.tsx` still don't. `e2e/` now has three real Playwright specs (see Testing section above)
 - [ ] Coverage threshold not yet enforced (see Testing section above)
 
 <!-- BEGIN:nextjs-agent-rules -->
