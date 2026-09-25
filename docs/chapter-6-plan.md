@@ -1,0 +1,53 @@
+# Chapter 6 — "הספר גמור — מי שומר עליו" (The Book Is Done — Who Guards It)
+
+> Status: planned, not yet built. Depends on Chapter 5 (`decider`, `authority`) and on `LogEntry.kind` — see `roadmap.md`.
+
+## Context
+
+Design doc §9.6, in two halves. **Opening:** the game replays three moments from the child's _own_ game — a time they wrote a rule, a time they ruled in a conflict, a time they made sure something actually happened — and attaches a name to each. They've been doing all three jobs the whole time without noticing. The doc calls this the strongest teaching moment in the game, and it costs almost no new content. **Then:** three slots, and the child staffs each — themselves, a character, a group, or "the village chooses."
+
+**The pinch:** a situation arrives that blows up exactly the combination they kept. Kept both writing and judging → they judge a case where the rule they wrote favours them, and a character says the judge is the one who wrote it. Split them → the one they appointed rules against them, and they choose between living with it and revoking — and losing everything they built.
+
+The book is closed (§10), so nothing in this chapter invites a rule.
+
+## Key design decisions
+
+1. **The replay needs the log to say _how_ each situation was resolved — it doesn't today.** `LogEntry` records `appliedRuleIds` and `overrode`, nothing else. Add `kind: "wrote-rule" | "applied-rule" | "overrode" | "ruled-by-precedent" | "chose-in-collision" | "no-rule"`, set in `resolve()` from the `Prompt` that was on screen (`page.tsx` already snapshots it as `decidedPrompt`; pass its kind into `Resolution`). Backward compatible; must land **before** Chapter 6 (roadmap). Then the three moments are just three log lookups:
+   - legislative = the most recent `wrote-rule`
+   - judicial = the most recent `ruled-by-precedent` or `chose-in-collision`
+   - executive = the most recent `applied-rule` (enforcing a rule as written — "making sure it happened")
+     With twenty situations behind the child, all three normally exist. A content test asserts the replay can't render blank; if one kind never happened, the opening says so in-world instead ("you never once…") rather than inventing a moment.
+2. **Holders are a small closed type.** `Holder = "you" | { actorId } | { groupId } | "village"`. `GameState.separation: { legislative: Holder; judicial: Holder; executive: Holder } | null`. "The village chooses" resolves deterministically to the highest-trust group (ties → the group that came first in `GROUPS`) — reusing Chapter 5's idea that trust is the village's voice. **Open:** whether that should instead run a Chapter 5-style election per slot.
+3. **The pinch situations branch on the assignment, not on WHAT.** c6s3/c6s4 each carry two outcome variants beyond the usual four: `heldByYou` and `heldByOther` text for the relevant slot. Keeps the existing `outcomes` record intact (a rule may still apply and needs its WHAT-keyed outcomes) and adds one small, explicit fork.
+4. **Revoking is real loss.** Choosing to revoke resets `separation` to all-`"you"` and drops every group to `stops-coming` (`applyTrust` with −3 across the board) — the arrangement was rescinded, so nobody trusts any arrangement. Strong on purpose; §9 says "loses everything he built." **Open:** whether rights should also strain (`halich` for the appointee's group is the natural one).
+
+## Content
+
+| id         | role                                                                                                             | invitesRule | notes                                                                                                                                        |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| — opening  | the three replayed moments, each named (חקיקה · שפיטה · ביצוע, said once, here, for the first time)              | —           | rendered from the log, not authored                                                                                                          |
+| — staffing | three slots                                                                                                      | —           | the child assigns each; `RuleBook` shows the assignment from now on                                                                          |
+| c6s1       | a routine case handled by whoever holds the judicial slot                                                        | false       | if not the child: they watch. Confirms the assignment has teeth                                                                              |
+| c6s2       | a rule needs enforcing (executive slot) against a character the child likes                                      | false       | Chapter 3's move, now through the slot: if the child holds it, they enforce it themselves                                                    |
+| c6s3       | **the pinch, kept-together branch**: a case where the child's own rule favours the child, and they hold judicial | false       | a character says the judge is the one who wrote it. If they _didn't_ keep both, this situation instead shows the appointee ruling it cleanly |
+| c6s4       | **the pinch, split branch**: the appointee rules against the child                                               | false       | choice: live with it, or revoke (decision #4). If they kept everything, this shows the cost of that instead                                  |
+
+Epilogue: what the three jobs are for, now that the child has felt what happens when one person holds all of them.
+
+## Data model / engine
+
+- `types.ts`: `LogEntry.kind`, `Holder`, `Separation`; `GameState.separation`.
+- `src/engine/separation.ts` (new, pure): `keyMoments(state)` (the three lookups), `resolveHolder(state, holder)` (who a slot actually is right now, incl. "village"), `assignSeparation`, `revokeSeparation`.
+- `game.ts`: `resolve()` writes `kind`; `Resolution` gains `kind`.
+- Tests: `keyMoments` finds the right entries and reports absence honestly; `resolveHolder("village")` is deterministic; revoke drops all trust; content test that no Chapter 6 situation has `invitesRule: true`.
+
+## UI
+
+- `KeyMoments` screen (three cards, each: the situation title, what the child did, and its name).
+- `SeparationBuilder` (three slot pickers; each offers you / characters / groups / village).
+- `ChapterEnd` for 6: shows who holds each job.
+
+## Open questions
+
+- Decision #2 (village-chooses as trust vs. election) and #4 (rights on revoke).
+- Whether the replay should use the _most recent_ or the _first_ moment of each kind — first is more "you did this before you knew what it was called."
