@@ -1,6 +1,6 @@
 # Chapters 4–7 — roadmap
 
-> Status: chapters 1–5 are built, and the book is closed. This page is the map for what's left (6–7); each chapter has its own plan doc.
+> Status: chapters 1–6 are built. Only chapter 7 is left — the ending.
 
 ## Build order and why it matters
 
@@ -12,7 +12,7 @@ The remaining chapters are not independent. Three engine additions flow forward:
 | Chapter 5 (book closing)       | the **amendment rule** (how a rule may be changed), written behind a veil | Chapter 7 (the whole chapter branches on it)                                                       |
 | ~~Before Chapter 6~~ _(built)_ | `LogEntry.kind` — _how_ each situation was resolved                       | Chapter 6's opening replays three of the child's own moments and can't find them without it        |
 
-So: **6 → 7, in order.** Chapters 4 and 5 are built. Chapter 5 delivered both things the later chapters need — the authority rule with its election, and the amendment rule written behind a veil — plus a general `variantOutcomes` mechanism chapter 6 can reuse for its three jobs without touching the engine.
+So: **7 is all that remains.** Chapter 6 is built, and it needed no new engine mechanism — chapter 5's `variantOutcomes` carried it. Chapter 7 has both of its dependencies in place: the amendment rule written behind a veil in chapter 5, and `separation` for the finale's "who holds each of the three jobs".
 
 **Open, and chapter 6's to answer:** losing the election sets `decider: "other"` and that persists. Chapter 6 asks the child to staff three jobs — what that means for a child who no longer decides is undecided. The honest options are that the new decider staffs them (and the child watches), or that staffing is the village's act rather than the decider's. Worth settling before writing any of chapter 6's content.
 
@@ -27,5 +27,5 @@ So: **6 → 7, in order.** Chapters 4 and 5 are built. Chapter 5 delivered both 
 
 - **4 — מי שלא היה כאן.** _(built)_ נעם arrives. The WHO field's two outcomes (§6) both have to be reachable: a `residents` rule leaves the gap felt, an `anyone-present` rule punishes someone who had no say — and a character says so. Almost no engine work; the two branches end up damaging different rights, which is §6's point stated by the rights board rather than by narration. → `chapter-4-plan.md`
 - **5 — מי מחליט מי מחליט.** _(built)_ Someone else starts ruling. The only fix is an authority rule, which applies to the child too. "The village chooses" is an election, decided by the trust numbers the game has been hiding all along — the first time they cash out. Ends with the book closing and the amendment rule. → `chapter-5-plan.md`
-- **6 — הספר גמור, מי שומר עליו.** Replays three of the child's own moments and names the three jobs. The child staffs them; a situation blows up whichever combination they kept. → `chapter-6-plan.md`
+- **6 — הספר גמור, מי שומר עליו.** _(built)_ Replays three of the child's own moments and names the three jobs. The child staffs them; a situation blows up whichever combination they kept. → `chapter-6-plan.md`
 - **7 — לשנות את מה שכבר כתוב.** A rule hurts the child; changing it goes through the amendment rule they wrote in Chapter 5 without knowing they'd need it. The real ending. → `chapter-7-plan.md`

@@ -207,8 +207,42 @@ export interface Situation {
    * (§9.5). Mutually exclusive with `invitesRule` — pinned by a content test.
    */
   invitesAuthority?: boolean;
+  /**
+   * This situation offers to tear the three-job arrangement up (§9.6). Only
+   * meaningful once somebody else holds the judicial job — if the child kept
+   * it, there is nothing to revoke.
+   */
+  offersRevoke?: boolean;
   /** Said after the outcome — the concept, named only now (§2). */
   lesson: string;
+}
+
+/* ---- the three jobs (§9.6) ---- */
+
+/**
+ * Who holds one of the three jobs. "village" is resolved at the moment it is
+ * read, to whichever group trusts the child most — see resolveHolder.
+ */
+export type Holder =
+  | { kind: "you" }
+  | { kind: "actor"; actorId: string }
+  | { kind: "group"; groupId: GroupId }
+  | { kind: "village" };
+
+/** The three jobs the child has been doing all game without noticing (§9.6). */
+export type Job = "legislative" | "judicial" | "executive";
+
+export type Separation = Record<Job, Holder>;
+
+/**
+ * One of the child's own past moments, replayed back to them with a name on
+ * it. Built from the log, never authored — see keyMoments.
+ */
+export interface KeyMoment {
+  job: Job;
+  /** Null when the child never once did this job — said in-world, not faked. */
+  situationId: string | null;
+  kind: ResolutionKind | null;
 }
 
 /* ---- who decides (§9.5) ---- */
@@ -343,4 +377,13 @@ export interface GameState {
   amendment: AmendmentForm | null;
   /** True once the book is closed (§10). No situation may invite a rule after. */
   bookClosed: boolean;
+
+  /* ---- chapter 6 ---- */
+
+  /**
+   * Who holds each of the three jobs, once the village has staffed them.
+   * Null until chapter 6 does so; reset to all-"you" if the child revokes
+   * the arrangement, which costs them everything they built (§9.6).
+   */
+  separation: Separation | null;
 }

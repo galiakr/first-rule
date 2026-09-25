@@ -6,6 +6,8 @@ import AboutVillage from "@/components/AboutVillage";
 import AuthorityBuilder from "@/components/AuthorityBuilder";
 import BookClosing from "@/components/BookClosing";
 import ElectionResult from "@/components/ElectionResult";
+import KeyMoments from "@/components/KeyMoments";
+import SeparationBuilder from "@/components/SeparationBuilder";
 import ChapterEnd from "@/components/ChapterEnd";
 import LinkedText from "@/components/LinkedText";
 import Notes from "@/components/Notes";
@@ -19,7 +21,7 @@ import { useLanguage, useT } from "@/content/language";
 import type { Lang, Translate } from "@/content/tokens";
 import { chapterNotes } from "@/content/notes";
 import { chapters, situationsById } from "@/content/situations";
-import { actorsWithChild } from "@/content/village";
+import { actors, actorsWithChild } from "@/content/village";
 import {
   activatePrecedent,
   addRule,
@@ -38,6 +40,13 @@ import {
   setAuthority,
   variantKeys,
 } from "@/engine/authority";
+import {
+  assignSeparation,
+  heldByYou,
+  keyMoments,
+  revokeSeparation,
+  separationVariants,
+} from "@/engine/separation";
 import type { Prompt } from "@/engine/game";
 import { ruleSentence } from "@/engine/match";
 import { authoritySentence } from "@/engine/options";
@@ -47,6 +56,7 @@ import type {
   AmendmentForm,
   AuthorityRule,
   GameState,
+  Separation,
   ResolutionKind,
   Rule,
   TraitKey,
@@ -61,7 +71,11 @@ import type {
 // "closing" is the book-closing ceremony at the end of chapter 5 (§10): it
 // sits between the last situation and the chapter-end screen, because from
 // then on nothing may be written into the book again.
-type Phase = "about" | "intro" | "situation" | "closing" | "end";
+// "moments" and "staffing" open chapter 6 (§9.6): the game replays three of
+// the child's own moments and names them, and then the village staffs the
+// three jobs. Both happen once, between the intro and the first situation.
+type Phase =
+  "about" | "intro" | "moments" | "staffing" | "situation" | "closing" | "end";
 
 interface Pending {
   governedBy: WhatClause | null;
@@ -192,6 +206,15 @@ export default function Page() {
   // A chapter's note is earned by *finishing* the chapter, not by reaching
   // it: the concept is named only once it's been felt (§2). The chapter the
   // child is inside counts only at its end screen.
+  // The one situation that offers to tear the three-job arrangement up, and
+  // only when somebody else holds the judging — keeping it yourself leaves
+  // nothing to revoke (§9.6).
+  const revokeChoice = Boolean(
+    situation?.offersRevoke &&
+    state.separation &&
+    !heldByYou(state, "judicial"),
+  );
+
   const unlockedNoteChapters = allChapters
     .map((_, i) => i + 1)
     .filter(
@@ -208,7 +231,7 @@ export default function Page() {
     const { wrote = false, ...rest } = next;
     setDecidedPrompt(prompt);
     setPending({
-      variants: variantKeys(state),
+      variants: [...separationVariants(state), ...variantKeys(state)],
       ...rest,
       kind: resolutionKind(prompt.kind, { overrode: rest.overrode, wrote }),
     });
@@ -240,8 +263,24 @@ export default function Page() {
       governedBy: null,
       appliedRuleIds: [],
       overrode: false,
-      variants: variantKeys(next),
+      variants: [...separationVariants(next), ...variantKeys(next)],
       kind: "wrote-authority",
+    });
+  }
+
+  // §9.6: living with a ruling that went against you is the only moment the
+  // whole arrangement is worth anything. Tearing it up is the other choice,
+  // and it costs everything — the cost itself is computed in
+  // revokeSeparation, since it depends on who had been appointed.
+  function revoke() {
+    setState((s) => revokeSeparation(s));
+    setDecidedPrompt(prompt);
+    setPending({
+      governedBy: null,
+      appliedRuleIds: [],
+      overrode: false,
+      variants: ["revoked"],
+      kind: "no-rule",
     });
   }
 
@@ -326,7 +365,15 @@ export default function Page() {
               {currentChapter.title}
             </h1>
             <p className="text-lg leading-relaxed">{currentChapter.intro}</p>
-            <Action onClick={() => setPhase("situation")}>
+            <Action
+              onClick={() =>
+                setPhase(
+                  state.chapter === 6 && !state.separation
+                    ? "moments"
+                    : "situation",
+                )
+              }
+            >
               {t("app.intro_continue")}
             </Action>
           </section>
@@ -346,7 +393,30 @@ export default function Page() {
             {/* Decide — live and interactive until a choice is made, then
                 freezes into a static recap so the outcome can appear below
                 it without the buttons staying clickable. */}
-            {pending === null && prompt ? (
+            {pending === null && prompt && revokeChoice ? (
+              // §9.6: when the arrangement has ruled against the child, the
+              // only question on screen is whether they keep to it. A rule
+              // may well fire on this scene too; it is not what the scene is
+              // about, so it does not get a say here.
+              <div className="settle flex flex-wrap gap-3">
+                <Action
+                  onClick={() =>
+                    settle({
+                      governedBy: null,
+                      appliedRuleIds: [],
+                      overrode: false,
+                    })
+                  }
+                >
+                  {t("chapter6.c6s4.accept")}
+                </Action>
+                <Action tone="quiet" onClick={revoke}>
+                  {t("chapter6.c6s4.revoke")}
+                </Action>
+              </div>
+            ) : null}
+
+            {pending === null && prompt && !revokeChoice ? (
               <div className="settle space-y-6">
                 {prompt.kind === "precedent-choice" ? (
                   <PrecedentChoice
@@ -673,6 +743,25 @@ export default function Page() {
               </div>
             ) : null}
           </section>
+        ) : null}
+
+        {phase === "moments" ? (
+          <KeyMoments
+            moments={keyMoments(state)}
+            situationsById={situationsById(lang)}
+            onContinue={() => setPhase("staffing")}
+          />
+        ) : null}
+
+        {phase === "staffing" ? (
+          <SeparationBuilder
+            actors={actors(lang)}
+            showLostNote={state.decider === "other"}
+            onConfirm={(separation: Separation) => {
+              setState((s) => assignSeparation(s, separation));
+              setPhase("situation");
+            }}
+          />
         ) : null}
 
         {phase === "closing" ? (

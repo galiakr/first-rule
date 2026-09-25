@@ -5,6 +5,7 @@ import { chapter2 } from "@/content/chapter2";
 import { chapter3 } from "@/content/chapter3";
 import { chapter4 } from "@/content/chapter4";
 import { chapter5 } from "@/content/chapter5";
+import { chapter6 } from "@/content/chapter6";
 import { chapterNotes } from "@/content/notes";
 import { situationsById } from "@/content/situations";
 import { actors, actorsWithChild, childActor } from "@/content/village";
@@ -19,6 +20,17 @@ import {
   variantKeys,
 } from "../authority";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
+import {
+  assignSeparation,
+  heldByYou,
+  JOBS,
+  keptWritingAndJudging,
+  keyMoments,
+  resolveHolder,
+  revokeSeparation,
+  separationVariants,
+  villageChoice,
+} from "../separation";
 import {
   activatePrecedent,
   addRule,
@@ -53,7 +65,14 @@ import {
   rightsKey,
   trustLevel,
 } from "../rights";
-import type { GameState, LogEntry, Precedent, Rule, Situation } from "../types";
+import type {
+  GameState,
+  Holder,
+  LogEntry,
+  Precedent,
+  Rule,
+  Situation,
+} from "../types";
 
 // The engine is language-agnostic; these tests pin behaviour, so they run
 // against Hebrew (the default) unless a case is specifically about language.
@@ -63,6 +82,7 @@ const CHAPTER_2 = chapter2(LANG).situations;
 const CHAPTER_3 = chapter3(LANG).situations;
 const CHAPTER_4 = chapter4(LANG).situations;
 const CHAPTER_5 = chapter5(LANG).situations;
+const CHAPTER_6 = chapter6(LANG).situations;
 const CHAPTER_NOTES = chapterNotes(LANG);
 const SITUATIONS_BY_ID = situationsById(LANG);
 const ACTORS = actors(LANG);
@@ -780,11 +800,12 @@ describe("the notebook holds up", () => {
     CHAPTER_3,
     CHAPTER_4,
     CHAPTER_5,
+    CHAPTER_6,
   ];
 
   it("has exactly one note per built chapter, numbered in order", () => {
     expect(CHAPTER_NOTES).toHaveLength(BUILT_CHAPTERS.length);
-    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3, 4, 5]);
+    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
   it("fills every field — a missing token would surface as its own key", () => {
@@ -1382,5 +1403,210 @@ describe("the log remembers which of the three jobs the child was doing", () => 
     // And it reports honestly when a kind never happened, rather than
     // inventing a moment.
     expect(first(["overrode"])).toBeUndefined();
+  });
+});
+
+describe("chapter 6 content holds up", () => {
+  it("has four situations and never asks for a rule — the book is closed", () => {
+    expect(CHAPTER_6).toHaveLength(4);
+    for (const s of CHAPTER_6) {
+      expect(s.invitesRule, s.id).toBe(false);
+      expect(s.invitesAuthority, s.id).toBeFalsy();
+    }
+  });
+
+  it("gives every situation an outcome for all four WHAT clauses", () => {
+    for (const s of CHAPTER_6) {
+      for (const what of whatOptions(LANG)) {
+        expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
+      }
+    }
+  });
+
+  it("branches each situation on the job that situation is about", () => {
+    const keys = (i: number) =>
+      Object.keys(CHAPTER_6[i].variantOutcomes ?? {}).sort();
+    expect(keys(0)).toEqual(["other-judges", "you-judge"]);
+    expect(keys(1)).toEqual(["other-enforces", "you-enforce"]);
+    expect(keys(2)).toEqual(["kept-together", "split"]);
+    expect(keys(3)).toEqual(["kept-together", "revoked", "split"]);
+  });
+
+  it("offers to tear the arrangement up at exactly one situation", () => {
+    expect(CHAPTER_6.filter((s) => s.offersRevoke).map((s) => s.id)).toEqual([
+      "c6s4",
+    ]);
+  });
+});
+
+describe("the three moments the chapter opens on", () => {
+  function played(entries: [Situation, LogEntry["kind"]][]): GameState {
+    let state = initialState(6);
+    for (const [situation, kind] of entries) {
+      state = resolve(state, {
+        situation,
+        governedBy: null,
+        appliedRuleIds: [],
+        overrode: false,
+        kind,
+      });
+    }
+    return state;
+  }
+
+  it("finds one moment per job, out of the child's own game", () => {
+    const state = played([
+      [s1, "wrote-rule"],
+      [c1s2, "applied-rule"],
+      [s3, "chose-in-collision"],
+    ]);
+    expect(keyMoments(state)).toEqual([
+      { job: "legislative", situationId: s1.id, kind: "wrote-rule" },
+      { job: "judicial", situationId: s3.id, kind: "chose-in-collision" },
+      { job: "executive", situationId: c1s2.id, kind: "applied-rule" },
+    ]);
+  });
+
+  it("takes the first of each kind, not the most recent", () => {
+    // "You did this before you knew what it was called" is the point.
+    const state = played([
+      [s1, "wrote-rule"],
+      [c1s2, "wrote-rule"],
+    ]);
+    expect(keyMoments(state)[0].situationId).toBe(s1.id);
+  });
+
+  it("counts writing the line about who decides as legislating", () => {
+    const state = played([[s1, "wrote-authority"]]);
+    expect(keyMoments(state)[0].kind).toBe("wrote-authority");
+  });
+
+  it("says a job was never done rather than substituting a moment", () => {
+    const state = played([[s1, "wrote-rule"]]);
+    const [, judicial, executive] = keyMoments(state);
+    expect(judicial.situationId).toBeNull();
+    expect(executive.situationId).toBeNull();
+  });
+
+  it("does not count going against a rule as having enforced it", () => {
+    const state = played([[s1, "overrode"]]);
+    expect(keyMoments(state).every((m) => m.situationId === null)).toBe(true);
+  });
+});
+
+describe("staffing the three jobs", () => {
+  const you = { kind: "you" } as const;
+
+  function staffed(judicial: Holder, executive: Holder = you): GameState {
+    return assignSeparation(initialState(6), {
+      legislative: you,
+      judicial,
+      executive,
+    });
+  }
+
+  it("is the village's act, so a child who lost the election still assigns", () => {
+    // decider "other" must not block staffing — appointing who guards the
+    // book is constitutional, not day-to-day.
+    const lost: GameState = { ...initialState(6), decider: "other" };
+    const state = assignSeparation(lost, {
+      legislative: you,
+      judicial: { kind: "actor", actorId: "yotam" },
+      executive: you,
+    });
+    expect(state.separation).not.toBeNull();
+    expect(state.decider).toBe("other");
+  });
+
+  it("resolves a slot left to the village to the group that trusts you most", () => {
+    const base = initialState(6);
+    const state = { ...base, trust: { ...base.trust, banaim: 3 } };
+    expect(villageChoice(state)).toBe("banaim");
+    expect(resolveHolder(state, { kind: "village" })).toEqual({
+      kind: "group",
+      groupId: "banaim",
+    });
+  });
+
+  it("breaks a tie by the village's own order, not at random", () => {
+    // Everyone starts equal, so this is the untouched case.
+    expect(villageChoice(initialState(6))).toBe(GROUPS[0]);
+  });
+
+  it("knows when the child kept both writing and judging", () => {
+    expect(keptWritingAndJudging(staffed(you))).toBe(true);
+    expect(
+      keptWritingAndJudging(staffed({ kind: "actor", actorId: "yotam" })),
+    ).toBe(false);
+  });
+
+  it("hands each situation the keys for the job it is about", () => {
+    expect(separationVariants(staffed(you))).toEqual([
+      "kept-together",
+      "you-judge",
+      "you-enforce",
+    ]);
+    expect(
+      separationVariants(
+        staffed({ kind: "group", groupId: "roim" }, { kind: "village" }),
+      ),
+    ).toEqual(["split", "other-judges", "other-enforces"]);
+    // Nothing to branch on before the village has staffed anything.
+    expect(separationVariants(initialState(6))).toEqual([]);
+  });
+
+  it("puts the pinch on the child who kept writing and judging", () => {
+    const c6s3 = CHAPTER_6[2];
+    expect(
+      outcomeFor(c6s3, null, false, separationVariants(staffed(you))).text,
+    ).toBe(c6s3.variantOutcomes!["kept-together"].text);
+    expect(
+      outcomeFor(
+        c6s3,
+        null,
+        false,
+        separationVariants(staffed({ kind: "actor", actorId: "yotam" })),
+      ).text,
+    ).toBe(c6s3.variantOutcomes!["split"].text);
+  });
+});
+
+describe("tearing the arrangement up costs everything", () => {
+  const staffed = assignSeparation(initialState(6), {
+    legislative: { kind: "you" },
+    judicial: { kind: "group", groupId: "roim" },
+    executive: { kind: "you" },
+  });
+
+  it("brings every job back to the child", () => {
+    const after = revokeSeparation(staffed);
+    for (const job of JOBS) expect(heldByYou(after, job), job).toBe(true);
+  });
+
+  it("leaves nobody coming to you any more", () => {
+    const after = revokeSeparation(staffed);
+    for (const g of GROUPS) {
+      expect(trustLevel(after.trust[g]), g).toBe("stops-coming");
+    }
+  });
+
+  it("strains fair process for whoever had been appointed to judge", () => {
+    // Revoking an arrangement because it ruled against you is exactly the
+    // denial of process, so it lands on the group that was judging.
+    const after = revokeSeparation(staffed);
+    expect(after.rights[rightsKey("halich", "roim")]).toBe("strained");
+  });
+
+  it("follows a village-chosen judge through to the group it resolved to", () => {
+    const base = initialState(6);
+    const trusting = { ...base, trust: { ...base.trust, banaim: 3 } };
+    const after = revokeSeparation(
+      assignSeparation(trusting, {
+        legislative: { kind: "you" },
+        judicial: { kind: "village" },
+        executive: { kind: "you" },
+      }),
+    );
+    expect(after.rights[rightsKey("halich", "banaim")]).toBe("strained");
   });
 });

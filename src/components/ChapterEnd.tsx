@@ -1,6 +1,8 @@
 "use client";
 
 import { useLanguage } from "@/content/language";
+import { actors } from "@/content/village";
+import { holderLabel, JOBS } from "@/engine/separation";
 import { ruleSentence } from "@/engine/match";
 import { groupLabel } from "@/engine/options";
 import { GROUPS, harmed, protectionLabel, stateLabel } from "@/engine/rights";
@@ -25,6 +27,7 @@ export default function ChapterEnd({
   const labels = groupLabel(lang);
   const protections = protectionLabel(lang);
   const states = stateLabel(lang);
+  const actorList = actors(lang);
   const harm = harmed(state.rights);
   const harmedGroups = new Set(harm.map((h) => h.group));
   const untouched = GROUPS.filter((g) => !harmedGroups.has(g));
@@ -106,6 +109,26 @@ export default function ChapterEnd({
               groups: untouched.map((g) => labels[g]).join(", "),
             })}
           </p>
+        </section>
+      ) : null}
+
+      {state.separation ? (
+        <section className="space-y-3">
+          <h3 className="font-book text-xl">
+            {t("chapter_end.separation_heading")}
+          </h3>
+          <ul className="space-y-2">
+            {JOBS.map((job) => (
+              <li key={job} className="flex flex-wrap items-baseline gap-x-2">
+                <span className="text-quiet">
+                  {t(`staffing.${job}_legend`)}
+                </span>
+                <span className="font-book text-lg">
+                  {holderLabel(state, state.separation![job], lang, actorList)}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
       ) : null}
 

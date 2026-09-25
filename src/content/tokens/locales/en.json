@@ -448,6 +448,50 @@
     "intro": "For four chapters people have come to you when something got stuck. Nobody appointed you, and nobody stopped you either. It worked for as long as everyone agreed that it worked.",
     "title": "Who Decides Who Decides"
   },
+  "chapter6": {
+    "c6s1": {
+      "lesson": "The rule was written, clear, and kept in the book — and the two of them still read it differently. That is why judging is a job, and not just reading.",
+      "text": "Dana and Michal both need the same ground on the same morning, and both point at the same rule in the book — each reading it differently. It isn't a big case. It's exactly the sort of case that happens here every week, and it needs somebody to settle it.",
+      "title": "An Entirely Ordinary Case",
+      "variant": {
+        "other_judges": "The one who was appointed settles it, and you stand to one side. The ruling comes out exactly as you would have ruled, and that isn't the point — what changed is that you no longer had to be there for it to happen.",
+        "you_judge": "You settle it, because that's what was agreed. You read the rule aloud, pick the reading that seems right to you, and both of them accept it. It took less than a minute, and for the first time it felt like a role rather than a favour."
+      }
+    },
+    "c6s2": {
+      "lesson": "Enforcement sounds like the technical one of the three. It's the one that breaks first, and it always breaks over someone you're fond of.",
+      "text": "Shira broke a rule that's written in the book. Not badly, and not with any bad intent — but she broke it, and the whole village saw. The rule says exactly what happens now. Somebody has to make sure it actually happens, and it's Shira, who has brought you water every morning since the first chapter.",
+      "title": "And This Time It's Shira",
+      "variant": {
+        "other_enforces": "The one who was appointed does it, and you don't have to. That's a relief, and he also does it a shade harder than you would have. Shira looks for you afterwards and asks whether you could have stopped it. You could have. You weren't supposed to.",
+        "you_enforce": "It falls to you. You do what the rule says, and Shira doesn't look at you while it happens. That evening she still brings the water, and it takes her a little longer than usual to get there."
+      }
+    },
+    "c6s3": {
+      "lesson": "Nobody claimed you ruled wrongly. That is exactly what makes it a problem — when the same person writes and judges, there's no way to tell, and they can't tell either.",
+      "text": "Barak claims that something you've been using for two weeks is actually his. There's a rule in the book that settles exactly this question, and it leans your way — not by much and not on purpose, it just came out that way. That rule is one you wrote.",
+      "title": "Your Rule, and Your Case",
+      "variant": {
+        "kept_together": "You judge your own case, by a rule you wrote. You rule in your own favour, and it even looks right. Barak accepts it and doesn't argue. Afterwards Michal says it quietly, not as an accusation: “The person who ruled here is the person who wrote the rule, and the case was his.” You have nothing to answer, because it is simply accurate.",
+        "split": "The one who was appointed rules, and you're a party to the case just like Barak. The ruling comes out in your favour — the very same ruling you'd have reached on your own. The only difference is that now nobody has to take your word for it being right."
+      }
+    },
+    "c6s4": {
+      "accept": "Live with the ruling",
+      "lesson": "This whole arrangement is worth something at exactly one moment: when it goes against you and you keep to it anyway. At every other moment it isn't being tested at all.",
+      "revoke": "Tear the whole arrangement up",
+      "text": "This time the ruling doesn't go your way. It's about something you genuinely need, and the rule — one you wrote, in a chapter it's already hard to remember — says it isn't yours. Nobody is especially pleased about it. Everyone is watching to see what you do.",
+      "title": "And the Ruling Goes Against You",
+      "variant": {
+        "kept_together": "There's nobody to rule against you, because you kept all three jobs. You rule, and this time you rule against yourself — because that's what the rule says. Nobody knows whether you did it because the rule said so or because people were watching, and neither do you. That's the only difference, and it's the whole difference.",
+        "revoked": "You tore it up. All three jobs come back to you that moment, and nobody tries to stop you — they have nothing to stop you with. By the end of the day there's nobody left who comes to tell you anything. The arrangement was worth nothing until it stood against you, and that is precisely when you tore it up.",
+        "split": "You accept the ruling. It isn't pleasant, and it takes about a day to stop stinging. The person you appointed never knew you could have overruled him at any moment, and that is exactly what makes it worth something: you didn't give way because you had no choice."
+      }
+    },
+    "epilogue": "The three jobs weren't split up to make things tidier. They were split because someone who writes the rule, judges by it and carries it out never has to convince anybody at any point. They are always right — not because they are right, but because there is nobody positioned to say otherwise. Splitting them is not distrust of a particular person. It's an assumption that nobody should be in that position.",
+    "intro": "The book is closed. No lines can be added to it, and none can be taken out. What's left is what gets done with it every day — and that, it turns out, is not one thing but three.",
+    "title": "The Book Is Done — Who Guards It"
+  },
   "chapter_end": {
     "closing_note": "This is as far as the story has been written. The rules you wrote and the precedents you set stay in the book, and they will go on applying — including when they do not suit you.",
     "continue": "Continue to the next chapter",
@@ -458,6 +502,7 @@
     "protected_heading": "And who they protected",
     "protected_text": "Every protection stayed whole for {groups}.",
     "protection_prefix": "the right to {protection}",
+    "separation_heading": "Who holds what",
     "subtitle": "End of chapter {chapter}",
     "title": "The village reads what you wrote"
   },
@@ -513,6 +558,24 @@
     "none": "Nobody",
     "won": "You are still the one who decides. Now it's written down, instead of just happening."
   },
+  "moments": {
+    "continue": "Three jobs",
+    "executive": {
+      "name": "Making them happen",
+      "what": "At “{title}” you made sure that what was written actually happened. It sounds the simplest of the three, and it's the part without which the rest is paper."
+    },
+    "heading": "Three Times You Already Did This",
+    "intro": "Before deciding who guards the book, it's worth looking back. Three times from your own game, and each of them has a name nobody has said to you yet.",
+    "judicial": {
+      "name": "Judging by them",
+      "what": "At “{title}” you settled between two things that were already written. Nobody wrote anything new there — you had to decide which applied to what."
+    },
+    "legislative": {
+      "name": "Making the rules",
+      "what": "At “{title}” you wrote a new line in the book. From that moment it applied to cases you hadn't seen yet."
+    },
+    "never": "You never once did this. That says something too."
+  },
   "notes": {
     "c1": {
       "concept": "A rule is a decision made in advance",
@@ -553,6 +616,14 @@
       "q2": "Who decides what happens at home? And who decided that?",
       "q3": "If you had lost the vote — why would you go on respecting what the winner decides at all?",
       "what_happened": "Yotam ruled without asking anyone, and then Dana ruled against him, and both were equally right — because nothing said who decides. You wrote that line, and it applied to you too: if you chose to let the village choose, the way the groups voted was no surprise. It was exactly what you had done with them over the four chapters before."
+    },
+    "c6": {
+      "concept": "Three jobs, and not one person",
+      "grown_up": "Separation of powers. Making the rules, judging by them and carrying them out are held in different hands not because any particular person is suspected, but because someone holding all three never has to convince anybody at any stage — so there's no way to tell whether they're right, even when they genuinely are.",
+      "q1": "You judged a case you were a party to. How could anyone tell whether you judged it rightly?",
+      "q2": "At home, who decides the rules, who decides whether a rule was broken, and who makes sure something happens? Is it the same person?",
+      "q3": "If you could tear the arrangement up at any moment — was it ever really an arrangement?",
+      "what_happened": "The game showed you three moments from your own game: a time you wrote a rule, a time you settled a case by what was already written, and a time you made sure something actually happened. You'd been doing all three from the start without knowing they were three. Then you split them up — or didn't — and then a case arrived in which you were a party."
     },
     "close_aria": "Close the notebook",
     "empty": "The notebook is still empty. The first chapter will open here when you finish it.",
@@ -599,7 +670,21 @@
     "precedent_entry": "{title} — {ruling}",
     "precedent_no_ruling": "no rule applied",
     "precedents_heading": "Precedents",
-    "rule_number": "Rule {n}"
+    "rule_number": "Rule {n}",
+    "separation_heading": "The three jobs"
+  },
+  "staffing": {
+    "confirm": "Settle it this way",
+    "executive_legend": "Who makes them happen",
+    "heading": "Who Guards the Book",
+    "held_by_village": "the village — currently {group}",
+    "held_by_you": "you",
+    "intro": "Until today you did all three of these on your own, without noticing they were three. The village is meeting to decide who does each of them from here on. They're asking you, because you're the one who wrote the book.",
+    "judicial_legend": "Who judges by them",
+    "legislative_legend": "Who writes the rules",
+    "lost_note": "Yotam decides what happens on an ordinary day. This is not an ordinary day, and on this question the village is asking everyone.",
+    "village": "The village decides",
+    "you": "Me"
   },
   "subject": {
     "chefetz": {

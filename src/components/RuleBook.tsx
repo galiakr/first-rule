@@ -1,6 +1,8 @@
 "use client";
 
 import { useLanguage } from "@/content/language";
+import { actors } from "@/content/village";
+import { holderLabel, JOBS } from "@/engine/separation";
 import { ruleSentence } from "@/engine/match";
 import {
   amendmentOptions,
@@ -100,6 +102,31 @@ export default function RuleBook({
             <p className="font-book text-[1.15rem] leading-relaxed">
               {findOption(amendmentOptions(lang), state.amendment).template}
             </p>
+          </div>
+        ) : null}
+
+        {state.separation ? (
+          <div className="mt-8 border-t border-ink/15 pt-6">
+            <h3 className="mb-3 font-book text-xl">
+              {t("rulebook.separation_heading")}
+            </h3>
+            <ul className="space-y-2">
+              {JOBS.map((job) => (
+                <li key={job} className="leading-relaxed">
+                  <span className="text-ink/60">
+                    {t(`staffing.${job}_legend`)}:{" "}
+                  </span>
+                  <span className="font-book">
+                    {holderLabel(
+                      state,
+                      state.separation![job],
+                      lang,
+                      actors(lang),
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : null}
 

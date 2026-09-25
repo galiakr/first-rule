@@ -6,7 +6,7 @@
 
 ## What this project is
 
-A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew (RTL) and English (LTR), switchable in place at any time, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–5 of a planned seven, ending with the rule book closing (§10); 6–7 are planned in `docs/roadmap.md` and `docs/chapter-6-plan.md` / `docs/chapter-7-plan.md`.
+A civics/democracy game for kids 8–12: a child arrives in a village with no rules, writes the rules themselves over the course of the game, and then lives under them. Hebrew (RTL) and English (LTR), switchable in place at any time, single player, no backend. Full design is in `docs/design.md` — read it before touching game logic or content, it is the source of truth for _why_ the engine works the way it does. This repo currently implements Chapters 1–6 of a planned seven; only chapter 7, the ending, is left (see `docs/roadmap.md` and `docs/chapter-7-plan.md`).
 
 ## Stack
 
@@ -25,9 +25,10 @@ src/
     conflict.ts    textual contradiction vs. field collision
     precedent.ts   does a past ruling apply to a new situation (trait matching)
     authority.ts   who decides (§9.5): the election, losing it, closing the book
+    separation.ts  the three jobs (§9.6): the replay, staffing, revoking
     rights.ts      the rights board and trust
     game.ts        the reducer: what's asked, what happens, what's saved, chapter transitions
-  content/         the village, chapters 1–5 — data only (chapter1.ts … chapter5.ts, village.ts)
+  content/         the village, chapters 1–6 — data only (chapter1.ts … chapter6.ts, village.ts)
     notes.ts       one concept note per chapter for the notebook (unlocked only after a chapter ends)
     language.tsx   LanguageProvider + useLang/useT — the current language, and <html lang/dir>
     situations.ts  every situation keyed by id, for precedent source lookup
@@ -98,8 +99,8 @@ Stack: **Vitest** + **React Testing Library** + **Playwright** (e2e)
 
 ### Current state
 
-- `src/engine/` has full behavioral coverage (113 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
-- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 146 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
+- `src/engine/` has full behavioral coverage (132 tests) — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
+- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 165 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
 - `e2e/` has five real Playwright specs: `home.spec.ts` (the about screen), `notes.spec.ts` (the notebook opens from the header and every chapter is still locked at the start), `language.spec.ts` (switching mid-chapter keeps your place, flips `dir`, and re-reads a Hebrew-written rule as an English sentence), and `situation-screen.spec.ts`, which drives a full situation through a real browser and asserts scene/decide/outcome/lesson all stay visible on one screen as they accumulate, rather than replacing each other — the actual behavior the single-screen redesign depends on, not just that the final state is reachable.
 - No coverage threshold is enforced yet (`vitest.config.ts` reports coverage but doesn't gate on it) — turn on the toolkit-default 80% lines/functions threshold once component tests exist, not before, or CI will fail on day one for the wrong reason.
 
@@ -166,8 +167,8 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
-- [ ] Chapters 1–5 are built (see `docs/chapter-1-plan.md` … `docs/chapter-5-plan.md`); chapters 6–7 are planned but not built (see `docs/roadmap.md`, `docs/chapter-6-plan.md`, `docs/chapter-7-plan.md`); save state is still unplanned
-- [ ] **Open for chapter 6:** losing the election sets `decider: "other"` and that persists. Chapter 6 asks the child to staff three jobs — what that means for a child who no longer decides isn't settled. See `docs/roadmap.md`.
+- [ ] Chapters 1–6 are built (see `docs/chapter-1-plan.md` … `docs/chapter-6-plan.md`); only chapter 7 is left (see `docs/roadmap.md`, `docs/chapter-7-plan.md`); save state is still unplanned
+- [x] Staffing the three jobs is the **village's** act, not the decider's — a child who lost chapter 5's election still assigns them, and gets a line saying why. Appointing who guards the book is constitutional, not day-to-day.
 - [ ] **`davar` is never pinched.** A rule about it is written at c2s2 and no later situation uses that subject, so it can never fire again — a real §7 violation. Chapter 7 is the planned home for it. `broke` is likewise the one unused `ActKind`, and nothing tests the §6/§7 claim that all 16 builder options get pinched across the game.
 - [ ] Chapter 2 introduced `chefetz` and `davar` as fresh subjects (c2s1/c2s2) that aren't pinched within Chapter 2 itself — a later chapter needs to eventually collide with rules written for them, same as Chapter 1 already does for `mayim`/`shvil`
 - [ ] Four of five `ActKind` values used (`took-without-asking`, `blocked`, `told-what-was-private`, `refused-to-share`); only `broke` remains unused
