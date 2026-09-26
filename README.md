@@ -89,14 +89,15 @@ through in a test without rendering anything — see
 
 ## What's not here yet
 
-Nothing structural. The game saves and resumes, and every chapter, act,
-protection and builder option the engine models is exercised and tested.
+Nothing structural. All seven chapters are built, the game saves and resumes,
+both languages ship complete, and every subject, act, protection and builder
+option the engine models is exercised and covered by a test.
 
-The English copy has had two passes but has never been read aloud to an
-eight-year-old — the one check that matters, and the one that can't be done
-from a keyboard. `chefetz` and `davar`, the two subjects
-Chapter 2 introduces, aren't pinched within Chapter 2 itself — a later
-chapter needs to eventually collide with rules written for them.
+Deliberately out of scope for this version (design doc §11): a language model
+at runtime, multiplayer, voice narration, a free-text rule editor, an election
+campaign with promises, and opening the rule builder past four options in any
+field. The last one is a content law rather than a preference — a fifth option
+may only be added alongside a situation that pinches it.
 
 ## A note on writing content
 

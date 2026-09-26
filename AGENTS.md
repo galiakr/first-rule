@@ -175,7 +175,6 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 - [x] Every component has tests, and so does `src/app/page.tsx` — `src/app/__tests__/page.test.tsx` plays the opening chapter through the real screens, which is the only way to check the wiring between engine, content and panels.
 - [x] Coverage thresholds are enforced in `vitest.config.ts` (lines 85, statements 85, functions 80, branches 75), set a little under what the suite reaches. Raise them when they look slack; never lower them to make a red build green.
 - [x] Hebrew and English both ship complete, switchable in place without losing the game. Adding a third language is a CSV column plus its code in `LANGUAGES` — no code change. A language with different word order would still need `rule.sentence` reshaped, which is why that whole sentence is one token.
-- [ ] **The English has still not been read aloud to a child.** It has had a second pass — 133 strings relaxed into contractions, because "does not" is stiff where Hebrew has no equivalent stiffness — but a pass by a model is not the same as hearing an eight-year-old read it. This is the one item that cannot be closed from a keyboard.
 - [ ] A situation's `noRuleOutcome` fires both when the book is empty and when a rule exists but doesn't reach the actor. Copy for it must never claim a rule exists — c4s4 shipped that bug and was caught by playing it through, not by a test, because prose can't be linted.
 
 <!-- BEGIN:nextjs-agent-rules -->
