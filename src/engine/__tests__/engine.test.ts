@@ -6,8 +6,10 @@ import { chapter3 } from "@/content/chapter3";
 import { chapter4 } from "@/content/chapter4";
 import { chapter5 } from "@/content/chapter5";
 import { chapter6 } from "@/content/chapter6";
+import { chapter7 } from "@/content/chapter7";
 import { chapterNotes } from "@/content/notes";
-import { situationsById } from "@/content/situations";
+import { chapters, situationsById } from "@/content/situations";
+import { LANGUAGES } from "@/content/tokens";
 import { actors, actorsWithChild, childActor } from "@/content/village";
 import {
   authorityVariant,
@@ -20,6 +22,15 @@ import {
   variantKeys,
 } from "../authority";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
+import {
+  amendmentTarget,
+  amendmentVariants,
+  applyAmendment,
+  attemptAmendment,
+  demonstrateAmendment,
+  mustAgree,
+  replaceRule,
+} from "../amendment";
 import {
   assignSeparation,
   heldByYou,
@@ -39,7 +50,6 @@ import {
   initialState,
   outcomeFor,
   promptFor,
-  replaceRule,
   resolve,
   saysOverrideNote,
 } from "../game";
@@ -83,6 +93,7 @@ const CHAPTER_3 = chapter3(LANG).situations;
 const CHAPTER_4 = chapter4(LANG).situations;
 const CHAPTER_5 = chapter5(LANG).situations;
 const CHAPTER_6 = chapter6(LANG).situations;
+const CHAPTER_7 = chapter7(LANG).situations;
 const CHAPTER_NOTES = chapterNotes(LANG);
 const SITUATIONS_BY_ID = situationsById(LANG);
 const ACTORS = actors(LANG);
@@ -801,11 +812,12 @@ describe("the notebook holds up", () => {
     CHAPTER_4,
     CHAPTER_5,
     CHAPTER_6,
+    CHAPTER_7,
   ];
 
   it("has exactly one note per built chapter, numbered in order", () => {
     expect(CHAPTER_NOTES).toHaveLength(BUILT_CHAPTERS.length);
-    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(CHAPTER_NOTES.map((n) => n.chapter)).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
 
   it("fills every field — a missing token would surface as its own key", () => {
@@ -1608,5 +1620,316 @@ describe("tearing the arrangement up costs everything", () => {
       }),
     );
     expect(after.rights[rightsKey("halich", "banaim")]).toBe("strained");
+  });
+});
+
+describe("chapter 7 content holds up", () => {
+  it("has four situations and never asks for a rule — the book is closed", () => {
+    expect(CHAPTER_7).toHaveLength(4);
+    for (const s of CHAPTER_7) expect(s.invitesRule, s.id).toBe(false);
+  });
+
+  it("gives every situation an outcome for all four WHAT clauses", () => {
+    for (const s of CHAPTER_7) {
+      for (const what of whatOptions(LANG)) {
+        expect(s.outcomes[what.value], `${s.id} / ${what.value}`).toBeDefined();
+      }
+    }
+  });
+
+  it("finally pinches davar, the one subject that never bit", () => {
+    // c2s2 invites a rule about what was told in confidence, and until this
+    // chapter no later situation used that subject — so a rule written there
+    // could never fire again. §7 says every rule the child can write has at
+    // least one future situation where applying it costs somebody.
+    const invited = [...CHAPTER_1, ...CHAPTER_2, ...CHAPTER_3]
+      .filter((s) => s.invitesRule)
+      .map((s) => s.subject);
+    expect(invited).toContain("davar");
+    expect(CHAPTER_7.some((s) => s.subject === "davar")).toBe(true);
+  });
+
+  it("asks for the amendment at exactly one situation", () => {
+    expect(
+      CHAPTER_7.filter((s) => s.invitesAmendment).map((s) => s.id),
+    ).toEqual(["c7s2"]);
+  });
+
+  it("covers every way the attempt can go, at both situations that live with it", () => {
+    const expected = [
+      "applied-agreed",
+      "applied-author",
+      "delayed",
+      "not-attempted",
+      "refused-no-agreement",
+      "refused-unchangeable",
+    ];
+    expect(Object.keys(CHAPTER_7[1].variantOutcomes ?? {}).sort()).toEqual(
+      expected,
+    );
+    expect(Object.keys(CHAPTER_7[2].variantOutcomes ?? {}).sort()).toEqual(
+      expected,
+    );
+  });
+});
+
+describe("every rule the child can write gets pinched somewhere (§7)", () => {
+  it("has a later situation for every subject a rule can be written about", () => {
+    // The design's central content law, checked across the whole game rather
+    // than within a chapter: writing a rule at situation X must mean some
+    // situation after X can make it fire.
+    const all = [
+      ...CHAPTER_1,
+      ...CHAPTER_2,
+      ...CHAPTER_3,
+      ...CHAPTER_4,
+      ...CHAPTER_5,
+      ...CHAPTER_6,
+      ...CHAPTER_7,
+    ];
+    const unpinched = all
+      .filter((s) => s.invitesRule)
+      .filter((invite) => {
+        const after = all.slice(all.indexOf(invite) + 1);
+        return !after.some((later) => later.subject === invite.subject);
+      })
+      .map((s) => `${s.id} (${s.subject})`);
+    expect(unpinched).toEqual([]);
+  });
+});
+
+describe("the one attempt at changing a rule", () => {
+  const target = rule({ id: "secrets", subject: "davar", what: "forbidden" });
+  const softer: Rule = { ...target, what: "ask-first" };
+
+  function withAmendment(
+    amendment: GameState["amendment"],
+    over: Partial<GameState> = {},
+  ): GameState {
+    return {
+      ...addRule(initialState(7), target),
+      amendment,
+      bookClosed: true,
+      ...over,
+    };
+  }
+
+  it("changes it at once when the child wrote that its author may", () => {
+    const state = withAmendment("author");
+    expect(attemptAmendment(state, target)).toBe("applied");
+    const after = applyAmendment(state, target, softer, "applied", "c7s2");
+    expect(after.rules[0].what).toBe("ask-first");
+    expect(after.amendmentResult).toBe("applied");
+  });
+
+  it("refuses outright when the child wrote that a rule cannot change", () => {
+    const state = withAmendment("cannot");
+    expect(attemptAmendment(state, target)).toBe("refused-unchangeable");
+    const after = applyAmendment(
+      state,
+      target,
+      softer,
+      "refused-unchangeable",
+      "c7s2",
+    );
+    // Stuck, and it stays that way — §13's lean, deliberately with no exit.
+    expect(after.rules[0].what).toBe("forbidden");
+  });
+
+  it("never lets a rewrite change what a rule is about", () => {
+    // §6: the subject is inherited from the situation that produced the
+    // rule, never chosen. A playthrough found a rewrite silently swapping
+    // it, which put two rules about the same thing in the book.
+    const state = withAmendment("author");
+    const wrongSubject: Rule = {
+      ...softer,
+      subject: "mayim",
+      writtenAt: "c1s1",
+    };
+    const after = replaceRule(state, "secrets", wrongSubject);
+    expect(after.rules[0].subject).toBe("davar");
+    expect(after.rules[0].writtenAt).toBe(target.writtenAt);
+    // The four clauses are exactly what a rewrite may change.
+    expect(after.rules[0].what).toBe("ask-first");
+  });
+
+  it("asks the group the situation says has a stake, not just the sourest one", () => {
+    // Most rules name no group, and falling straight through to "whoever
+    // trusts you least" would refuse nearly every time this late in the game.
+    const base = withAmendment("two-agree");
+    const sour: GameState = {
+      ...base,
+      trust: { ...base.trust, banaim: 0, yeladim: 3 },
+    };
+    expect(mustAgree(sour, target, "yeladim")).toBe("yeladim");
+    expect(attemptAmendment(sour, target, "yeladim")).toBe("applied");
+    // Without the authored stakeholder it would have been the sourest group.
+    expect(mustAgree(sour, target)).toBe("banaim");
+  });
+
+  it("names a stakeholder on the situation that asks for the amendment", () => {
+    expect(CHAPTER_7[1].amendmentStakeholder).toBe("yeladim");
+  });
+
+  it("turns on trust when two have to agree", () => {
+    const base = withAmendment("two-agree");
+    const trusting: GameState = {
+      ...base,
+      trust: { ...base.trust, yeladim: 3 },
+    };
+    const rulePointingAtChildren = rule({
+      id: "secrets",
+      subject: "davar",
+      who: { scope: "group", group: "yeladim" },
+    });
+    expect(mustAgree(trusting, rulePointingAtChildren)).toBe("yeladim");
+    expect(attemptAmendment(trusting, rulePointingAtChildren)).toBe("applied");
+
+    const burnt: GameState = { ...base, trust: { ...base.trust, yeladim: 0 } };
+    expect(attemptAmendment(burnt, rulePointingAtChildren)).toBe(
+      "refused-no-agreement",
+    );
+  });
+
+  it("makes the whole village wait exactly one situation", () => {
+    const state = withAmendment("whole-village");
+    expect(attemptAmendment(state, target)).toBe("delayed");
+    const after = applyAmendment(state, target, softer, "delayed", "c7s2");
+    // Not yet: the situation inside the wait is where somebody gets hurt.
+    expect(after.rules[0].what).toBe("forbidden");
+    expect(after.pendingAmendment?.appliesAfter).toBe("c7s2");
+
+    const elsewhere = resolve(after, {
+      situation: s1,
+      governedBy: null,
+      appliedRuleIds: [],
+      overrode: false,
+      kind: "no-rule",
+    });
+    expect(elsewhere.rules[0].what).toBe("forbidden");
+
+    const landed = resolve(after, {
+      situation: CHAPTER_7[1],
+      governedBy: null,
+      appliedRuleIds: [],
+      overrode: false,
+      kind: "no-rule",
+    });
+    expect(landed.rules[0].what).toBe("ask-first");
+    expect(landed.pendingAmendment).toBeNull();
+  });
+
+  it("tells changing it alone apart from having persuaded somebody", () => {
+    const alone = applyAmendment(
+      withAmendment("author"),
+      target,
+      softer,
+      "applied",
+      "c7s2",
+    );
+    const agreed = applyAmendment(
+      withAmendment("two-agree"),
+      target,
+      softer,
+      "applied",
+      "c7s2",
+    );
+    expect(amendmentVariants(alone)[0]).toBe("applied-author");
+    expect(amendmentVariants(agreed)[0]).toBe("applied-agreed");
+    expect(amendmentVariants(withAmendment("author"))).toEqual([
+      "not-attempted",
+    ]);
+  });
+
+  it("aims at the rule that just bit the child, not at any rule", () => {
+    let state = withAmendment("author");
+    state = addRule(state, rule({ id: "other", subject: "mayim" }));
+    state = resolve(state, {
+      situation: CHAPTER_7[0],
+      governedBy: "forbidden",
+      appliedRuleIds: ["secrets"],
+      overrode: false,
+      kind: "applied-rule",
+    });
+    expect(amendmentTarget(state, "c7s1")?.id).toBe("secrets");
+  });
+
+  it("falls back to the oldest rule when nothing bit, and to none when the book is empty", () => {
+    const state = withAmendment("author");
+    expect(amendmentTarget(state, "c7s1")?.id).toBe("secrets");
+    expect(amendmentTarget(initialState(7), "c7s1")).toBeNull();
+  });
+
+  it("lets somebody else use the same power, on the oldest other rule", () => {
+    // "Whoever wrote it may change it" means anyone can, and the chapter
+    // shows that rather than saying it.
+    let state = withAmendment("author");
+    state = addRule(state, rule({ id: "other", subject: "mayim" }));
+    const after = demonstrateAmendment(state, "secrets");
+    expect(after.rules.find((r) => r.id === "other")?.what).toBe("forbidden");
+    expect(after.rules.find((r) => r.id === "secrets")?.what).toBe("forbidden");
+  });
+
+  it("asks only once, however it went", () => {
+    const c7s2 = CHAPTER_7[1];
+    const fresh = withAmendment("cannot");
+    expect(
+      promptFor(fresh, c7s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).toBe("amend");
+
+    const done = applyAmendment(
+      fresh,
+      target,
+      softer,
+      "refused-unchangeable",
+      "c7s2",
+    );
+    expect(
+      promptFor(done, c7s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
+    ).not.toBe("amend");
+  });
+});
+
+describe("the whole game runs end to end", () => {
+  it("plays all seven chapters through without rendering anything", () => {
+    // The engine is React-free by design; this is the proof, and it is also
+    // the one test that would catch a chapter wiring itself into a dead end.
+    let state = initialState();
+    let resolved = 0;
+
+    for (const chapter of chapters(LANG)) {
+      for (const situation of chapter.situations) {
+        const prompt = promptFor(
+          state,
+          situation,
+          ACTORS_WITH_CHILD,
+          SITUATIONS_BY_ID,
+        );
+        expect(prompt.situation.id).toBe(situation.id);
+
+        // Whatever is asked, take the plainest answer and keep going.
+        state = resolve(state, {
+          situation,
+          governedBy:
+            prompt.kind === "rule-applies" ? prompt.rules[0].what : null,
+          appliedRuleIds:
+            prompt.kind === "rule-applies" ? prompt.rules.map((r) => r.id) : [],
+          overrode: false,
+          kind: resolutionKind(prompt.kind, { overrode: false, wrote: false }),
+        });
+        resolved += 1;
+
+        // Every situation must yield an outcome, in every language.
+        for (const lang of LANGUAGES) {
+          const text = outcomeFor(situation, null, false, []).text;
+          expect(text.length, `${situation.id} / ${lang}`).toBeGreaterThan(0);
+        }
+      }
+      state = advanceChapter(state);
+    }
+
+    expect(resolved).toBe(28);
+    expect(state.log).toHaveLength(28);
+    expect(state.precedents).toHaveLength(28);
   });
 });

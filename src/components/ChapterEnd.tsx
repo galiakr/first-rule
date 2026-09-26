@@ -15,9 +15,16 @@ import type { GameState } from "@/engine/types";
 export default function ChapterEnd({
   state,
   epilogue,
+  finale,
   onContinue,
 }: {
   state: GameState;
+  /**
+   * The end of the last chapter (§10). No victory and no score — the book,
+   * who holds each of the three jobs, and what it cost the child to change
+   * something in it. Nothing else, and nothing summarising the whole game.
+   */
+  finale?: boolean;
   /** The chapter's closing idea, named in words. Not every chapter has one. */
   epilogue?: string;
   /** Present when there's a next chapter to move to; absent at the last built one. */
@@ -39,7 +46,7 @@ export default function ChapterEnd({
           {t("chapter_end.subtitle", { chapter: state.chapter })}
         </p>
         <h2 className="font-book text-3xl leading-tight">
-          {t("chapter_end.title")}
+          {finale ? t("ending.heading") : t("chapter_end.title")}
         </h2>
       </header>
 
@@ -132,6 +139,15 @@ export default function ChapterEnd({
         </section>
       ) : null}
 
+      {finale ? (
+        <section className="space-y-2">
+          <h3 className="font-book text-xl">{t("ending.cost_heading")}</h3>
+          <p className="leading-relaxed">
+            {t(`ending.cost.${state.amendmentResult ?? "not-attempted"}`)}
+          </p>
+        </section>
+      ) : null}
+
       {epilogue ? (
         <section className="border-t border-moss pt-6">
           <p className="max-w-read border-s-2 border-lamp pe-4 ps-3 text-lg leading-relaxed">
@@ -152,7 +168,7 @@ export default function ChapterEnd({
         </div>
       ) : (
         <p className="max-w-read border-t border-moss pt-6 text-quiet">
-          {t("chapter_end.closing_note")}
+          {finale ? t("ending.close") : t("chapter_end.closing_note")}
         </p>
       )}
     </div>

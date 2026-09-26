@@ -3,6 +3,7 @@
  * of chapter 1 can be played through in a test without rendering anything.
  */
 
+import { applyPendingAmendment } from "./amendment";
 import { fieldCollision } from "./conflict";
 import { applicableRules } from "./match";
 import { traitDifferences, traitsMatch } from "./precedent";
@@ -41,6 +42,8 @@ export function initialState(chapter = 1): GameState {
     amendment: null,
     bookClosed: false,
     separation: null,
+    pendingAmendment: null,
+    amendmentResult: null,
   };
 }
 
@@ -60,6 +63,7 @@ export type Prompt =
     }
   | { kind: "rule-applies"; situation: Situation; rules: Rule[] }
   | { kind: "write-authority"; situation: Situation }
+  | { kind: "amend"; situation: Situation }
   | {
       kind: "collision";
       situation: Situation;
@@ -95,6 +99,13 @@ export function promptFor(
   // fire on the same scene (§9.5).
   if (situation.invitesAuthority && !state.authority) {
     return { kind: "write-authority", situation };
+  }
+
+  // The one attempt at changing a rule (§9.7). Like the authority question,
+  // it comes before everything else — an ordinary rule firing on the scene
+  // is not what the scene is about.
+  if (situation.invitesAmendment && state.amendmentResult === null) {
+    return { kind: "amend", situation };
   }
 
   const collision = fieldCollision(state.rules, situation, actors);
@@ -174,6 +185,9 @@ export function resolutionKind(
       return decision.wrote ? "wrote-rule" : "no-rule";
     case "write-authority":
       return decision.wrote ? "wrote-authority" : "no-rule";
+    // Changing a rule is legislating, when it works at all.
+    case "amend":
+      return decision.wrote ? "wrote-rule" : "no-rule";
     case "rule-applies":
       return decision.overrode ? "overrode" : "applied-rule";
     case "precedent-reminder":
@@ -252,7 +266,7 @@ export function resolve(state: GameState, resolution: Resolution): GameState {
     essentialTraits: null,
   };
 
-  return {
+  const next: GameState = {
     ...state,
     cursor: state.cursor + 1,
     rights: applyRights(state.rights, outcome.rights),
@@ -272,28 +286,14 @@ export function resolve(state: GameState, resolution: Resolution): GameState {
     sawOverrideNote:
       state.sawOverrideNote || saysOverrideNote(state, resolution.overrode),
   };
+
+  // A change the whole village agreed to lands once the situation it was
+  // waiting on is behind them (§9.7). The wait is the cost of that form.
+  return applyPendingAmendment(next, resolution.situation.id);
 }
 
 export function addRule(state: GameState, rule: Rule): GameState {
   return { ...state, rules: [...state.rules, rule] };
-}
-
-/**
- * Swaps one rule for a rewritten version, in place (§10 — the child may
- * change exactly one rule as the book closes). Order and length are kept, so
- * the book still reads as the history of what was decided and when.
- */
-export function replaceRule(
-  state: GameState,
-  ruleId: string,
-  next: Rule,
-): GameState {
-  return {
-    ...state,
-    rules: state.rules.map((r) =>
-      r.id === ruleId ? { ...next, id: r.id } : r,
-    ),
-  };
 }
 
 /**

@@ -7,6 +7,14 @@
     "title": "The village, before you step in",
     "village_text": "A small village, with no wall and no gate. Six groups live here — except one, which only passes through — and each of them is bothered by something different."
   },
+  "amend": {
+    "empty_book": "There's not a single rule in the book. You wrote none, so there's nothing to change now — and that was a choice too, at every moment when you could have written one.",
+    "heading": "Changing What's Already Written",
+    "intro": "This is the rule. You wrote it, and since then it's been in the book like everything else.",
+    "leave": "Leave it as it is",
+    "rule_says": "And what you wrote about changing rules says:",
+    "start": "Try to change it"
+  },
   "app": {
     "chapter_progress": "Chapter {chapter} · Situation {n} of {total}",
     "decide": {
@@ -492,6 +500,56 @@
     "intro": "The book is closed. No lines can be added to it, and none can be taken out. What's left is what gets done with it every day — and that, it turns out, is not one thing but three.",
     "title": "The Book Is Done — Who Guards It"
   },
+  "chapter7": {
+    "c7s1": {
+      "lesson": "You wrote this rule when somebody else passed on somebody else's secret, and it looked simple then. It hasn't changed since. Only the case it landed on has.",
+      "no_rule_outcome": "There's no rule about things told in confidence. You tell Michal, she speaks to a couple of others, and by the end of the week someone offers Shira's family work on a build. Shira didn't thank you, and she didn't ask you to tell either.",
+      "outcomes": {
+        "ask_first": "Your rule requires asking first. You ask Shira whether you may tell, and she says no — she doesn't want to be pitied. You don't tell. Nobody offers anything, because nobody knows.",
+        "by_turn": "Your rule sets turns over things that were told, which doesn't really fit a secret. You tell one person, because that's what the turn came out as. He isn't the person who could have helped.",
+        "forbidden": "Your rule forbids repeating anything told in confidence, absolutely. You tell nobody. Two weeks pass, and nobody offers Shira's family anything, because nobody knows there's anything to offer. That rule was written to protect somebody, and today it did exactly the opposite.",
+        "share_equally": "Your rule says what's told gets shared equally, so by evening the whole village knows. Somebody does offer work. Shira doesn't speak to you for three days, and you're not sure it wasn't worth it."
+      },
+      "override_outcome": "You decided not to apply your own rule to yourself this time. You tell, and the help arrives. Shira knows you told, and she also knows the rule forbidding it is yours.",
+      "text": "Shira told you yesterday, only you, that her family isn't managing and they're thinking of leaving before winter. She asked you not to tell. This morning you realise that if nobody in the village knows, nobody will offer them anything, and they really will go. They can be helped. It only takes telling someone. The rule about what's said in confidence is one you wrote, five chapters ago, when Dana passed on what Yotam had said to her.",
+      "title": "What Shira Told You"
+    },
+    "c7s2": {
+      "lesson": "When you wrote the amendment rule you didn't know who it would end up serving. Today you know, and it can no longer be adjusted to suit you — because it applies to itself too.",
+      "text": "You want to change the rule. You can't simply delete it — the book is closed, and written in it is exactly how a rule gets changed. You wrote that line at the end of chapter 5, before you knew you'd be the one who needed it.",
+      "title": "The Door You Wrote Yourself",
+      "variant": {
+        "applied_agreed": "You wrote that two people have to agree. You went to explain, they explained back, and in the end they agreed with you — not because of who you are, but because what you said was convincing. The change goes into the book with somebody else's name beside it.",
+        "applied_author": "You wrote that whoever writes a rule may change it, and this rule you wrote. The change takes a second and a half. Nobody objects, because there's nothing to object with. Afterwards Yotam goes to the book, finds an old rule he wrote himself a long time ago, and changes it to a harder version — in the same second and a half, by exactly the same right. “Just so you know it works this way too,” he says, without smiling.",
+        "delayed": "You wrote that the whole village has to agree, so the village convenes. It takes time. People ask good questions, and one of them is why this is coming up now of all times. In the end they agree, and the change takes effect tomorrow. Until tomorrow, the old rule is still the rule.",
+        "left_alone": "You didn't try. The rule stays exactly as it is, and that's a decision like any other — just one nobody will see, because nothing happened.",
+        "refused_no_agreement": "You wrote that two people have to agree, and the person who has to agree is precisely the one this rule protects. He heard you out and said no. It isn't an argument you can win by insisting — you wrote yourself that his agreement is required.",
+        "refused_unchangeable": "You wrote that a rule once written cannot be changed. There's no door. There's nobody to persuade and nobody to appeal to, because you wrote that there isn't. The rule stays exactly as it is, and that is how it will stay."
+      }
+    },
+    "c7s3": {
+      "lesson": "A good rule isn't one that's always comfortable to live with. It's one you're willing to live with the time it isn't in your favour — and there's no way to know that until it's happened.",
+      "text": "A few days pass, and something similar happens again: somebody tells you something they're telling nobody else. Exactly the same kind of moment, and this time you already know what the book says about it.",
+      "title": "And How It Feels Now",
+      "variant": {
+        "applied_agreed": "The rule works differently now, and you aren't the only one standing behind it. When people ask why it changed, there are two people who can answer, and one of them isn't you. It took longer, and it holds better.",
+        "applied_author": "Your rule now works the way you wanted, and it really is better. The rule Yotam changed now works the way he wanted, and it isn't. Both changes were made in exactly the same way, and there's nothing in the book that tells them apart — because you wrote that there needn't be.",
+        "delayed": "The change has been agreed, and it isn't in force yet. This case falls exactly inside that one day, so it's settled by the old rule. The person it costs did nothing except arrive a single day too early.",
+        "not_attempted": "The rule lands on you again, exactly as before. You didn't try to change it, so it simply goes on being what it is.",
+        "refused_no_agreement": "The rule didn't change, and it lands on you again, exactly as before. You tried and didn't succeed, and that's the end of it. That rule will stay in the book long after you've forgotten why you wrote it.",
+        "refused_unchangeable": "The rule lands on you again, and there's no door. It will land on you next time too, and the time after. You wrote it when it was easy, and you also wrote that it can't be changed — and that's how it stays, to the end."
+      }
+    },
+    "c7s4": {
+      "lesson": "In the first chapter people came to you because there was nothing else to come to. Today nobody came to you, because there is. That's the whole difference, and it took seven chapters.",
+      "outcome": "They sort it out. Not because anyone ruled, but because it was written, and even when they didn't agree on what was right they agreed on what was written. It takes about forty seconds and nobody will remember it tomorrow.",
+      "text": "Michal and Barak disagree about something small by the well. They argue for a minute, and then one of them says “hang on” and goes to look in the book. They read, they agree on what it says, and they get on with their day. You're standing far enough away to see it and not close enough for anyone to turn to you. Nobody turned to you.",
+      "title": "An Ordinary Morning"
+    },
+    "epilogue": "The amendment rule was written at the end of chapter 5, when you didn't yet know who would need it. That is exactly the point. A constitution is a promise you make to your future self, before you know what you'll want then — which is why it's worth something only when it's inconvenient. If you were writing it today, having seen what's standing in your way, you'd write something else. That's the reason it isn't written today.",
+    "intro": "The book is closed, the rules are written, and who guards them is already settled. Only one thing hasn't been tested: what happens when the rule in the way is yours, and you're the one who wants it different.",
+    "title": "Changing What's Already Written"
+  },
   "chapter_end": {
     "closing_note": "This is as far as the story has been written. The rules you wrote and the precedents you set stay in the book, and they will go on applying — including when they do not suit you.",
     "continue": "Continue to the next chapter",
@@ -557,6 +615,20 @@
     "lost": "From today Yotam is the one who decides. The rules in the book are still your rules — it's just that from now on somebody else applies them.",
     "none": "Nobody",
     "won": "You are still the one who decides. Now it's written down, instead of just happening."
+  },
+  "ending": {
+    "book_heading": "The book",
+    "close": "And that's it. The village carries on.",
+    "cost": {
+      "applied_agreed": "You changed a rule, and had to convince somebody who wasn't obliged to agree.",
+      "applied_author": "You changed a rule in a second, and learned in the same second that anyone else can do exactly the same.",
+      "delayed": "You changed a rule, after the whole village agreed and after somebody paid for the wait.",
+      "not_attempted": "You didn't try to change anything, so there's nothing to record here.",
+      "refused_no_agreement": "You tried to change a rule and they didn't agree with you. It's still in the book.",
+      "refused_unchangeable": "You wanted to change a rule and found that you'd written that it can't be done. It stays as it is."
+    },
+    "cost_heading": "What changing something cost you",
+    "heading": "This Is the Village"
   },
   "moments": {
     "continue": "Three jobs",
@@ -624,6 +696,14 @@
       "q2": "At home, who decides the rules, who decides whether a rule was broken, and who makes sure something happens? Is it the same person?",
       "q3": "If you could tear the arrangement up at any moment — was it ever really an arrangement?",
       "what_happened": "The game showed you three moments from your own game: a time you wrote a rule, a time you settled a case by what was already written, and a time you made sure something actually happened. You'd been doing all three from the start without knowing they were three. Then you split them up — or didn't — and then a case arrived in which you were a party."
+    },
+    "c7": {
+      "concept": "A constitution is a promise to your future self",
+      "grown_up": "A constitution, and amending one. The reason a constitution is hard to change isn't that somebody wanted to make things complicated: it's that it gets written behind a veil, before anyone knows who it will end up serving, and if it could be changed every time it was inconvenient it would protect nobody at any moment when that mattered.",
+      "q1": "If you were writing the amendment rule today, after all this — would you write it differently? And why is that exactly what makes it a problem?",
+      "q2": "A rule you wrote to protect somebody kept help from somebody else. Is it even possible to write a rule this never happens to?",
+      "q3": "Which was easier: changing the rule, or living with it? And which of those was more right?",
+      "what_happened": "A rule you wrote to protect somebody stopped you from helping somebody. You wanted to change it, and you couldn't simply delete it — you went through the path you set yourself at the end of chapter 5, when you didn't yet know you'd be the one who needed it."
     },
     "close_aria": "Close the notebook",
     "empty": "The notebook is still empty. The first chapter will open here when you finish it.",

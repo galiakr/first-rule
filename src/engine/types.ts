@@ -213,8 +213,43 @@ export interface Situation {
    * it, there is nothing to revoke.
    */
   offersRevoke?: boolean;
+  /**
+   * This situation is the child's one attempt at changing a rule (§9.7).
+   * What happens is decided by the amendment rule they wrote at the end of
+   * chapter 5, not by anything here.
+   */
+  invitesAmendment?: boolean;
+  /**
+   * Whose agreement the child needs, if their amendment rule says two people
+   * must agree (§9.7). Authored because it depends on whom the rule at issue
+   * actually protects, which the engine cannot see.
+   */
+  amendmentStakeholder?: GroupId;
   /** Said after the outcome — the concept, named only now (§2). */
   lesson: string;
+}
+
+/* ---- changing what's already written (§9.7) ---- */
+
+/**
+ * What happened when the child tried to change a rule.
+ *
+ * Every one of these is the amendment rule they wrote at the end of chapter 5
+ * doing exactly what it says — written behind a veil, before they knew they
+ * would be the one who wanted something changed.
+ */
+export type AmendmentResult =
+  | "applied" // whoever wrote it may change it, and they did
+  | "delayed" // the whole village has to agree; it takes until tomorrow
+  | "refused-no-agreement" // two must agree, and the other one won't
+  | "refused-unchangeable"; // they wrote that a rule cannot be changed
+
+/** A change the whole village agreed to, which lands one situation later. */
+export interface PendingAmendment {
+  ruleId: string;
+  next: Rule;
+  /** The situation after which it takes effect. */
+  appliesAfter: string;
 }
 
 /* ---- the three jobs (§9.6) ---- */
@@ -386,4 +421,20 @@ export interface GameState {
    * the arrangement, which costs them everything they built (§9.6).
    */
   separation: Separation | null;
+
+  /* ---- chapter 7 ---- */
+
+  /**
+   * A change the whole village agreed to but that has not landed yet (§9.7).
+   * Applied by `resolve()` once the named situation is behind them — the
+   * delay is the point, and someone is hurt inside it.
+   */
+  pendingAmendment: PendingAmendment | null;
+  /**
+   * What came of the child's one attempt at changing a rule. Null until they
+   * try — recorded rather than re-derived, because "the whole village agreed
+   * and it has now landed" and "nobody agreed" both end with no pending
+   * change and must not read the same.
+   */
+  amendmentResult: AmendmentResult | null;
 }
