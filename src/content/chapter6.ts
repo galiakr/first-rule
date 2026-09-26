@@ -1,5 +1,5 @@
 /**
- * פרק 6 — הספר גמור, מי שומר עליו.
+ * Chapter 6 — "הספר גמור, מי שומר עליו" (The Book Is Done, Who Guards It).
  *
  * Design doc §9.6. The book is closed, so nothing here invites a rule; what's
  * left is what gets done with it, which turns out to be three jobs rather
@@ -13,7 +13,7 @@
  *   c6s1 — you-judge / other-judges
  *   c6s2 — you-enforce / other-enforces
  *   c6s3 — kept-together / split. The pinch: the child judges their own case
- *          under a rule they wrote, and מיכל names it without accusing.
+ *          under a rule they wrote, and Michal names it without accusing.
  *   c6s4 — kept-together / split, plus a `revoked` variant reachable only by
  *          choosing to tear the arrangement up (§9.6: "loses everything he
  *          built"). The cost of that is computed in revokeSeparation, since
@@ -43,10 +43,10 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c6s1",
       chapter: 6,
-      speakerGroup: "roim",
+      speakerGroup: "shepherds",
       title: t("chapter6.c6s1.title"),
       text: t("chapter6.c6s1.text"),
-      subject: "shetach",
+      subject: "land",
       act: "blocked",
       justification: "nobody-said-no",
       power: "equal",
@@ -61,14 +61,14 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
         "you-judge": {
           text: t("chapter6.c6s1.variant.you_judge"),
           rights: [],
-          trust: [{ group: "roim", delta: 1 }],
+          trust: [{ group: "shepherds", delta: 1 }],
         },
         "other-judges": {
           text: t("chapter6.c6s1.variant.other_judges"),
           rights: [],
           trust: [
-            { group: "roim", delta: 1 },
-            { group: "hadashim", delta: 1 },
+            { group: "shepherds", delta: 1 },
+            { group: "newcomers", delta: 1 },
           ],
         },
       },
@@ -91,10 +91,10 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c6s2",
       chapter: 6,
-      speakerGroup: "yeladim",
+      speakerGroup: "children",
       title: t("chapter6.c6s2.title"),
       text: t("chapter6.c6s2.text"),
-      subject: "mayim",
+      subject: "water",
       act: "took-without-asking",
       justification: "needed-more",
       power: "victim-weaker",
@@ -110,14 +110,16 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
           text: t("chapter6.c6s2.variant.you_enforce"),
           rights: [],
           trust: [
-            { group: "yeladim", delta: -1 },
-            { group: "vatikim", delta: 1 },
+            { group: "children", delta: -1 },
+            { group: "old-timers", delta: 1 },
           ],
         },
         "other-enforces": {
           text: t("chapter6.c6s2.variant.other_enforces"),
-          rights: [{ protection: "halich", group: "yeladim", move: "strain" }],
-          trust: [{ group: "yeladim", delta: -1 }],
+          rights: [
+            { protection: "fair-hearing", group: "children", move: "strain" },
+          ],
+          trust: [{ group: "children", delta: -1 }],
         },
       },
       noRuleOutcome: {
@@ -139,10 +141,10 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c6s3",
       chapter: 6,
-      speakerGroup: "banaim",
+      speakerGroup: "builders",
       title: t("chapter6.c6s3.title"),
       text: t("chapter6.c6s3.text"),
-      subject: "chefetz",
+      subject: "things",
       act: "took-without-asking",
       justification: "was-mine-first",
       power: "equal",
@@ -154,23 +156,23 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
       invitesRule: false,
       lesson: t("chapter6.c6s3.lesson"),
       // The pinch. Keeping both writing and judging means ruling on your own
-      // case under your own rule, and מיכל names it — without accusing,
+      // case under your own rule, and Michal names it — without accusing,
       // because §2 forbids the game telling the child they were wrong.
       variantOutcomes: {
         "kept-together": {
           text: t("chapter6.c6s3.variant.kept_together"),
           rights: [
-            { protection: "halich", group: "banaim", move: "strain" },
-            { protection: "shivyon", group: "banaim", move: "strain" },
+            { protection: "fair-hearing", group: "builders", move: "strain" },
+            { protection: "equality", group: "builders", move: "strain" },
           ],
-          trust: [{ group: "banaim", delta: -1 }],
+          trust: [{ group: "builders", delta: -1 }],
         },
         split: {
           text: t("chapter6.c6s3.variant.split"),
           rights: [],
           trust: [
-            { group: "banaim", delta: 1 },
-            { group: "hadashim", delta: 1 },
+            { group: "builders", delta: 1 },
+            { group: "newcomers", delta: 1 },
           ],
         },
       },
@@ -193,10 +195,10 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c6s4",
       chapter: 6,
-      speakerGroup: "hadashim",
+      speakerGroup: "newcomers",
       title: t("chapter6.c6s4.title"),
       text: t("chapter6.c6s4.text"),
-      subject: "chefetz",
+      subject: "things",
       act: "refused-to-share",
       justification: "was-mine-first",
       power: "equal",
@@ -223,15 +225,15 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
           text: t("chapter6.c6s4.variant.split"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "banaim", delta: 1 },
-            { group: "vatikim", delta: 1 },
+            { group: "newcomers", delta: 1 },
+            { group: "builders", delta: 1 },
+            { group: "old-timers", delta: 1 },
           ],
         },
         "kept-together": {
           text: t("chapter6.c6s4.variant.kept_together"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
       },
       noRuleOutcome: {

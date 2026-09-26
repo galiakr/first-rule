@@ -63,13 +63,13 @@ These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test h
 - **Rights are states, not points** — `intact` / `strained` / `broken`, always attached to a named group. A strain never quietly heals a break.
 - **Trust is never shown as a number** — it only surfaces through which of three ways a group approaches the child (`comes-to-you` / `comes-but` / `stops-coming`).
 - **The rule book is open the whole game**; the rights board is only revealed at the end of a chapter (§10) — don't leak rights state into the always-visible book.
-- **The notebook names a concept only after its chapter is finished** (§2: felt first, named afterwards). `src/content/notes.ts` holds one note per chapter, and it is the only place in the game that uses adult vocabulary ("תקדים", "שלטון החוק") — never put those words into playable chapter content.
+- **The notebook names a concept only after its chapter is finished** (§2: felt first, named afterwards). `src/content/notes.ts` holds one note per chapter, and it is the only place in the game that uses adult vocabulary ("תקדים" — precedent, "שלטון החוק" — the rule of law) — never put those words into playable chapter content.
 - **Never run a blanket regex over the copy.** A contraction pass across the English column turned "when keeping it is inconvenient" into "when keeping it's inconvenient" in two places — "it" was an object, not a subject. Prose edits need reading, not matching.
 - **A situation's subject is inherited, never chosen** — this is what makes rules land narrower than the child expects, on purpose. `replaceRule` enforces it: rewriting a rule may change its four clauses and nothing else, not its subject and not where it came from.
 - **Every resolution records which of the three jobs it was** (`LogEntry.kind`, via `resolutionKind`). Chapter 6 replays these moments back to the child by name, so a mislabelled one puts the wrong word on something they did. `resolve()` requires it deliberately — a new call site has to say what kind of moment it is rather than defaulting to a wrong one.
 - **The book is closed after chapter 5** (§10). `canWriteRules()` collapses any later write-rule prompt to no-rule; don't work around it.
 - **The amendment rule is written behind a veil** (§10) — the child writes it in chapter 5 without knowing chapter 7 will make them want to change something. Nothing in `BookClosing` may hint at that; the veil is the point.
-- **`ovrim` never speaks** (§4: "אין להם קול בכלל"). No situation may set `speakerGroup: "ovrim"` — someone else always reports what a passer-through did or had done to them. Their trust still moves; it matters for Chapter 5's election. Pinned by a content test.
+- **`passers-through` never speaks** (§4: "אין להם קול בכלל" — they have no voice at all). No situation may set `speakerGroup: "passers-through"` — someone else always reports what a passer-through did or had done to them. Their trust still moves; it matters for Chapter 5's election. Pinned by a content test.
 
 ## What to avoid
 

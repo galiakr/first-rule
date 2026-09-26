@@ -21,13 +21,13 @@ describe("LinkedText", () => {
   });
 
   it("still finds the name when a Hebrew prefix is glued to it", () => {
-    // "לשירה" = "to שירה" — Hebrew prepositions attach with no space.
+    // "Shira" = "to Shira" — Hebrew prepositions attach with no space.
     renderWithLanguage(<LinkedText text="זה לא חל על לשירה הפעם." />);
     expect(screen.getByLabelText(/^שירה —/)).toBeInTheDocument();
   });
 
   it("shows every group a character belongs to", () => {
-    // שירה is both a child and a shepherd (design doc §4).
+    // Shira is both a child and a shepherd (design doc §4).
     renderWithLanguage(<LinkedText text="שירה מחכה." />);
     const trigger = screen.getByLabelText(/^שירה —/);
     expect(trigger.getAttribute("aria-label")).toContain("הילדים");
@@ -49,7 +49,7 @@ describe("LinkedText", () => {
       "הבאר של יותם הכי קרובה. אין זמן לחפש אותו ולשאול. אתה ממלא דלי ורץ הלאה.";
     renderWithLanguage(<LinkedText text={text} />);
     expect(screen.queryByLabelText(/^אתה —/)).not.toBeInTheDocument();
-    // יותם, the one real character mentioned, is still linkified normally.
+    // Yotam, the one real character mentioned, is still linkified normally.
     expect(screen.getByLabelText(/^יותם —/)).toBeInTheDocument();
   });
 });

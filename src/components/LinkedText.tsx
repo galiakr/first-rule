@@ -11,7 +11,7 @@ function escapeRegExp(value: string): string {
 }
 
 // Hebrew prepositions/conjunctions attach directly to the next word with no
-// space (e.g. "לשירה" = "to שירה"), so this matches the name as a plain
+// space (e.g. "Shira" = "to Shira"), so this matches the name as a plain
 // substring rather than requiring a word boundary — \b doesn't know Hebrew
 // letters are word characters anyway. The prefix stays as plain text before
 // the highlighted name. English names match the same way.

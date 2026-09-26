@@ -1,5 +1,5 @@
 /**
- * מחברת המושגים — the notebook.
+ * The notebook — "מחברת המושגים".
  *
  * One note per chapter, naming the thing that chapter was actually about.
  * Deliberately separate from the chapter content itself: §2's rule is that
@@ -9,7 +9,7 @@
  * chapter title and nothing else.
  *
  * `grownUp` is the one place in the game that uses adult vocabulary —
- * "שלטון החוק", "תקדים", "שוויון בפני החוק". It exists so the idea can be
+ * "שלטון החוק" (rule of law), "תקדים" (precedent). It exists so the idea can be
  * looked up and talked about later, not so the game can teach it in those
  * words; nothing in the playable chapters ever says them.
  *

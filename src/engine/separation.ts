@@ -126,7 +126,11 @@ export function revokeSeparation(state: GameState): GameState {
     rights:
       judge?.kind === "group"
         ? applyRights(state.rights, [
-            { protection: "halich", group: judge.groupId, move: "strain" },
+            {
+              protection: "fair-hearing",
+              group: judge.groupId,
+              move: "strain",
+            },
           ])
         : state.rights,
   };

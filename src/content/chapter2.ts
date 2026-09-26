@@ -1,13 +1,13 @@
 /**
- * פרק 2 — זה כבר קרה.
+ * Chapter 2 — "זה כבר קרה" (This Already Happened).
  *
  * Situations 1–2 are fresh cases (§9) that introduce subjects untouched by
- * Chapter 1 — chefetz (a personal object) and davar (something told in
+ * Chapter 1 — things (a personal object) and confidence (something told in
  * confidence) — and invite new rules. Situations 3–4 are both subject
- * shetach (land), untouched by any rule anywhere in the game so far, on
+ * land (land), untouched by any rule anywhere in the game so far, on
  * purpose: it guarantees the precedent path in game.ts's promptFor is
  * actually reachable regardless of what the child wrote in Chapter 1 (a
- * mayim rule almost always exists by now and would otherwise shadow it).
+ * water rule almost always exists by now and would otherwise shadow it).
  *
  * c2s3 and c2s4 both set precedentOf: "c1s2" — the SAME source situation —
  * not a chain. c2s3 is where the child is first asked what determined their
@@ -28,9 +28,9 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       id: "c2s1",
       chapter: 2,
       title: t("chapter2.c2s1.title"),
-      speakerGroup: "hadashim",
+      speakerGroup: "newcomers",
       text: t("chapter2.c2s1.text"),
-      subject: "chefetz",
+      subject: "things",
       act: "took-without-asking",
       justification: "meant-to-return",
       power: "victim-weaker",
@@ -43,45 +43,51 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       lesson: t("chapter2.c2s1.lesson"),
       noRuleOutcome: {
         text: t("chapter2.c2s1.no_rule_outcome"),
-        rights: [{ protection: "kinyan", group: "hadashim", move: "strain" }],
-        trust: [{ group: "hadashim", delta: -1 }],
+        rights: [
+          { protection: "property", group: "newcomers", move: "strain" },
+        ],
+        trust: [{ group: "newcomers", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter2.c2s1.override_outcome"),
-        rights: [{ protection: "shivyon", group: "hadashim", move: "strain" }],
-        trust: [{ group: "hadashim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "newcomers", move: "strain" },
+        ],
+        trust: [{ group: "newcomers", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter2.c2s1.outcomes.ask_first"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "banaim", delta: 0 },
+            { group: "newcomers", delta: 1 },
+            { group: "builders", delta: 0 },
           ],
         },
         forbidden: {
           text: t("chapter2.c2s1.outcomes.forbidden"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "banaim", delta: -1 },
+            { group: "newcomers", delta: 1 },
+            { group: "builders", delta: -1 },
           ],
         },
         "by-turn": {
           text: t("chapter2.c2s1.outcomes.by_turn"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 0 },
-            { group: "banaim", delta: 0 },
+            { group: "newcomers", delta: 0 },
+            { group: "builders", delta: 0 },
           ],
         },
         "share-equally": {
           text: t("chapter2.c2s1.outcomes.share_equally"),
-          rights: [{ protection: "kinyan", group: "hadashim", move: "strain" }],
+          rights: [
+            { protection: "property", group: "newcomers", move: "strain" },
+          ],
           trust: [
-            { group: "hadashim", delta: -1 },
-            { group: "banaim", delta: 1 },
+            { group: "newcomers", delta: -1 },
+            { group: "builders", delta: 1 },
           ],
         },
       },
@@ -91,9 +97,9 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       id: "c2s2",
       chapter: 2,
       title: t("chapter2.c2s2.title"),
-      speakerGroup: "vatikim",
+      speakerGroup: "old-timers",
       text: t("chapter2.c2s2.text"),
-      subject: "davar",
+      subject: "confidence",
       act: "told-what-was-private",
       justification: "everyone-does-it",
       power: "equal",
@@ -106,45 +112,51 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       lesson: t("chapter2.c2s2.lesson"),
       noRuleOutcome: {
         text: t("chapter2.c2s2.no_rule_outcome"),
-        rights: [{ protection: "bitui", group: "vatikim", move: "strain" }],
-        trust: [{ group: "vatikim", delta: -1 }],
+        rights: [
+          { protection: "expression", group: "old-timers", move: "strain" },
+        ],
+        trust: [{ group: "old-timers", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter2.c2s2.override_outcome"),
-        rights: [{ protection: "shivyon", group: "vatikim", move: "strain" }],
-        trust: [{ group: "vatikim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "old-timers", move: "strain" },
+        ],
+        trust: [{ group: "old-timers", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter2.c2s2.outcomes.ask_first"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 1 },
-            { group: "roim", delta: 0 },
+            { group: "old-timers", delta: 1 },
+            { group: "shepherds", delta: 0 },
           ],
         },
         forbidden: {
           text: t("chapter2.c2s2.outcomes.forbidden"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 1 },
-            { group: "roim", delta: -1 },
+            { group: "old-timers", delta: 1 },
+            { group: "shepherds", delta: -1 },
           ],
         },
         "by-turn": {
           text: t("chapter2.c2s2.outcomes.by_turn"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 0 },
-            { group: "roim", delta: 0 },
+            { group: "old-timers", delta: 0 },
+            { group: "shepherds", delta: 0 },
           ],
         },
         "share-equally": {
           text: t("chapter2.c2s2.outcomes.share_equally"),
-          rights: [{ protection: "bitui", group: "vatikim", move: "strain" }],
+          rights: [
+            { protection: "expression", group: "old-timers", move: "strain" },
+          ],
           trust: [
-            { group: "vatikim", delta: -1 },
-            { group: "roim", delta: 1 },
+            { group: "old-timers", delta: -1 },
+            { group: "shepherds", delta: 1 },
           ],
         },
       },
@@ -154,9 +166,9 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       id: "c2s3",
       chapter: 2,
       title: t("chapter2.c2s3.title"),
-      speakerGroup: "hadashim",
+      speakerGroup: "newcomers",
       text: t("chapter2.c2s3.text"),
-      subject: "shetach",
+      subject: "land",
       act: "blocked",
       justification: "was-mine-first",
       power: "victim-weaker",
@@ -175,46 +187,50 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       noRuleOutcome: {
         text: t("chapter2.c2s3.no_rule_outcome"),
         rights: [
-          { protection: "shayachut", group: "hadashim", move: "strain" },
+          { protection: "belonging", group: "newcomers", move: "strain" },
         ],
-        trust: [{ group: "hadashim", delta: -1 }],
+        trust: [{ group: "newcomers", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter2.c2s3.override_outcome"),
-        rights: [{ protection: "shivyon", group: "hadashim", move: "strain" }],
-        trust: [{ group: "hadashim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "newcomers", move: "strain" },
+        ],
+        trust: [{ group: "newcomers", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter2.c2s3.outcomes.ask_first"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "vatikim", delta: 0 },
+            { group: "newcomers", delta: 1 },
+            { group: "old-timers", delta: 0 },
           ],
         },
         forbidden: {
           text: t("chapter2.c2s3.outcomes.forbidden"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "vatikim", delta: -1 },
+            { group: "newcomers", delta: 1 },
+            { group: "old-timers", delta: -1 },
           ],
         },
         "by-turn": {
           text: t("chapter2.c2s3.outcomes.by_turn"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 0 },
-            { group: "vatikim", delta: 0 },
+            { group: "newcomers", delta: 0 },
+            { group: "old-timers", delta: 0 },
           ],
         },
         "share-equally": {
           text: t("chapter2.c2s3.outcomes.share_equally"),
-          rights: [{ protection: "kinyan", group: "vatikim", move: "strain" }],
+          rights: [
+            { protection: "property", group: "old-timers", move: "strain" },
+          ],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "vatikim", delta: -1 },
+            { group: "newcomers", delta: 1 },
+            { group: "old-timers", delta: -1 },
           ],
         },
       },
@@ -224,9 +240,9 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       id: "c2s4",
       chapter: 2,
       title: t("chapter2.c2s4.title"),
-      speakerGroup: "vatikim",
+      speakerGroup: "old-timers",
       text: t("chapter2.c2s4.text"),
-      subject: "shetach",
+      subject: "land",
       act: "blocked",
       justification: "needed-more",
       power: "equal",
@@ -240,45 +256,49 @@ export const chapter2 = perLanguage((lang: Lang): Chapter => {
       lesson: t("chapter2.c2s4.lesson"),
       noRuleOutcome: {
         text: t("chapter2.c2s4.no_rule_outcome"),
-        rights: [{ protection: "shayachut", group: "vatikim", move: "strain" }],
-        trust: [{ group: "vatikim", delta: -1 }],
+        rights: [
+          { protection: "belonging", group: "old-timers", move: "strain" },
+        ],
+        trust: [{ group: "old-timers", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter2.c2s4.override_outcome"),
-        rights: [{ protection: "shivyon", group: "vatikim", move: "strain" }],
-        trust: [{ group: "vatikim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "old-timers", move: "strain" },
+        ],
+        trust: [{ group: "old-timers", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter2.c2s4.outcomes.ask_first"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 1 },
-            { group: "banaim", delta: 0 },
+            { group: "old-timers", delta: 1 },
+            { group: "builders", delta: 0 },
           ],
         },
         forbidden: {
           text: t("chapter2.c2s4.outcomes.forbidden"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 1 },
-            { group: "banaim", delta: -1 },
+            { group: "old-timers", delta: 1 },
+            { group: "builders", delta: -1 },
           ],
         },
         "by-turn": {
           text: t("chapter2.c2s4.outcomes.by_turn"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 0 },
-            { group: "banaim", delta: 0 },
+            { group: "old-timers", delta: 0 },
+            { group: "builders", delta: 0 },
           ],
         },
         "share-equally": {
           text: t("chapter2.c2s4.outcomes.share_equally"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 0 },
-            { group: "banaim", delta: 0 },
+            { group: "old-timers", delta: 0 },
+            { group: "builders", delta: 0 },
           ],
         },
       },

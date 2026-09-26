@@ -30,7 +30,7 @@ const RULE: Rule = {
   what: "ask-first",
   when: "always",
   consequence: "return-or-fix",
-  subject: "mayim",
+  subject: "water",
   writtenAt: "c1s1",
 };
 
@@ -115,9 +115,9 @@ describe("content is rebuilt per language", () => {
   });
 
   it("translates groups, protections, notes and situation lookups", () => {
-    expect(groupLabel("en").ovrim).toBe("the passers-through");
-    expect(groupBlurb("en").yeladim).toBe("nobody asks them");
-    expect(protectionLabel("en").kinyan).toBe("property");
+    expect(groupLabel("en")["passers-through"]).toBe("the passers-through");
+    expect(groupBlurb("en").children).toBe("nobody asks them");
+    expect(protectionLabel("en").property).toBe("property");
     expect(chapterNotes("en")[0].concept).toBe(
       "A rule is a decision made in advance",
     );
@@ -167,7 +167,11 @@ describe("the rule sentence composes in both languages", () => {
       ] as const) {
         for (const what of whatOptions(lang)) {
           const text = ruleSentence(
-            { ...RULE, who: { scope: who, group: "roim" }, what: what.value },
+            {
+              ...RULE,
+              who: { scope: who, group: "shepherds" },
+              what: what.value,
+            },
             lang,
           );
           expect(text).not.toContain("{");
@@ -177,8 +181,8 @@ describe("the rule sentence composes in both languages", () => {
   });
 
   it("gives English one plain noun where Hebrew needs two cases", () => {
-    const he = subjectForms("he").mayim;
-    const en = subjectForms("en").mayim;
+    const he = subjectForms("he").water;
+    const en = subjectForms("en").water;
     expect(he.et).not.toBe(he.be);
     expect(en.et).toBe(en.be);
   });

@@ -20,35 +20,35 @@ import type {
 } from "./types";
 
 export const PROTECTIONS: Protection[] = [
-  "kinyan",
-  "bitui",
-  "shivyon",
-  "machse",
-  "halich",
-  "shayachut",
+  "property",
+  "expression",
+  "equality",
+  "shelter",
+  "fair-hearing",
+  "belonging",
 ];
 
 export const protectionLabel = perLanguage(
   (lang: Lang): Record<Protection, string> => {
     const t = translator(lang);
     return {
-      kinyan: t("rights.protections.kinyan"),
-      bitui: t("rights.protections.bitui"),
-      shivyon: t("rights.protections.shivyon"),
-      machse: t("rights.protections.machse"),
-      halich: t("rights.protections.halich"),
-      shayachut: t("rights.protections.shayachut"),
+      property: t("rights.protections.property"),
+      expression: t("rights.protections.expression"),
+      equality: t("rights.protections.equality"),
+      shelter: t("rights.protections.shelter"),
+      "fair-hearing": t("rights.protections.fair-hearing"),
+      belonging: t("rights.protections.belonging"),
     };
   },
 );
 
 export const GROUPS: GroupId[] = [
-  "vatikim",
-  "hadashim",
-  "roim",
-  "banaim",
-  "yeladim",
-  "ovrim",
+  "old-timers",
+  "newcomers",
+  "shepherds",
+  "builders",
+  "children",
+  "passers-through",
 ];
 
 export const stateLabel = perLanguage(

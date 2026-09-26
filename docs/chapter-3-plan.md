@@ -43,15 +43,15 @@ Unlike Ch1/Ch2, Chapter 3 doesn't need "2 situations invite, 2 collide" — its 
 
 | id   | role                                                                 | subject | act                 | actor→victim    | invitesRule |
 | ---- | -------------------------------------------------------------------- | ------- | ------------------- | --------------- | ----------- |
-| c3s1 | self-pinch on the Ch1 water rule                                     | mayim   | took-without-asking | **you**→yotam   | false       |
-| c3s2 | beloved-character pinch on the Ch1 path rule                         | shvil   | blocked             | shira→**barak** | false       |
-| c3s3 | fresh case, explicitly flagged: you'll be affected by what you write | chefetz | refused-to-share    | barak→dana      | true        |
-| c3s4 | c3s3's rule, reapplied to the child directly — closes the chapter    | chefetz | refused-to-share    | **you**→michal  | false       |
+| c3s1 | self-pinch on the Ch1 water rule                                     | water   | took-without-asking | **you**→yotam   | false       |
+| c3s2 | beloved-character pinch on the Ch1 path rule                         | path    | blocked             | shira→**barak** | false       |
+| c3s3 | fresh case, explicitly flagged: you'll be affected by what you write | things  | refused-to-share    | barak→dana      | true        |
+| c3s4 | c3s3's rule, reapplied to the child directly — closes the chapter    | things  | refused-to-share    | **you**→michal  | false       |
 
 Notes on choices:
 
-- **c3s1** reuses the Ch1 `mayim` rule via plain `ruleApplies` — no new mechanism. If the child never wrote a water rule (skipped it at c1s1), `noRuleOutcome` carries its own lesson ("you have nothing to go by here either — same as everyone did before there were rules").
-- **c3s2** deliberately makes **ברק** the victim this time, not שירה — a small structural inversion (he was the one the path rule originally measured; now it measures someone else, and he's the one waiting) that keeps this from feeling like a straight repeat of c1s2/c1s4. `forbidden`'s outcome strains **`halich`** (fair process / hearing both sides) for `yeladim` — the only one of the six protections still unused after Chapters 1–2. Thematically exact: "the rule didn't ask her why, it only checked whether she lives here."
+- **c3s1** reuses the Ch1 `water` rule via plain `ruleApplies` — no new mechanism. If the child never wrote a water rule (skipped it at c1s1), `noRuleOutcome` carries its own lesson ("you have nothing to go by here either — same as everyone did before there were rules").
+- **c3s2** deliberately makes **Barak** the victim this time, not Shira — a small structural inversion (he was the one the path rule originally measured; now it measures someone else, and he's the one waiting) that keeps this from feeling like a straight repeat of c1s2/c1s4. `forbidden`'s outcome strains **`fair-hearing`** (fair process / hearing both sides) for `children` — the only one of the six protections still unused after Chapters 1–2. Thematically exact: "the rule didn't ask her why, it only checked whether she lives here."
 - **c3s3/c3s4** use `refused-to-share`, the other still-unused `ActKind` (Ch1/Ch2 have used `took-without-asking`, `blocked`, `told-what-was-private`; `broke` stays open for a later chapter). c3s3's scene text and lesson name the stakes honestly up front ("you use the village's shared things too — think about that as you write this one") — informative, not a trick, matching §2's "never says you were wrong" rule. c3s4 then reapplies whatever the child wrote, this time with the child as the one being refused or required to share.
 - Chapter-closing lesson at c3s4 states the theme in words only now that it's been felt twice, per §2: _"כלל שלא חל עליך הוא בקשה. כלל שחל גם עליך הוא הבטחה."_ ("A rule that doesn't apply to you is a request. A rule that also applies to you is a promise.")
 - No new `Subject` values needed (all five are already in play); chapter budget stays inside the existing 4-situation shape.
@@ -75,8 +75,8 @@ Extend `engine.test.ts` (same single-file convention):
 - `CHILD_ACTOR` coverage: `whoCovers` returns true for `residents`/`anyone-present`/`everyone-except`, false for any `group` scope.
 - **Regression guard**: `CHILD_ACTOR` is never present in `Object.values(ACTORS)` — pins down the exact bug this plan avoided, so nobody re-merges it in later.
 - "chapter 3 content holds up": 4 situations, every situation has outcomes for all four WHAT clauses.
-- Playthrough test: with a `mayim` rule written at c1s1-equivalent state, c3s1 resolves via `rule-applies` against `CHILD_ACTOR`; without one, it falls through to `no-rule`.
-- Playthrough test: c3s3 → write a `chefetz` rule scoped `everyone-except` a group → c3s4 confirms it still reaches the child (the emergent case called out above).
+- Playthrough test: with a `water` rule written at c1s1-equivalent state, c3s1 resolves via `rule-applies` against `CHILD_ACTOR`; without one, it falls through to `no-rule`.
+- Playthrough test: c3s3 → write a `things` rule scoped `everyone-except` a group → c3s4 confirms it still reaches the child (the emergent case called out above).
 
 ## Verification
 
