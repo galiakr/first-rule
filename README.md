@@ -14,7 +14,15 @@ per-chapter implementation notes are in `docs/chapter-1-plan.md` …
 npm install
 npm run dev     # http://localhost:3000
 npm test        # 231 tests over the engine, content and components
-npm run build
+npm run build   # static export, written to out/
+```
+
+`next build` produces a plain static site in `out/` — no server, no API
+routes, nothing to run. Serve that directory from anywhere. To build for a
+site hosted under a subdirectory, set the base path:
+
+```bash
+PAGES_BASE_PATH=/first-rule npm run build
 ```
 
 Fonts load via `next/font/google` (Frank Ruhl Libre for the rulebook and
