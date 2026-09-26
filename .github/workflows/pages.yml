@@ -1,0 +1,77 @@
+# Publishes the game to GitHub Pages on every push to main.
+#
+# The site is fully static (see next.config.mjs), so this is a build and an
+# upload — nothing runs on a server. Pages serves a project site from a
+# subdirectory, so the build is given the repository name as its base path;
+# hardcoding it here rather than in the config keeps `npm run dev` and the
+# e2e suite working at `/`.
+#
+# Deploying is deliberately gated on the tests passing. A green Pages badge
+# over a broken game would be worse than no deploy at all.
+
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  # Lets a deploy be re-run by hand without an empty commit.
+  workflow_dispatch:
+
+# Read the repo, write a Pages deployment, and prove the job's identity to
+# Pages. Nothing wider than that.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. Queue rather than cancel, so a push that lands mid
+# deploy doesn't leave the site half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # The same checks CI runs. Publishing something that fails them would
+      # defeat the point of having them.
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm test
+
+      - name: Build the static site
+        run: npm run build
+        env:
+          # A project site lives at /<repo>/, so every asset needs that prefix.
+          PAGES_BASE_PATH: /${{ github.event.repository.name }}
+
+      # Tells Pages this is a plain static upload, and stops Jekyll from
+      # eating the _next directory, whose leading underscore it would
+      # otherwise treat as private and refuse to serve.
+      - name: Disable Jekyll processing
+        run: touch out/.nojekyll
+
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
