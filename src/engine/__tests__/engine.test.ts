@@ -128,7 +128,7 @@ function rule(over: Partial<Rule> = {}): Rule {
     what: "ask-first",
     when: "always",
     consequence: "return-or-fix",
-    subject: "mayim",
+    subject: "water",
     writtenAt: "c1s1",
     ...over,
   };
@@ -160,13 +160,13 @@ describe("who a rule reaches", () => {
   });
 
   it("group covers only members", () => {
-    const r = rule({ who: { scope: "group", group: "roim" } });
+    const r = rule({ who: { scope: "group", group: "shepherds" } });
     expect(whoCovers(r, ACTORS.dana)).toBe(true);
     expect(whoCovers(r, ACTORS.barak)).toBe(false);
   });
 
   it("everyone-except is the inverse of group", () => {
-    const r = rule({ who: { scope: "everyone-except", group: "roim" } });
+    const r = rule({ who: { scope: "everyone-except", group: "shepherds" } });
     expect(whoCovers(r, ACTORS.dana)).toBe(false);
     expect(whoCovers(r, ACTORS.barak)).toBe(true);
   });
@@ -176,12 +176,15 @@ describe("who a rule reaches", () => {
     // group lands on a person the child was not thinking about.
     expect(
       whoCovers(
-        rule({ who: { scope: "group", group: "yeladim" } }),
+        rule({ who: { scope: "group", group: "children" } }),
         ACTORS.shira,
       ),
     ).toBe(true);
     expect(
-      whoCovers(rule({ who: { scope: "group", group: "roim" } }), ACTORS.shira),
+      whoCovers(
+        rule({ who: { scope: "group", group: "shepherds" } }),
+        ACTORS.shira,
+      ),
     ).toBe(true);
   });
 });
@@ -204,8 +207,8 @@ describe("when a rule bites", () => {
 
 describe("rule to situation", () => {
   it("does not apply across subjects", () => {
-    expect(ruleApplies(rule({ subject: "shvil" }), s1, ACTORS)).toBe(false);
-    expect(ruleApplies(rule({ subject: "mayim" }), s1, ACTORS)).toBe(true);
+    expect(ruleApplies(rule({ subject: "path" }), s1, ACTORS)).toBe(false);
+    expect(ruleApplies(rule({ subject: "water" }), s1, ACTORS)).toBe(true);
   });
 
   it("a residents-only water rule still reaches שירה in situation 3", () => {
@@ -227,8 +230,8 @@ describe("the rule reads as a sentence", () => {
   it("names the group when the rule is aimed at one", () => {
     const text = ruleSentence(
       rule({
-        who: { scope: "everyone-except", group: "roim" },
-        subject: "shvil",
+        who: { scope: "everyone-except", group: "shepherds" },
+        subject: "path",
         what: "forbidden",
       }),
       LANG,
@@ -241,7 +244,10 @@ describe("the rule reads as a sentence", () => {
     for (const who of whoOptions(LANG)) {
       for (const what of whatOptions(LANG)) {
         const text = ruleSentence(
-          rule({ who: { scope: who.value, group: "roim" }, what: what.value }),
+          rule({
+            who: { scope: who.value, group: "shepherds" },
+            what: what.value,
+          }),
           LANG,
         );
         expect(text).not.toContain("{");
@@ -269,7 +275,7 @@ describe("conflicts caught while writing", () => {
   });
 
   it("does not flag rules about different things", () => {
-    const existing = [rule({ id: "old", what: "forbidden", subject: "shvil" })];
+    const existing = [rule({ id: "old", what: "forbidden", subject: "path" })];
     expect(
       textualConflict(rule({ id: "new", what: "by-turn" }), existing),
     ).toEqual([]);
@@ -280,7 +286,7 @@ describe("conflicts caught while writing", () => {
       rule({
         id: "old",
         what: "forbidden",
-        who: { scope: "group", group: "roim" },
+        who: { scope: "group", group: "shepherds" },
       }),
     ];
     expect(
@@ -297,12 +303,12 @@ describe("collisions found only by running the situation", () => {
       rule({
         id: "a",
         what: "forbidden",
-        who: { scope: "group", group: "roim" },
+        who: { scope: "group", group: "shepherds" },
       }),
       rule({
         id: "b",
         what: "by-turn",
-        who: { scope: "group", group: "yeladim" },
+        who: { scope: "group", group: "children" },
       }),
     ];
     expect(textualConflict(rules[1], [rules[0]])).toEqual([]);
@@ -339,44 +345,44 @@ describe("collisions found only by running the situation", () => {
 describe("rights are states, not points", () => {
   it("strains, breaks and repairs", () => {
     let board = emptyRightsBoard();
-    expect(board[rightsKey("machse", "hadashim")]).toBe("intact");
+    expect(board[rightsKey("shelter", "newcomers")]).toBe("intact");
 
     board = applyRights(board, [
-      { protection: "machse", group: "hadashim", move: "strain" },
+      { protection: "shelter", group: "newcomers", move: "strain" },
     ]);
-    expect(board[rightsKey("machse", "hadashim")]).toBe("strained");
+    expect(board[rightsKey("shelter", "newcomers")]).toBe("strained");
 
     board = applyRights(board, [
-      { protection: "machse", group: "hadashim", move: "break" },
+      { protection: "shelter", group: "newcomers", move: "break" },
     ]);
-    expect(board[rightsKey("machse", "hadashim")]).toBe("broken");
+    expect(board[rightsKey("shelter", "newcomers")]).toBe("broken");
 
     board = applyRights(board, [
-      { protection: "machse", group: "hadashim", move: "repair" },
+      { protection: "shelter", group: "newcomers", move: "repair" },
     ]);
-    expect(board[rightsKey("machse", "hadashim")]).toBe("intact");
+    expect(board[rightsKey("shelter", "newcomers")]).toBe("intact");
   });
 
   it("straining something broken does not quietly heal it", () => {
     let board = applyRights(emptyRightsBoard(), [
-      { protection: "machse", group: "hadashim", move: "break" },
+      { protection: "shelter", group: "newcomers", move: "break" },
     ]);
     board = applyRights(board, [
-      { protection: "machse", group: "hadashim", move: "strain" },
+      { protection: "shelter", group: "newcomers", move: "strain" },
     ]);
-    expect(board[rightsKey("machse", "hadashim")]).toBe("broken");
+    expect(board[rightsKey("shelter", "newcomers")]).toBe("broken");
   });
 
   it("reports harm with the group named, broken first", () => {
     const board = applyRights(emptyRightsBoard(), [
-      { protection: "kinyan", group: "vatikim", move: "strain" },
-      { protection: "machse", group: "hadashim", move: "break" },
+      { protection: "property", group: "old-timers", move: "strain" },
+      { protection: "shelter", group: "newcomers", move: "break" },
     ]);
     const list = harmed(board);
     expect(list).toHaveLength(2);
     expect(list[0]).toEqual({
-      protection: "machse",
-      group: "hadashim",
+      protection: "shelter",
+      group: "newcomers",
       state: "broken",
     });
   });
@@ -460,8 +466,8 @@ describe("playing the chapter through", () => {
       kind: "applied-rule",
     });
 
-    expect(state.rights[rightsKey("shayachut", "yeladim")]).toBe("broken");
-    expect(trustLevel(state.trust.yeladim)).toBe("stops-coming");
+    expect(state.rights[rightsKey("belonging", "children")]).toBe("broken");
+    expect(trustLevel(state.trust.children)).toBe("stops-coming");
     expect(state.cursor).toBe(1);
   });
 
@@ -476,19 +482,19 @@ describe("playing the chapter through", () => {
       kind: "overrode",
     });
 
-    expect(state.rights[rightsKey("shivyon", "vatikim")]).toBe("strained");
+    expect(state.rights[rightsKey("equality", "old-timers")]).toBe("strained");
     expect(state.log[0].overrode).toBe(true);
     expect(outcomeFor(s3, "ask-first", true)).toBe(s3.overrideOutcome);
   });
 
   it("a second rule can reach a situation the first one missed", () => {
     let state = initialState();
-    state = addRule(state, rule({ id: "water", subject: "mayim" }));
+    state = addRule(state, rule({ id: "water", subject: "water" }));
     expect(applicableRules(state.rules, CHAPTER_1[3], ACTORS)).toHaveLength(0);
 
     state = addRule(
       state,
-      rule({ id: "path", subject: "shvil", writtenAt: "c1s2" }),
+      rule({ id: "path", subject: "path", writtenAt: "c1s2" }),
     );
     expect(applicableRules(state.rules, CHAPTER_1[3], ACTORS)).toHaveLength(1);
   });
@@ -723,7 +729,7 @@ describe("the child as an actor (§9 chapter 3)", () => {
     ).toBe(true);
     expect(
       whoCovers(
-        rule({ who: { scope: "group", group: "vatikim" } }),
+        rule({ who: { scope: "group", group: "old-timers" } }),
         CHILD_ACTOR,
       ),
     ).toBe(false);
@@ -765,7 +771,7 @@ describe("playing chapter 3 through", () => {
     let state = initialState();
     state = addRule(
       state,
-      rule({ id: "water", subject: "mayim", who: { scope: "residents" } }),
+      rule({ id: "water", subject: "water", who: { scope: "residents" } }),
     );
     const prompt = promptFor(state, c3s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID);
     expect(prompt.kind).toBe("rule-applies");
@@ -781,14 +787,14 @@ describe("playing chapter 3 through", () => {
     expect(prompt.kind).toBe("no-rule");
   });
 
-  it("an everyone-except chefetz rule written at c3s3 still reaches the child at c3s4", () => {
+  it("an everyone-except things rule written at c3s3 still reaches the child at c3s4", () => {
     let state = initialState();
     state = addRule(
       state,
       rule({
         id: "rope",
-        subject: "chefetz",
-        who: { scope: "everyone-except", group: "banaim" },
+        subject: "things",
+        who: { scope: "everyone-except", group: "builders" },
         writtenAt: "c3s3",
       }),
     );
@@ -796,14 +802,14 @@ describe("playing chapter 3 through", () => {
     expect(prompt.kind).toBe("rule-applies");
   });
 
-  it("a group-scoped chefetz rule does not reach the child at c3s4", () => {
+  it("a group-scoped things rule does not reach the child at c3s4", () => {
     let state = initialState();
     state = addRule(
       state,
       rule({
         id: "rope",
-        subject: "chefetz",
-        who: { scope: "group", group: "banaim" },
+        subject: "things",
+        who: { scope: "group", group: "builders" },
         writtenAt: "c3s3",
       }),
     );
@@ -869,7 +875,7 @@ describe("chapter 4 content holds up", () => {
     // §4: "אין להם קול בכלל". What נעם did, or what was done to him, is
     // always reported by somebody else — he never opens a scene.
     for (const s of CHAPTER_4) {
-      expect(s.speakerGroup, s.id).not.toBe("ovrim");
+      expect(s.speakerGroup, s.id).not.toBe("passers-through");
     }
   });
 
@@ -885,7 +891,7 @@ describe("chapter 4 content holds up", () => {
     const earlier = [...CHAPTER_1, ...CHAPTER_2, ...CHAPTER_3];
     const touchesOvrim = (s: Situation) =>
       [s.noRuleOutcome, s.overrideOutcome, ...Object.values(s.outcomes)].some(
-        (o) => o?.rights.some((r) => r.group === "ovrim"),
+        (o) => o?.rights.some((r) => r.group === "passers-through"),
       );
     expect(earlier.some(touchesOvrim)).toBe(false);
     expect(CHAPTER_4.some(touchesOvrim)).toBe(true);
@@ -902,7 +908,7 @@ describe("chapter 4 content holds up", () => {
 
 describe("§6's two outcomes are both reachable at c4s1", () => {
   function waterRule(who: Rule["who"]): Rule {
-    return rule({ id: "water", subject: "mayim", who, writtenAt: "c1s1" });
+    return rule({ id: "water", subject: "water", who, writtenAt: "c1s1" });
   }
 
   it("a residents rule leaves the gap: nothing reaches him", () => {
@@ -914,7 +920,7 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
   it("a group rule leaves the same gap — he belongs to no village group", () => {
     const state = addRule(
       initialState(4),
-      waterRule({ scope: "group", group: "roim" }),
+      waterRule({ scope: "group", group: "shepherds" }),
     );
     expect(
       promptFor(state, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
@@ -934,7 +940,7 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
   it("an everyone-except rule reaches him unless it excludes his own group", () => {
     const reaches = addRule(
       initialState(4),
-      waterRule({ scope: "everyone-except", group: "roim" }),
+      waterRule({ scope: "everyone-except", group: "shepherds" }),
     );
     expect(
       promptFor(reaches, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
@@ -942,7 +948,7 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
 
     const excludesHim = addRule(
       initialState(4),
-      waterRule({ scope: "everyone-except", group: "ovrim" }),
+      waterRule({ scope: "everyone-except", group: "passers-through" }),
     );
     expect(
       promptFor(excludesHim, c4s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
@@ -950,7 +956,7 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
   });
 
   it("c4s4's no-rule copy has to serve two different silences", () => {
-    // It fires when the child wrote no shetach rule at all, and when they
+    // It fires when the child wrote no land rule at all, and when they
     // wrote one that doesn't reach him. The copy must not claim a rule
     // exists — this test is here to say why if anyone rewrites it.
     const wroteNothing = initialState(4);
@@ -960,7 +966,7 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
 
     const wroteOneThatMissesHim = addRule(
       initialState(4),
-      rule({ id: "ground", subject: "shetach", who: { scope: "residents" } }),
+      rule({ id: "ground", subject: "land", who: { scope: "residents" } }),
     );
     expect(
       promptFor(
@@ -974,12 +980,14 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
 
   it("the covered branch is what puts העוברים on the rights board", () => {
     const covered = outcomeFor(c4s1, "forbidden", false);
-    expect(covered.rights.some((r) => r.group === "ovrim")).toBe(true);
+    expect(covered.rights.some((r) => r.group === "passers-through")).toBe(
+      true,
+    );
     // The gap costs the village instead — nobody's rule was broken, but
     // יותם stops trusting that anything here is settled.
     const gap = outcomeFor(c4s1, null, false);
-    expect(gap.rights.every((r) => r.group !== "ovrim")).toBe(true);
-    expect(gap.trust).toContainEqual({ group: "vatikim", delta: -1 });
+    expect(gap.rights.every((r) => r.group !== "passers-through")).toBe(true);
+    expect(gap.trust).toContainEqual({ group: "old-timers", delta: -1 });
   });
 });
 
@@ -989,7 +997,7 @@ describe("a rule binds by who acted, so it can protect someone it never binds", 
     // rule, and is protected by it anyway — without having been asked.
     const state = addRule(
       initialState(4),
-      rule({ id: "things", subject: "chefetz", who: { scope: "residents" } }),
+      rule({ id: "things", subject: "things", who: { scope: "residents" } }),
     );
     expect(
       promptFor(state, c4s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
@@ -1082,7 +1090,7 @@ describe("chapter 5 content holds up", () => {
 describe("who votes", () => {
   it("leaves the passers-through out when the rule is for residents", () => {
     const eligible = eligibleGroups({ scope: "residents" });
-    expect(eligible).not.toContain("ovrim");
+    expect(eligible).not.toContain("passers-through");
     expect(eligible).toHaveLength(GROUPS.length - 1);
   });
 
@@ -1091,10 +1099,12 @@ describe("who votes", () => {
   });
 
   it("narrows to one group, or to everyone but one", () => {
-    expect(eligibleGroups({ scope: "group", group: "roim" })).toEqual(["roim"]);
+    expect(eligibleGroups({ scope: "group", group: "shepherds" })).toEqual([
+      "shepherds",
+    ]);
     expect(
-      eligibleGroups({ scope: "everyone-except", group: "roim" }),
-    ).not.toContain("roim");
+      eligibleGroups({ scope: "everyone-except", group: "shepherds" }),
+    ).not.toContain("shepherds");
   });
 });
 
@@ -1114,12 +1124,12 @@ describe("the election", () => {
 
   it("counts a group that stopped coming as a vote against", () => {
     const state = withTrust({
-      vatikim: 0,
-      roim: 0,
-      banaim: 0,
-      yeladim: 0,
-      hadashim: 0,
-      ovrim: 0,
+      "old-timers": 0,
+      shepherds: 0,
+      builders: 0,
+      children: 0,
+      newcomers: 0,
+      "passers-through": 0,
     });
     const result = runElection(state, { scope: "anyone-present" });
     expect(result.votedAgainst).toEqual(GROUPS);
@@ -1127,15 +1137,15 @@ describe("the election", () => {
   });
 
   it("lets a half-trusting group abstain rather than count against you", () => {
-    const state = withTrust({ vatikim: 1, roim: 1 });
+    const state = withTrust({ "old-timers": 1, shepherds: 1 });
     const result = runElection(state, { scope: "anyone-present" });
-    expect(result.abstained).toEqual(["vatikim", "roim"]);
-    expect(result.votedFor).not.toContain("vatikim");
-    expect(result.votedAgainst).not.toContain("vatikim");
+    expect(result.abstained).toEqual(["old-timers", "shepherds"]);
+    expect(result.votedFor).not.toContain("old-timers");
+    expect(result.votedAgainst).not.toContain("old-timers");
   });
 
   it("keeps the incumbent on a tie — nobody voted them out", () => {
-    const state = withTrust({ vatikim: 0, roim: 0, banaim: 0 });
+    const state = withTrust({ "old-timers": 0, shepherds: 0, builders: 0 });
     const result = runElection(state, { scope: "anyone-present" });
     expect(result.votedFor).toHaveLength(3);
     expect(result.votedAgainst).toHaveLength(3);
@@ -1145,13 +1155,13 @@ describe("the election", () => {
   it("is decided only by the groups the WHO field let vote", () => {
     // The passers-through are against, and it changes nothing, because a
     // residents-scoped rule never gave them a voice (§6).
-    const state = withTrust({ ovrim: 0 });
+    const state = withTrust({ "passers-through": 0 });
     expect(runElection(state, { scope: "residents" }).eligible).not.toContain(
-      "ovrim",
+      "passers-through",
     );
     expect(
       runElection(state, { scope: "anyone-present" }).votedAgainst,
-    ).toEqual(["ovrim"]);
+    ).toEqual(["passers-through"]);
   });
 });
 
@@ -1188,11 +1198,11 @@ describe("who decides, once it is written down", () => {
         ...burnt,
         trust: {
           ...burnt.trust,
-          vatikim: 0,
-          roim: 0,
-          banaim: 0,
-          yeladim: 0,
-          hadashim: 0,
+          "old-timers": 0,
+          shepherds: 0,
+          builders: 0,
+          children: 0,
+          newcomers: 0,
         },
       },
       { form: "village-chooses", who: { scope: "residents" } },
@@ -1216,7 +1226,7 @@ describe("losing is real, and the game goes on under it", () => {
   });
 
   it("still applies the rules the child already wrote, to the child", () => {
-    const state = addRule(lost, rule({ subject: "mayim" }));
+    const state = addRule(lost, rule({ subject: "water" }));
     expect(promptFor(state, s1, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind).toBe(
       "rule-applies",
     );
@@ -1265,11 +1275,11 @@ describe("losing is real, and the game goes on under it", () => {
         ...base,
         trust: {
           ...base.trust,
-          vatikim: 0,
-          roim: 0,
-          banaim: 0,
-          yeladim: 0,
-          hadashim: 0,
+          "old-timers": 0,
+          shepherds: 0,
+          builders: 0,
+          children: 0,
+          newcomers: 0,
         },
       },
       { form: "village-chooses", who: { scope: "residents" } },
@@ -1282,7 +1292,7 @@ describe("the book closes", () => {
   it("asks who decides before anything else at c5s2", () => {
     // c5s2 must not be shadowed by an ordinary rule that happens to fire.
     const c5s2 = CHAPTER_5[1];
-    const state = addRule(initialState(5), rule({ subject: "mayim" }));
+    const state = addRule(initialState(5), rule({ subject: "water" }));
     expect(
       promptFor(state, c5s2, ACTORS_WITH_CHILD, SITUATIONS_BY_ID).kind,
     ).toBe("write-authority");
@@ -1318,8 +1328,8 @@ describe("the book closes", () => {
   });
 
   it("swaps one rule in place, keeping the book's order and length", () => {
-    let state = addRule(initialState(5), rule({ id: "a", subject: "mayim" }));
-    state = addRule(state, rule({ id: "b", subject: "shvil" }));
+    let state = addRule(initialState(5), rule({ id: "a", subject: "water" }));
+    state = addRule(state, rule({ id: "b", subject: "path" }));
     state = replaceRule(state, "a", rule({ id: "ignored", what: "forbidden" }));
 
     expect(state.rules).toHaveLength(2);
@@ -1540,11 +1550,11 @@ describe("staffing the three jobs", () => {
 
   it("resolves a slot left to the village to the group that trusts you most", () => {
     const base = initialState(6);
-    const state = { ...base, trust: { ...base.trust, banaim: 3 } };
-    expect(villageChoice(state)).toBe("banaim");
+    const state = { ...base, trust: { ...base.trust, builders: 3 } };
+    expect(villageChoice(state)).toBe("builders");
     expect(resolveHolder(state, { kind: "village" })).toEqual({
       kind: "group",
-      groupId: "banaim",
+      groupId: "builders",
     });
   });
 
@@ -1568,7 +1578,7 @@ describe("staffing the three jobs", () => {
     ]);
     expect(
       separationVariants(
-        staffed({ kind: "group", groupId: "roim" }, { kind: "village" }),
+        staffed({ kind: "group", groupId: "shepherds" }, { kind: "village" }),
       ),
     ).toEqual(["split", "other-judges", "other-enforces"]);
     // Nothing to branch on before the village has staffed anything.
@@ -1594,7 +1604,7 @@ describe("staffing the three jobs", () => {
 describe("tearing the arrangement up costs everything", () => {
   const staffed = assignSeparation(initialState(6), {
     legislative: { kind: "you" },
-    judicial: { kind: "group", groupId: "roim" },
+    judicial: { kind: "group", groupId: "shepherds" },
     executive: { kind: "you" },
   });
 
@@ -1614,12 +1624,14 @@ describe("tearing the arrangement up costs everything", () => {
     // Revoking an arrangement because it ruled against you is exactly the
     // denial of process, so it lands on the group that was judging.
     const after = revokeSeparation(staffed);
-    expect(after.rights[rightsKey("halich", "roim")]).toBe("strained");
+    expect(after.rights[rightsKey("fair-hearing", "shepherds")]).toBe(
+      "strained",
+    );
   });
 
   it("follows a village-chosen judge through to the group it resolved to", () => {
     const base = initialState(6);
-    const trusting = { ...base, trust: { ...base.trust, banaim: 3 } };
+    const trusting = { ...base, trust: { ...base.trust, builders: 3 } };
     const after = revokeSeparation(
       assignSeparation(trusting, {
         legislative: { kind: "you" },
@@ -1627,7 +1639,9 @@ describe("tearing the arrangement up costs everything", () => {
         executive: { kind: "you" },
       }),
     );
-    expect(after.rights[rightsKey("halich", "banaim")]).toBe("strained");
+    expect(after.rights[rightsKey("fair-hearing", "builders")]).toBe(
+      "strained",
+    );
   });
 });
 
@@ -1645,7 +1659,7 @@ describe("chapter 7 content holds up", () => {
     }
   });
 
-  it("finally pinches davar, the one subject that never bit", () => {
+  it("finally pinches confidence, the one subject that never bit", () => {
     // c2s2 invites a rule about what was told in confidence, and until this
     // chapter no later situation used that subject — so a rule written there
     // could never fire again. §7 says every rule the child can write has at
@@ -1653,8 +1667,8 @@ describe("chapter 7 content holds up", () => {
     const invited = [...CHAPTER_1, ...CHAPTER_2, ...CHAPTER_3]
       .filter((s) => s.invitesRule)
       .map((s) => s.subject);
-    expect(invited).toContain("davar");
-    expect(CHAPTER_7.some((s) => s.subject === "davar")).toBe(true);
+    expect(invited).toContain("confidence");
+    expect(CHAPTER_7.some((s) => s.subject === "confidence")).toBe(true);
   });
 
   it("asks for the amendment at exactly one situation", () => {
@@ -1714,12 +1728,12 @@ describe("every act and protection the model offers is actually used", () => {
       ]).flatMap((o) => (o?.rights ?? []).map((r) => r.protection)),
     );
     expect([...moved].sort()).toEqual([
-      "bitui",
-      "halich",
-      "kinyan",
-      "machse",
-      "shayachut",
-      "shivyon",
+      "belonging",
+      "equality",
+      "expression",
+      "fair-hearing",
+      "property",
+      "shelter",
     ]);
   });
 });
@@ -1811,7 +1825,11 @@ describe("every rule the child can write gets pinched somewhere (§7)", () => {
 });
 
 describe("the one attempt at changing a rule", () => {
-  const target = rule({ id: "secrets", subject: "davar", what: "forbidden" });
+  const target = rule({
+    id: "secrets",
+    subject: "confidence",
+    what: "forbidden",
+  });
   const softer: Rule = { ...target, what: "ask-first" };
 
   function withAmendment(
@@ -1855,11 +1873,11 @@ describe("the one attempt at changing a rule", () => {
     const state = withAmendment("author");
     const wrongSubject: Rule = {
       ...softer,
-      subject: "mayim",
+      subject: "water",
       writtenAt: "c1s1",
     };
     const after = replaceRule(state, "secrets", wrongSubject);
-    expect(after.rules[0].subject).toBe("davar");
+    expect(after.rules[0].subject).toBe("confidence");
     expect(after.rules[0].writtenAt).toBe(target.writtenAt);
     // The four clauses are exactly what a rewrite may change.
     expect(after.rules[0].what).toBe("ask-first");
@@ -1871,33 +1889,33 @@ describe("the one attempt at changing a rule", () => {
     const base = withAmendment("two-agree");
     const sour: GameState = {
       ...base,
-      trust: { ...base.trust, banaim: 0, yeladim: 3 },
+      trust: { ...base.trust, builders: 0, children: 3 },
     };
-    expect(mustAgree(sour, target, "yeladim")).toBe("yeladim");
-    expect(attemptAmendment(sour, target, "yeladim")).toBe("applied");
+    expect(mustAgree(sour, target, "children")).toBe("children");
+    expect(attemptAmendment(sour, target, "children")).toBe("applied");
     // Without the authored stakeholder it would have been the sourest group.
-    expect(mustAgree(sour, target)).toBe("banaim");
+    expect(mustAgree(sour, target)).toBe("builders");
   });
 
   it("names a stakeholder on the situation that asks for the amendment", () => {
-    expect(CHAPTER_7[1].amendmentStakeholder).toBe("yeladim");
+    expect(CHAPTER_7[1].amendmentStakeholder).toBe("children");
   });
 
   it("turns on trust when two have to agree", () => {
     const base = withAmendment("two-agree");
     const trusting: GameState = {
       ...base,
-      trust: { ...base.trust, yeladim: 3 },
+      trust: { ...base.trust, children: 3 },
     };
     const rulePointingAtChildren = rule({
       id: "secrets",
-      subject: "davar",
-      who: { scope: "group", group: "yeladim" },
+      subject: "confidence",
+      who: { scope: "group", group: "children" },
     });
-    expect(mustAgree(trusting, rulePointingAtChildren)).toBe("yeladim");
+    expect(mustAgree(trusting, rulePointingAtChildren)).toBe("children");
     expect(attemptAmendment(trusting, rulePointingAtChildren)).toBe("applied");
 
-    const burnt: GameState = { ...base, trust: { ...base.trust, yeladim: 0 } };
+    const burnt: GameState = { ...base, trust: { ...base.trust, children: 0 } };
     expect(attemptAmendment(burnt, rulePointingAtChildren)).toBe(
       "refused-no-agreement",
     );
@@ -1955,7 +1973,7 @@ describe("the one attempt at changing a rule", () => {
 
   it("aims at the rule that just bit the child, not at any rule", () => {
     let state = withAmendment("author");
-    state = addRule(state, rule({ id: "other", subject: "mayim" }));
+    state = addRule(state, rule({ id: "other", subject: "water" }));
     state = resolve(state, {
       situation: CHAPTER_7[0],
       governedBy: "forbidden",
@@ -1976,7 +1994,7 @@ describe("the one attempt at changing a rule", () => {
     // "Whoever wrote it may change it" means anyone can, and the chapter
     // shows that rather than saying it.
     let state = withAmendment("author");
-    state = addRule(state, rule({ id: "other", subject: "mayim" }));
+    state = addRule(state, rule({ id: "other", subject: "water" }));
     const after = demonstrateAmendment(state, "secrets");
     expect(after.rules.find((r) => r.id === "other")?.what).toBe("forbidden");
     expect(after.rules.find((r) => r.id === "secrets")?.what).toBe("forbidden");

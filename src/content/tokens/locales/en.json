@@ -726,12 +726,12 @@
   },
   "rights": {
     "protections": {
-      "bitui": "expression",
-      "halich": "a fair hearing",
-      "kinyan": "property",
-      "machse": "shelter",
-      "shayachut": "belonging",
-      "shivyon": "equality before the law"
+      "belonging": "belonging",
+      "equality": "equality before the law",
+      "expression": "expression",
+      "fair-hearing": "a fair hearing",
+      "property": "property",
+      "shelter": "shelter"
     },
     "states": {
       "broken": "broken",
@@ -777,30 +777,30 @@
     "you": "Me"
   },
   "subject": {
-    "chefetz": {
-      "be": "something that belongs to someone else",
-      "et": "something that belongs to someone else",
-      "label": "something that belongs to someone else"
-    },
-    "davar": {
+    "confidence": {
       "be": "what someone told them",
       "et": "what someone told them",
       "label": "something someone said"
     },
-    "mayim": {
-      "be": "the water",
-      "et": "the water",
-      "label": "the water"
-    },
-    "shetach": {
+    "land": {
       "be": "the land",
       "et": "the land",
       "label": "the land"
     },
-    "shvil": {
+    "path": {
       "be": "the path",
       "et": "the path",
       "label": "the path"
+    },
+    "things": {
+      "be": "something that belongs to someone else",
+      "et": "something that belongs to someone else",
+      "label": "something that belongs to someone else"
+    },
+    "water": {
+      "be": "the water",
+      "et": "the water",
+      "label": "the water"
     }
   },
   "toc": {
@@ -838,29 +838,29 @@
       }
     },
     "groups": {
-      "banaim": {
+      "builders": {
         "blurb": "want to change things, and fast",
         "label": "the builders"
       },
-      "hadashim": {
+      "children": {
+        "blurb": "nobody asks them",
+        "label": "the children"
+      },
+      "newcomers": {
         "blurb": "arrived not long ago, and have nothing settled yet",
         "label": "the newcomers"
       },
-      "ovrim": {
-        "blurb": "don't live here. Only passing through",
-        "label": "the passers-through"
-      },
-      "roim": {
-        "blurb": "need land and water, and move between places",
-        "label": "the shepherds"
-      },
-      "vatikim": {
+      "old-timers": {
         "blurb": "were here first, and feel they should come first",
         "label": "the old-timers"
       },
-      "yeladim": {
-        "blurb": "nobody asks them",
-        "label": "the children"
+      "passers-through": {
+        "blurb": "don't live here. Only passing through",
+        "label": "the passers-through"
+      },
+      "shepherds": {
+        "blurb": "need land and water, and move between places",
+        "label": "the shepherds"
       }
     }
   }

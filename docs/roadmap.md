@@ -21,7 +21,7 @@ All seven are built. The dependencies below all landed in the order this page pr
 - ~~**§7's "two overrides" line.**~~ Built with chapter 4: `saysOverrideNote()` in `game.ts` and `sawOverrideNote` on `GameState`. The line is said beside the outcome of the child's _second_ override, once ever — one override is a hard case, two is a pattern, and the village only names a pattern.
 - ~~**Per-chapter epilogue.**~~ Built with chapter 4: an optional `epilogue` on the `Chapter` type in `types.ts`, rendered by `ChapterEnd` above the continue button. Chapters 1–3 have none and were left untouched.
 - ~~**The book closes at the end of Chapter 5**~~ Built: `closeBook()` sets `bookClosed`, and `canWriteRules()` collapses any later write-rule prompt to no-rule. A content test over chapters 6–7 should still assert no situation sets `invitesRule` once they exist.
-- ~~**`chefetz`/`davar` aren't pinched.**~~ Both now are: `chefetz` across chapters 3–6, and `davar` at c7s1, which was the last §7 gap. A test checks the whole game for this class of gap rather than trusting anyone to remember.
+- ~~**`things`/`confidence` aren't pinched.**~~ Both now are: `things` across chapters 3–6, and `confidence` at c7s1, which was the last §7 gap. A test checks the whole game for this class of gap rather than trusting anyone to remember.
 
 ## Chapter summaries
 

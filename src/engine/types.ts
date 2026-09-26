@@ -6,15 +6,15 @@
 
 /** The six groups in the village (design doc §4). */
 export type GroupId =
-  | "vatikim" // הוותיקים
-  | "hadashim" // החדשים
-  | "roim" // הרועים
-  | "banaim" // הבנאים
-  | "yeladim" // הילדים
-  | "ovrim"; // העוברים — no voice, not residents
+  | "old-timers" // הוותיקים
+  | "newcomers" // החדשים
+  | "shepherds" // הרועים
+  | "builders" // הבנאים
+  | "children" // הילדים
+  | "passers-through"; // העוברים — no voice, not residents
 
 /** What a rule is about. Inherited from the situation, never chosen (§6). */
-export type Subject = "mayim" | "shetach" | "shvil" | "chefetz" | "davar";
+export type Subject = "water" | "land" | "path" | "things" | "confidence";
 
 /* ---- the four builder fields, four options each (§6) ---- */
 
@@ -89,12 +89,12 @@ export type PowerBalance = "victim-weaker" | "equal" | "victim-stronger";
 
 /** The six protections (§8). */
 export type Protection =
-  | "kinyan" // קניין
-  | "bitui" // ביטוי
-  | "shivyon" // שוויון בפני החוק
-  | "machse" // מחסה
-  | "halich" // הליך הוגן
-  | "shayachut"; // שייכות
+  | "property" // קניין
+  | "expression" // ביטוי
+  | "equality" // שוויון בפני החוק
+  | "shelter" // מחסה
+  | "fair-hearing" // הליך הוגן
+  | "belonging"; // שייכות
 
 export interface RightsEffect {
   protection: Protection;

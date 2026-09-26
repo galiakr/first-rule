@@ -5,12 +5,12 @@ import type { Actor, GroupId } from "@/engine/types";
 export const groupBlurb = perLanguage((lang: Lang): Record<GroupId, string> => {
   const t = translator(lang);
   return {
-    vatikim: t("village.groups.vatikim.blurb"),
-    hadashim: t("village.groups.hadashim.blurb"),
-    roim: t("village.groups.roim.blurb"),
-    banaim: t("village.groups.banaim.blurb"),
-    yeladim: t("village.groups.yeladim.blurb"),
-    ovrim: t("village.groups.ovrim.blurb"),
+    "old-timers": t("village.groups.old-timers.blurb"),
+    newcomers: t("village.groups.newcomers.blurb"),
+    shepherds: t("village.groups.shepherds.blurb"),
+    builders: t("village.groups.builders.blurb"),
+    children: t("village.groups.children.blurb"),
+    "passers-through": t("village.groups.passers-through.blurb"),
   };
 });
 
@@ -34,13 +34,13 @@ export const actors = perLanguage((lang: Lang): Record<string, Actor> => {
     yotam: {
       id: "yotam",
       name: t("village.actors.yotam.name"),
-      groups: ["vatikim"],
+      groups: ["old-timers"],
       resident: true,
     },
     dana: {
       id: "dana",
       name: t("village.actors.dana.name"),
-      groups: ["roim"],
+      groups: ["shepherds"],
       resident: true,
     },
     shira: {
@@ -48,25 +48,25 @@ export const actors = perLanguage((lang: Lang): Record<string, Actor> => {
       // A child, and the one who brings you water every morning.
       // Situation 3 exists to make her the one the rule bites.
       name: t("village.actors.shira.name"),
-      groups: ["yeladim", "roim"],
+      groups: ["children", "shepherds"],
       resident: true,
     },
     barak: {
       id: "barak",
       name: t("village.actors.barak.name"),
-      groups: ["banaim"],
+      groups: ["builders"],
       resident: true,
     },
     michal: {
       id: "michal",
       name: t("village.actors.michal.name"),
-      groups: ["hadashim"],
+      groups: ["newcomers"],
       resident: true,
     },
     noam: {
       id: "noam",
       name: t("village.actors.noam.name"),
-      groups: ["ovrim"],
+      groups: ["passers-through"],
       resident: false,
     },
   };

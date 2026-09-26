@@ -32,10 +32,10 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
       chapter: 5,
       // The shepherds are the ones who went to יותם instead of to you, so a
       // low-trust opener here reads exactly right.
-      speakerGroup: "roim",
+      speakerGroup: "shepherds",
       title: t("chapter5.c5s1.title"),
       text: t("chapter5.c5s1.text"),
-      subject: "shvil",
+      subject: "path",
       act: "blocked",
       justification: "was-mine-first",
       power: "equal",
@@ -48,53 +48,57 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
       lesson: t("chapter5.c5s1.lesson"),
       noRuleOutcome: {
         text: t("chapter5.c5s1.no_rule_outcome"),
-        rights: [{ protection: "halich", group: "roim", move: "strain" }],
-        trust: [{ group: "roim", delta: -1 }],
+        rights: [
+          { protection: "fair-hearing", group: "shepherds", move: "strain" },
+        ],
+        trust: [{ group: "shepherds", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter5.c5s1.override_outcome"),
-        rights: [{ protection: "shivyon", group: "roim", move: "strain" }],
-        trust: [{ group: "roim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "shepherds", move: "strain" },
+        ],
+        trust: [{ group: "shepherds", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter5.c5s1.outcomes.ask_first"),
           rights: [],
           trust: [
-            { group: "roim", delta: 1 },
-            { group: "banaim", delta: 1 },
+            { group: "shepherds", delta: 1 },
+            { group: "builders", delta: 1 },
           ],
         },
         forbidden: {
           text: t("chapter5.c5s1.outcomes.forbidden"),
           rights: [],
           trust: [
-            { group: "roim", delta: 1 },
-            { group: "banaim", delta: -1 },
+            { group: "shepherds", delta: 1 },
+            { group: "builders", delta: -1 },
           ],
         },
         "by-turn": {
           text: t("chapter5.c5s1.outcomes.by_turn"),
           rights: [],
           trust: [
-            { group: "roim", delta: 1 },
-            { group: "banaim", delta: 1 },
+            { group: "shepherds", delta: 1 },
+            { group: "builders", delta: 1 },
           ],
         },
         "share-equally": {
           text: t("chapter5.c5s1.outcomes.share_equally"),
           rights: [],
-          trust: [{ group: "roim", delta: 1 }],
+          trust: [{ group: "shepherds", delta: 1 }],
         },
       },
     },
     {
       id: "c5s2",
       chapter: 5,
-      speakerGroup: "vatikim",
+      speakerGroup: "old-timers",
       title: t("chapter5.c5s2.title"),
       text: t("chapter5.c5s2.text"),
-      subject: "mayim",
+      subject: "water",
       act: "blocked",
       justification: "nobody-said-no",
       power: "equal",
@@ -115,57 +119,61 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
           text: t("chapter5.c5s2.variant.authority_written"),
           rights: [],
           trust: [
-            { group: "vatikim", delta: 1 },
-            { group: "roim", delta: 1 },
+            { group: "old-timers", delta: 1 },
+            { group: "shepherds", delta: 1 },
           ],
         },
       },
       noRuleOutcome: {
         text: t("chapter5.c5s2.no_rule_outcome"),
         rights: [
-          { protection: "halich", group: "vatikim", move: "strain" },
-          { protection: "shivyon", group: "yeladim", move: "strain" },
+          { protection: "fair-hearing", group: "old-timers", move: "strain" },
+          { protection: "equality", group: "children", move: "strain" },
         ],
         trust: [
-          { group: "vatikim", delta: -1 },
-          { group: "yeladim", delta: -1 },
+          { group: "old-timers", delta: -1 },
+          { group: "children", delta: -1 },
         ],
       },
       overrideOutcome: {
         text: t("chapter5.c5s2.override_outcome"),
-        rights: [{ protection: "shivyon", group: "vatikim", move: "strain" }],
-        trust: [{ group: "vatikim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "old-timers", move: "strain" },
+        ],
+        trust: [{ group: "old-timers", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter5.c5s2.outcomes.ask_first"),
           rights: [],
-          trust: [{ group: "vatikim", delta: 1 }],
+          trust: [{ group: "old-timers", delta: 1 }],
         },
         forbidden: {
           text: t("chapter5.c5s2.outcomes.forbidden"),
           rights: [],
-          trust: [{ group: "vatikim", delta: 1 }],
+          trust: [{ group: "old-timers", delta: 1 }],
         },
         "by-turn": {
           text: t("chapter5.c5s2.outcomes.by_turn"),
-          rights: [{ protection: "halich", group: "vatikim", move: "strain" }],
-          trust: [{ group: "vatikim", delta: -1 }],
+          rights: [
+            { protection: "fair-hearing", group: "old-timers", move: "strain" },
+          ],
+          trust: [{ group: "old-timers", delta: -1 }],
         },
         "share-equally": {
           text: t("chapter5.c5s2.outcomes.share_equally"),
           rights: [],
-          trust: [{ group: "roim", delta: 1 }],
+          trust: [{ group: "shepherds", delta: 1 }],
         },
       },
     },
     {
       id: "c5s3",
       chapter: 5,
-      speakerGroup: "yeladim",
+      speakerGroup: "children",
       title: t("chapter5.c5s3.title"),
       text: t("chapter5.c5s3.text"),
-      subject: "shetach",
+      subject: "land",
       act: "blocked",
       justification: "needed-more",
       power: "victim-weaker",
@@ -181,65 +189,71 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
       variantOutcomes: {
         you: {
           text: t("chapter5.c5s3.variant.you"),
-          rights: [{ protection: "halich", group: "yeladim", move: "strain" }],
-          trust: [{ group: "banaim", delta: 1 }],
+          rights: [
+            { protection: "fair-hearing", group: "children", move: "strain" },
+          ],
+          trust: [{ group: "builders", delta: 1 }],
         },
         "most-senior": {
           text: t("chapter5.c5s3.variant.most_senior"),
-          rights: [{ protection: "shivyon", group: "yeladim", move: "strain" }],
+          rights: [
+            { protection: "equality", group: "children", move: "strain" },
+          ],
           trust: [
-            { group: "vatikim", delta: 1 },
-            { group: "yeladim", delta: -1 },
+            { group: "old-timers", delta: 1 },
+            { group: "children", delta: -1 },
           ],
         },
         "two-together": {
           text: t("chapter5.c5s3.variant.two_together"),
           rights: [
-            { protection: "machse", group: "yeladim", move: "break" },
-            { protection: "machse", group: "banaim", move: "strain" },
+            { protection: "shelter", group: "children", move: "break" },
+            { protection: "shelter", group: "builders", move: "strain" },
           ],
           trust: [
-            { group: "yeladim", delta: -1 },
-            { group: "banaim", delta: -1 },
+            { group: "children", delta: -1 },
+            { group: "builders", delta: -1 },
           ],
         },
         "each-alone": {
           text: t("chapter5.c5s3.variant.each_alone"),
           rights: [
-            { protection: "shivyon", group: "yeladim", move: "break" },
-            { protection: "machse", group: "yeladim", move: "strain" },
+            { protection: "equality", group: "children", move: "break" },
+            { protection: "shelter", group: "children", move: "strain" },
           ],
-          trust: [{ group: "yeladim", delta: -1 }],
+          trust: [{ group: "children", delta: -1 }],
         },
         "village-chooses-won": {
           text: t("chapter5.c5s3.variant.village_chooses_won"),
           rights: [],
           trust: [
-            { group: "yeladim", delta: 1 },
-            { group: "banaim", delta: -1 },
+            { group: "children", delta: 1 },
+            { group: "builders", delta: -1 },
           ],
         },
         "village-chooses-lost": {
           text: t("chapter5.c5s3.variant.village_chooses_lost"),
-          rights: [{ protection: "shivyon", group: "yeladim", move: "strain" }],
-          trust: [{ group: "vatikim", delta: 1 }],
+          rights: [
+            { protection: "equality", group: "children", move: "strain" },
+          ],
+          trust: [{ group: "old-timers", delta: 1 }],
         },
       },
       noRuleOutcome: {
         text: t("chapter5.c5s3.no_rule_outcome"),
         rights: [
-          { protection: "machse", group: "yeladim", move: "break" },
-          { protection: "machse", group: "banaim", move: "strain" },
+          { protection: "shelter", group: "children", move: "break" },
+          { protection: "shelter", group: "builders", move: "strain" },
         ],
         trust: [
-          { group: "yeladim", delta: -1 },
-          { group: "banaim", delta: -1 },
+          { group: "children", delta: -1 },
+          { group: "builders", delta: -1 },
         ],
       },
       overrideOutcome: {
         text: t("chapter5.c5s3.override_outcome"),
-        rights: [{ protection: "shivyon", group: "yeladim", move: "strain" }],
-        trust: [{ group: "yeladim", delta: -1 }],
+        rights: [{ protection: "equality", group: "children", move: "strain" }],
+        trust: [{ group: "children", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
@@ -267,10 +281,10 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c5s4",
       chapter: 5,
-      speakerGroup: "hadashim",
+      speakerGroup: "newcomers",
       title: t("chapter5.c5s4.title"),
       text: t("chapter5.c5s4.text"),
-      subject: "chefetz",
+      subject: "things",
       act: "refused-to-share",
       justification: "nobody-said-no",
       power: "equal",
@@ -286,47 +300,51 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
         "you-decide": {
           text: t("chapter5.c5s4.variant.you_decide"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
         "other-decides": {
           text: t("chapter5.c5s4.variant.other_decides"),
           rights: [],
           trust: [
-            { group: "hadashim", delta: 1 },
-            { group: "vatikim", delta: 1 },
+            { group: "newcomers", delta: 1 },
+            { group: "old-timers", delta: 1 },
           ],
         },
       },
       noRuleOutcome: {
         text: t("chapter5.c5s4.no_rule_outcome"),
-        rights: [{ protection: "kinyan", group: "hadashim", move: "strain" }],
-        trust: [{ group: "hadashim", delta: -1 }],
+        rights: [
+          { protection: "property", group: "newcomers", move: "strain" },
+        ],
+        trust: [{ group: "newcomers", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter5.c5s4.override_outcome"),
-        rights: [{ protection: "shivyon", group: "hadashim", move: "strain" }],
-        trust: [{ group: "hadashim", delta: -1 }],
+        rights: [
+          { protection: "equality", group: "newcomers", move: "strain" },
+        ],
+        trust: [{ group: "newcomers", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter5.c5s4.variant.you_decide"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
         forbidden: {
           text: t("chapter5.c5s4.variant.you_decide"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
         "by-turn": {
           text: t("chapter5.c5s4.variant.you_decide"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
         "share-equally": {
           text: t("chapter5.c5s4.variant.you_decide"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
       },
     },

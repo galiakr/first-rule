@@ -100,7 +100,7 @@ export interface SubjectForms {
   be: string;
 }
 
-const SUBJECTS: Subject[] = ["mayim", "shetach", "shvil", "chefetz", "davar"];
+const SUBJECTS: Subject[] = ["water", "land", "path", "things", "confidence"];
 
 export const subjectForms = perLanguage(
   (lang: Lang): Record<Subject, SubjectForms> => {
@@ -161,12 +161,12 @@ export const amendmentOptions = perLanguage(
 export const groupLabel = perLanguage((lang: Lang): Record<GroupId, string> => {
   const t = translator(lang);
   return {
-    vatikim: t("village.groups.vatikim.label"),
-    hadashim: t("village.groups.hadashim.label"),
-    roim: t("village.groups.roim.label"),
-    banaim: t("village.groups.banaim.label"),
-    yeladim: t("village.groups.yeladim.label"),
-    ovrim: t("village.groups.ovrim.label"),
+    "old-timers": t("village.groups.old-timers.label"),
+    newcomers: t("village.groups.newcomers.label"),
+    shepherds: t("village.groups.shepherds.label"),
+    builders: t("village.groups.builders.label"),
+    children: t("village.groups.children.label"),
+    "passers-through": t("village.groups.passers-through.label"),
   };
 });
 
@@ -206,7 +206,7 @@ export function authoritySentence(
     findOption(whoOptions(lang), authority.who.scope).template,
     // The authority rule is not about a subject, so {et}/{be} never appear
     // in its WHO fragment; any subject would do here.
-    "mayim",
+    "water",
     lang,
     authority.who.group,
   );

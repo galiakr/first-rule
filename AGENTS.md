@@ -69,7 +69,7 @@ These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test h
 - **Every resolution records which of the three jobs it was** (`LogEntry.kind`, via `resolutionKind`). Chapter 6 replays these moments back to the child by name, so a mislabelled one puts the wrong word on something they did. `resolve()` requires it deliberately — a new call site has to say what kind of moment it is rather than defaulting to a wrong one.
 - **The book is closed after chapter 5** (§10). `canWriteRules()` collapses any later write-rule prompt to no-rule; don't work around it.
 - **The amendment rule is written behind a veil** (§10) — the child writes it in chapter 5 without knowing chapter 7 will make them want to change something. Nothing in `BookClosing` may hint at that; the veil is the point.
-- **`ovrim` never speaks** (§4: "אין להם קול בכלל"). No situation may set `speakerGroup: "ovrim"` — someone else always reports what a passer-through did or had done to them. Their trust still moves; it matters for Chapter 5's election. Pinned by a content test.
+- **`passers-through` never speaks** (§4: "אין להם קול בכלל"). No situation may set `speakerGroup: "passers-through"` — someone else always reports what a passer-through did or had done to them. Their trust still moves; it matters for Chapter 5's election. Pinned by a content test.
 
 ## What to avoid
 

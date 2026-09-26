@@ -35,7 +35,7 @@ const RULE: Rule = {
   what: "ask-first",
   when: "always",
   consequence: "return-or-fix",
-  subject: "mayim",
+  subject: "water",
   writtenAt: "c1s1",
 };
 
@@ -52,7 +52,9 @@ describe("AboutVillage", () => {
       />,
     );
 
-    expect(screen.getByText(t("village.groups.ovrim.label"))).toBeVisible();
+    expect(
+      screen.getByText(t("village.groups.passers-through.label")),
+    ).toBeVisible();
     await user.type(screen.getByLabelText(t("about.name_prompt")), "עין חרוד");
     await user.click(
       screen.getByRole("button", { name: t("about.enter_village") }),
@@ -141,7 +143,7 @@ describe("RuleBuilder", () => {
     const onWrite = vi.fn();
     renderWithLanguage(
       <RuleBuilder
-        subject="mayim"
+        subject="water"
         situationId="c1s1"
         existingRules={[]}
         onWrite={onWrite}
@@ -173,7 +175,7 @@ describe("RuleBuilder", () => {
 
     expect(onWrite).toHaveBeenCalledOnce();
     const written = onWrite.mock.calls[0][0] as Rule;
-    expect(written.subject).toBe("mayim");
+    expect(written.subject).toBe("water");
     expect(written.who.scope).toBe("residents");
     expect(written.what).toBe("ask-first");
   });
@@ -182,7 +184,7 @@ describe("RuleBuilder", () => {
     const user = userEvent.setup();
     renderWithLanguage(
       <RuleBuilder
-        subject="mayim"
+        subject="water"
         situationId="c1s1"
         existingRules={[]}
         onWrite={() => {}}
@@ -202,7 +204,7 @@ describe("RuleBuilder", () => {
     const user = userEvent.setup();
     renderWithLanguage(
       <RuleBuilder
-        subject="mayim"
+        subject="water"
         situationId="c1s3"
         existingRules={[RULE]}
         onWrite={() => {}}
@@ -235,7 +237,7 @@ describe("RuleBuilder", () => {
     const onSkip = vi.fn();
     renderWithLanguage(
       <RuleBuilder
-        subject="mayim"
+        subject="water"
         situationId="c1s1"
         existingRules={[]}
         onWrite={() => {}}

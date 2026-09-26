@@ -28,7 +28,7 @@ import type {
  * hook back into chapter 6's question: the WHO field the child picks here
  * decides who has a voice in choosing who rules.
  */
-const NON_RESIDENT_GROUPS: GroupId[] = ["ovrim"];
+const NON_RESIDENT_GROUPS: GroupId[] = ["passers-through"];
 
 /** Which groups the authority rule's WHO field gives a vote to. */
 export function eligibleGroups(who: RuleWho): GroupId[] {

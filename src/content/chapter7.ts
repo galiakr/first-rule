@@ -6,7 +6,7 @@
  * in chapter 5, and the only way through is the amendment rule they wrote at
  * the end of that chapter, behind a veil, before they knew who would need it.
  *
- * c7s1 is deliberately a `davar` situation. That subject was introduced at
+ * c7s1 is deliberately a `confidence` situation. That subject was introduced at
  * c2s2 and never pinched again — a standing §7 violation, since the design's
  * central content law is that every rule the child can write has at least one
  * future situation where applying it costs somebody. This is that situation,
@@ -40,11 +40,11 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c7s1",
       chapter: 7,
-      speakerGroup: "yeladim",
+      speakerGroup: "children",
       title: t("chapter7.c7s1.title"),
       text: t("chapter7.c7s1.text"),
       // The one subject the game never pinched until now (§7).
-      subject: "davar",
+      subject: "confidence",
       act: "told-what-was-private",
       justification: "meant-to-return",
       power: "victim-weaker",
@@ -57,48 +57,56 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
       lesson: t("chapter7.c7s1.lesson"),
       noRuleOutcome: {
         text: t("chapter7.c7s1.no_rule_outcome"),
-        rights: [{ protection: "bitui", group: "yeladim", move: "strain" }],
-        trust: [{ group: "yeladim", delta: -1 }],
+        rights: [
+          { protection: "expression", group: "children", move: "strain" },
+        ],
+        trust: [{ group: "children", delta: -1 }],
       },
       overrideOutcome: {
         text: t("chapter7.c7s1.override_outcome"),
-        rights: [{ protection: "shivyon", group: "yeladim", move: "strain" }],
-        trust: [{ group: "yeladim", delta: -1 }],
+        rights: [{ protection: "equality", group: "children", move: "strain" }],
+        trust: [{ group: "children", delta: -1 }],
       },
       outcomes: {
         "ask-first": {
           text: t("chapter7.c7s1.outcomes.ask_first"),
-          rights: [{ protection: "machse", group: "yeladim", move: "strain" }],
-          trust: [{ group: "yeladim", delta: -1 }],
+          rights: [
+            { protection: "shelter", group: "children", move: "strain" },
+          ],
+          trust: [{ group: "children", delta: -1 }],
         },
         // Written to protect somebody, and here it does the opposite.
         forbidden: {
           text: t("chapter7.c7s1.outcomes.forbidden"),
           rights: [
-            { protection: "machse", group: "yeladim", move: "break" },
-            { protection: "shayachut", group: "yeladim", move: "strain" },
+            { protection: "shelter", group: "children", move: "break" },
+            { protection: "belonging", group: "children", move: "strain" },
           ],
-          trust: [{ group: "yeladim", delta: -1 }],
+          trust: [{ group: "children", delta: -1 }],
         },
         "by-turn": {
           text: t("chapter7.c7s1.outcomes.by_turn"),
-          rights: [{ protection: "machse", group: "yeladim", move: "strain" }],
+          rights: [
+            { protection: "shelter", group: "children", move: "strain" },
+          ],
           trust: [],
         },
         "share-equally": {
           text: t("chapter7.c7s1.outcomes.share_equally"),
-          rights: [{ protection: "bitui", group: "yeladim", move: "break" }],
-          trust: [{ group: "yeladim", delta: -1 }],
+          rights: [
+            { protection: "expression", group: "children", move: "break" },
+          ],
+          trust: [{ group: "children", delta: -1 }],
         },
       },
     },
     {
       id: "c7s2",
       chapter: 7,
-      speakerGroup: "vatikim",
+      speakerGroup: "old-timers",
       title: t("chapter7.c7s2.title"),
       text: t("chapter7.c7s2.text"),
-      subject: "davar",
+      subject: "confidence",
       act: "told-what-was-private",
       justification: "nobody-said-no",
       power: "equal",
@@ -111,7 +119,7 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
       invitesAmendment: true,
       // The rule protects what שירה told in confidence, so it is the children
       // whose agreement the child needs — the same group c7s1 just cost.
-      amendmentStakeholder: "yeladim",
+      amendmentStakeholder: "children",
       lesson: t("chapter7.c7s2.lesson"),
       // Branches on what the amendment rule turned out to mean, which the
       // child decided two chapters ago without knowing.
@@ -123,15 +131,17 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
         },
         "applied-author": {
           text: t("chapter7.c7s2.variant.applied_author"),
-          rights: [{ protection: "halich", group: "vatikim", move: "strain" }],
-          trust: [{ group: "yeladim", delta: 1 }],
+          rights: [
+            { protection: "fair-hearing", group: "old-timers", move: "strain" },
+          ],
+          trust: [{ group: "children", delta: 1 }],
         },
         "applied-agreed": {
           text: t("chapter7.c7s2.variant.applied_agreed"),
           rights: [],
           trust: [
-            { group: "yeladim", delta: 1 },
-            { group: "vatikim", delta: 1 },
+            { group: "children", delta: 1 },
+            { group: "old-timers", delta: 1 },
           ],
         },
         "refused-no-agreement": {
@@ -142,7 +152,7 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
         delayed: {
           text: t("chapter7.c7s2.variant.delayed"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
         "refused-unchangeable": {
           text: t("chapter7.c7s2.variant.refused_unchangeable"),
@@ -169,10 +179,10 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c7s3",
       chapter: 7,
-      speakerGroup: "hadashim",
+      speakerGroup: "newcomers",
       title: t("chapter7.c7s3.title"),
       text: t("chapter7.c7s3.text"),
-      subject: "davar",
+      subject: "confidence",
       act: "told-what-was-private",
       justification: "everyone-does-it",
       power: "equal",
@@ -191,28 +201,36 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
         },
         "applied-author": {
           text: t("chapter7.c7s3.variant.applied_author"),
-          rights: [{ protection: "shivyon", group: "vatikim", move: "strain" }],
+          rights: [
+            { protection: "equality", group: "old-timers", move: "strain" },
+          ],
           trust: [],
         },
         "applied-agreed": {
           text: t("chapter7.c7s3.variant.applied_agreed"),
           rights: [],
-          trust: [{ group: "hadashim", delta: 1 }],
+          trust: [{ group: "newcomers", delta: 1 }],
         },
         "refused-no-agreement": {
           text: t("chapter7.c7s3.variant.refused_no_agreement"),
-          rights: [{ protection: "machse", group: "yeladim", move: "strain" }],
+          rights: [
+            { protection: "shelter", group: "children", move: "strain" },
+          ],
           trust: [],
         },
         // The wait is what this form costs, and somebody stands inside it.
         delayed: {
           text: t("chapter7.c7s3.variant.delayed"),
-          rights: [{ protection: "machse", group: "hadashim", move: "break" }],
-          trust: [{ group: "hadashim", delta: -1 }],
+          rights: [
+            { protection: "shelter", group: "newcomers", move: "break" },
+          ],
+          trust: [{ group: "newcomers", delta: -1 }],
         },
         "refused-unchangeable": {
           text: t("chapter7.c7s3.variant.refused_unchangeable"),
-          rights: [{ protection: "machse", group: "yeladim", move: "strain" }],
+          rights: [
+            { protection: "shelter", group: "children", move: "strain" },
+          ],
           trust: [],
         },
       },
@@ -235,13 +253,13 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c7s4",
       chapter: 7,
-      speakerGroup: "banaim",
+      speakerGroup: "builders",
       title: t("chapter7.c7s4.title"),
       text: t("chapter7.c7s4.text"),
       // The one place in the game that uses `broke`. It fits the quietest
       // scene there is: a snapped handle, settled out of the book by two
       // people who don't need anyone to rule on it.
-      subject: "chefetz",
+      subject: "things",
       act: "broke",
       justification: "nobody-said-no",
       power: "equal",
@@ -267,7 +285,7 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
       outcomes: sameForEveryClause({
         text: t("chapter7.c7s4.outcome"),
         rights: [],
-        trust: [{ group: "banaim", delta: 1 }],
+        trust: [{ group: "builders", delta: 1 }],
       }),
     },
   ];
