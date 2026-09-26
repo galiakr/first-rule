@@ -1,6 +1,6 @@
 # Chapter 7 — "לשנות את מה שכבר כתוב" (Changing What's Already Written)
 
-> Status: planned, not yet built. Depends on Chapter 5's amendment rule and Chapter 6's separation. This is the ending.
+> Status: **built**. The last chapter — the game is complete at seven.
 
 ## Context
 
@@ -44,8 +44,16 @@ Then the finale (decision #5), and the line about the promise to your future sel
 - `AmendmentAttempt` screen: the rule as it is, the child's proposed change (reopen `RuleBuilder` on it, as in Chapter 5's change-one-rule step), and the in-world response per branch.
 - `ChapterEnd` finale variant (decision #5).
 
-## Open questions
+## Open questions, as answered
 
-- Which subject the hurting rule should prefer, if the child wrote several candidates — lean: the _oldest_ rule in the book, since it's the one they least remember choosing.
-- Whether the whole-village branch's "someone hurt meanwhile" should be a rights break or only trust — a break is closer to the doc's wording.
-- The two-agree refusal: is one refusal final, or may the child try once more after a situation passes? Lean: final. One round, like the election.
+- **The rule that hurts is the one that just bit them**, at c7s1, with the oldest rule in the book as the fallback and an authored "there was nothing to change" beat when the book is empty. Better than the plan's "oldest" lean: it is the rule the child has a live reason to want changed, rather than one the game picked for them.
+- **The whole-village delay breaks a right**, not just trust — closer to the doc, and it should be: the person standing inside the wait did nothing except arrive a day too early.
+- **One refusal is final.** One round, like the election in chapter 5.
+
+## What changed in the build
+
+- **c7s1 is a `davar` situation, and that clears a standing §7 violation.** The subject was introduced at c2s2 and never pinched again, so a rule written there could never fire a second time. A new test now checks the whole game for this class of gap — every situation that invites a rule must have a later situation on the same subject — and it passes for all seven chapters.
+- **The bite was chosen so the child wants the rule _changed_, not merely resented.** The rule protects what was told in confidence; here keeping it means nobody can help שירה. A rule doing exactly what it says, and costing exactly what it costs.
+- **`mustAgree` needed an authored stakeholder.** Falling through to "whoever trusts you least" made the two-agree branch refuse nearly every time — after two dozen situations some group has always slipped, so one of the four endings was effectively dead. The situation now names who is on the other side of the specific rule (`yeladim`, whose confidence it protects), which is truer and winnable.
+- **`replaceRule` was letting a rewrite change a rule's subject.** §6 says the subject is inherited from the situation that produced it and is never chosen; a playthrough put two rules about the same thing in the book because of it. Rewrites may now change the four clauses and nothing else. This also affected chapter 5's change-one-rule step.
+- **The engine now plays the whole game end to end in a test** — 28 situations, seven chapters, no rendering. The README has claimed the engine is React-free since chapter 1; this is the proof, and it is the one test that would catch a chapter wiring itself into a dead end.

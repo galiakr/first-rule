@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import AboutVillage from "@/components/AboutVillage";
+import AmendmentAttempt from "@/components/AmendmentAttempt";
 import AuthorityBuilder from "@/components/AuthorityBuilder";
 import BookClosing from "@/components/BookClosing";
 import ElectionResult from "@/components/ElectionResult";
@@ -29,11 +30,18 @@ import {
   initialState,
   outcomeFor,
   promptFor,
-  replaceRule,
   resolutionKind,
   resolve,
   saysOverrideNote,
 } from "@/engine/game";
+import {
+  amendmentTarget,
+  amendmentVariants,
+  applyAmendment,
+  attemptAmendment,
+  demonstrateAmendment,
+  replaceRule,
+} from "@/engine/amendment";
 import {
   canOverride,
   closeBook,
@@ -231,7 +239,11 @@ export default function Page() {
     const { wrote = false, ...rest } = next;
     setDecidedPrompt(prompt);
     setPending({
-      variants: [...separationVariants(state), ...variantKeys(state)],
+      variants: [
+        ...amendmentVariants(state),
+        ...separationVariants(state),
+        ...variantKeys(state),
+      ],
       ...rest,
       kind: resolutionKind(prompt.kind, { overrode: rest.overrode, wrote }),
     });
@@ -263,7 +275,11 @@ export default function Page() {
       governedBy: null,
       appliedRuleIds: [],
       overrode: false,
-      variants: [...separationVariants(next), ...variantKeys(next)],
+      variants: [
+        ...amendmentVariants(next),
+        ...separationVariants(next),
+        ...variantKeys(next),
+      ],
       kind: "wrote-authority",
     });
   }
@@ -281,6 +297,40 @@ export default function Page() {
       overrode: false,
       variants: ["revoked"],
       kind: "no-rule",
+    });
+  }
+
+  /**
+   * The child's one attempt at changing a rule (§9.7). What happens is
+   * decided entirely by the amendment rule they wrote at the end of chapter
+   * 5 — no special case for them, because the veil it was written behind is
+   * the whole point.
+   */
+  function amend(target: Rule, next: Rule) {
+    const result = attemptAmendment(
+      state,
+      target,
+      situation!.amendmentStakeholder,
+    );
+    let after = applyAmendment(state, target, next, result, situation!.id);
+    // "Whoever wrote it may change it" means anyone can, and the chapter
+    // shows that rather than saying it: somebody else uses the same power
+    // on the child's oldest rule, in the same breath.
+    if (result === "applied" && state.amendment === "author") {
+      after = demonstrateAmendment(after, target.id);
+    }
+    setState(after);
+    setDecidedPrompt(prompt);
+    setPending({
+      governedBy: null,
+      appliedRuleIds: [],
+      overrode: false,
+      variants: [
+        ...amendmentVariants(after),
+        ...separationVariants(after),
+        ...variantKeys(after),
+      ],
+      kind: result === "applied" ? "wrote-rule" : "no-rule",
     });
   }
 
@@ -465,6 +515,30 @@ export default function Page() {
                       </Action>
                     </div>
                   </>
+                ) : null}
+
+                {prompt.kind === "amend" ? (
+                  <AmendmentAttempt
+                    rule={amendmentTarget(state, "c7s1")}
+                    amendment={state.amendment}
+                    onAttempt={(next) => {
+                      const target = amendmentTarget(state, "c7s1");
+                      if (target) amend(target, next);
+                      else
+                        settle({
+                          governedBy: null,
+                          appliedRuleIds: [],
+                          overrode: false,
+                        });
+                    }}
+                    onLeave={() =>
+                      settle({
+                        governedBy: null,
+                        appliedRuleIds: [],
+                        overrode: false,
+                      })
+                    }
+                  />
                 ) : null}
 
                 {prompt.kind === "write-authority" ? (
@@ -781,6 +855,7 @@ export default function Page() {
           <ChapterEnd
             state={state}
             epilogue={currentChapter.epilogue}
+            finale={!hasNextChapter}
             onContinue={hasNextChapter ? continueToNextChapter : undefined}
           />
         ) : null}
