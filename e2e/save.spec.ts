@@ -44,11 +44,11 @@ test("a village survives closing the tab, and can be thrown away", async ({
 
   // The village is gone: back to the opening screen, and it stays gone.
   await expect(
-    page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
+    page.getByRole("heading", { name: /אין כאן אף כלל/ }),
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
+    page.getByRole("heading", { name: /אין כאן אף כלל/ }),
   ).toBeVisible();
 });
 
@@ -71,12 +71,12 @@ test("the village can be thrown away from inside the game", async ({
   await contents.getByRole("button", { name: "כן, להתחיל מחדש" }).click();
 
   await expect(
-    page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
+    page.getByRole("heading", { name: /אין כאן אף כלל/ }),
   ).toBeVisible();
 
   // And it stays gone — no offer to resume what was just discarded.
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
+    page.getByRole("heading", { name: /אין כאן אף כלל/ }),
   ).toBeVisible();
 });

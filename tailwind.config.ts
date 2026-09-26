@@ -13,10 +13,17 @@ const config: Config = {
         lamp: "#E8A33D",
         harm: "#C2563C",
         quiet: "#8FA79C",
+        // The entry screen burns hotter than the game it opens onto: a
+        // deeper night so the lamp reads as light rather than as a tint.
+        deepnight: "#07130E",
+        blaze: "#FFB43D",
+        ember: "#FF7A3D",
+        well: "#4FA8C4",
       },
       fontFamily: {
         book: ["var(--font-book)", "serif"],
         ui: ["var(--font-ui)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
       },
       maxWidth: { read: "34rem" },
     },

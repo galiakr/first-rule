@@ -630,6 +630,14 @@
     "cost_heading": "What changing something cost you",
     "heading": "This Is the Village"
   },
+  "landing": {
+    "book_label": "Your rule",
+    "headline": "There are no rules here yet.",
+    "made_it": "That's it. You wrote a law. Now it needs a village to live under it.",
+    "prompt": "Try it now. Four choices, and the rule is written.",
+    "subhead": "You're going to write the first one.",
+    "who_it_lands_on": "This rule is going to land on these people."
+  },
   "moments": {
     "continue": "Three jobs",
     "executive": {

@@ -42,7 +42,7 @@ describe("playing the game through its own screens", () => {
     renderWithLanguage(<Page />);
 
     expect(
-      screen.getByRole("heading", { name: t("about.title") }),
+      screen.getByRole("heading", { name: new RegExp(t("landing.headline")) }),
     ).toBeVisible();
 
     await user.click(
@@ -223,7 +223,7 @@ describe("playing the game through its own screens", () => {
     // Back to the very beginning, and the saved copy is gone too — otherwise
     // the next load would offer to resume what was just thrown away.
     expect(
-      screen.getByRole("heading", { name: t("about.title") }),
+      screen.getByRole("heading", { name: new RegExp(t("landing.headline")) }),
     ).toBeVisible();
     expect(window.localStorage.getItem("first-rule:save")).toBeNull();
   });

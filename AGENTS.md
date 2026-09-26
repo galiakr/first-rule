@@ -34,7 +34,9 @@ src/
     language.tsx   LanguageProvider + useLang/useT — the current language, and <html lang/dir>
     situations.ts  every situation keyed by id, for precedent source lookup
     tokens/        language tokens: tokens.csv (source), generate.py, locales/*.json (generated), t()
-  components/      rule builder, rule book, notebook, table of contents, chapter end, about screen, precedent choice, language switcher
+  components/      rule builder, rule book, notebook, table of contents, chapter end, entry screen, precedent choice, language switcher
+                   RuleTaste.tsx  the entry screen's live builder — runs on the real
+                                  engine, so the demo can't drift from the game
   app/             single-screen state machine driving the whole game across chapters (src/app/page.tsx)
 ```
 
@@ -65,6 +67,7 @@ These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test h
 - **The rule book is open the whole game**; the rights board is only revealed at the end of a chapter (§10) — don't leak rights state into the always-visible book.
 - **The notebook names a concept only after its chapter is finished** (§2: felt first, named afterwards). `src/content/notes.ts` holds one note per chapter, and it is the only place in the game that uses adult vocabulary ("תקדים" — precedent, "שלטון החוק" — the rule of law) — never put those words into playable chapter content.
 - **Never run a blanket regex over the copy.** A contraction pass across the English column turned "when keeping it is inconvenient" into "when keeping it's inconvenient" in two places — "it" was an object, not a subject. Prose edits need reading, not matching.
+- **The entry screen is a poster; the game is a book.** It runs wider (`max-w-2xl`), hotter (`.lamplight-entry`) and in a display face (Rubik), and it hides the contents/book/notebook buttons because all three are empty before the first situation. Inside the game the measure narrows and the lamp turns down — the child should feel they walked in, not that they changed product.
 - **A situation's subject is inherited, never chosen** — this is what makes rules land narrower than the child expects, on purpose. `replaceRule` enforces it: rewriting a rule may change its four clauses and nothing else, not its subject and not where it came from.
 - **Every resolution records which of the three jobs it was** (`LogEntry.kind`, via `resolutionKind`). Chapter 6 replays these moments back to the child by name, so a mislabelled one puts the wrong word on something they did. `resolve()` requires it deliberately — a new call site has to say what kind of moment it is rather than defaulting to a wrong one.
 - **The book is closed after chapter 5** (§10). `canWriteRules()` collapses any later write-rule prompt to no-rule; don't work around it.
