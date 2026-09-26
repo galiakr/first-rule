@@ -8,6 +8,10 @@
 #
 # Deploying is deliberately gated on the tests passing. A green Pages badge
 # over a broken game would be worse than no deploy at all.
+#
+# ONE MANUAL STEP, once per repository: Settings -> Pages -> Source must be
+# set to "GitHub Actions". Until that is done this workflow builds fine and
+# then fails on the deploy job, which is confusing if you don't know why.
 
 name: Deploy to Pages
 
