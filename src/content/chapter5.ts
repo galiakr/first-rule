@@ -1,9 +1,9 @@
 /**
- * פרק 5 — מי מחליט מי מחליט.
+ * Chapter 5 — "מי מחליט מי מחליט" (Who Decides Who Decides).
  *
  * Design doc §9.5. Four chapters of ruling without anyone having appointed
- * the child (§4) finally get questioned: יותם settles a dispute on his own
- * (c5s1), דנה settles a different one against him (c5s2), and since nothing
+ * the child (§4) finally get questioned: Yotam settles a dispute on his own
+ * (c5s1), Dana settles a different one against him (c5s2), and since nothing
  * in the book says who decides, both are exactly equally right. The only way
  * out is a rule about who decides — and like every rule the child has
  * written, it applies to them too.
@@ -30,7 +30,7 @@ export const chapter5 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c5s1",
       chapter: 5,
-      // The shepherds are the ones who went to יותם instead of to you, so a
+      // The shepherds are the ones who went to Yotam instead of to you, so a
       // low-trust opener here reads exactly right.
       speakerGroup: "shepherds",
       title: t("chapter5.c5s1.title"),

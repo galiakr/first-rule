@@ -1,5 +1,5 @@
 /**
- * פרק 3 — הכלל שלך נגדך.
+ * Chapter 3 — "הכלל שלך נגדך" (Your Rule Against You).
  *
  * Unlike Chapters 1–2, all four situations here are retrospective — the
  * chapter's whole point (design doc §9.3, one line) is that an *existing*

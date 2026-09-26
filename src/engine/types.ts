@@ -1,17 +1,17 @@
 /**
- * Core data model for כלל ראשון.
+ * Core data model for "כלל ראשון" (First Rule).
  * Everything here is plain data — no React, no I/O. The whole game is
  * testable through these types and the pure functions in this folder.
  */
 
 /** The six groups in the village (design doc §4). */
 export type GroupId =
-  | "old-timers" // הוותיקים
-  | "newcomers" // החדשים
-  | "shepherds" // הרועים
-  | "builders" // הבנאים
-  | "children" // הילדים
-  | "passers-through"; // העוברים — no voice, not residents
+  | "old-timers"
+  | "newcomers"
+  | "shepherds"
+  | "builders"
+  | "children"
+  | "passers-through"; // no voice, and not residents
 
 /** What a rule is about. Inherited from the situation, never chosen (§6). */
 export type Subject = "water" | "land" | "path" | "things" | "confidence";
@@ -19,28 +19,28 @@ export type Subject = "water" | "land" | "path" | "things" | "confidence";
 /* ---- the four builder fields, four options each (§6) ---- */
 
 export type WhoScope =
-  | "residents" // מי שגר בכפר
-  | "anyone-present" // כל מי שנמצא כאן עכשיו
-  | "group" // קבוצה מסוימת
-  | "everyone-except"; // כולם חוץ מ־
+  | "residents" // whoever lives in the village
+  | "anyone-present" // anyone who is here right now
+  | "group" // one particular group
+  | "everyone-except"; // everyone but one group
 
 export type WhatClause =
-  | "ask-first" // אסור לקחת בלי לבקש
-  | "forbidden" // אסור בכלל
-  | "by-turn" // מותר, אבל לפי תור
-  | "share-equally"; // חייבים לחלוק שווה
+  | "ask-first" // must not take without asking
+  | "forbidden" // not allowed at all
+  | "by-turn" // allowed, but in turns
+  | "share-equally"; // must share equally
 
 export type WhenClause =
-  | "always" // תמיד
-  | "when-scarce" // רק כשאין מספיק לכולם
-  | "when-harmed" // רק אם מישהו נפגע מזה
-  | "first-time-forgiven"; // רק בפעם הראשונה סולחים
+  | "always"
+  | "when-scarce" // only when there is not enough for everyone
+  | "when-harmed" // only if someone is hurt by it
+  | "first-time-forgiven"; // the first time is forgiven
 
 export type ConsequenceClause =
-  | "return-or-fix" // צריך להחזיר או לתקן
-  | "help-victim" // צריך לעזור לנפגע יום אחד
-  | "lose-next-turn" // מפסיד את הזכות לזה בפעם הבאה
-  | "village-decides"; // הכפר מחליט בכל מקרה לגופו
+  | "return-or-fix" // must give it back or fix it
+  | "help-victim" // must help the one who was hurt, one day
+  | "lose-next-turn" // loses the right to it next time
+  | "village-decides"; // the village decides case by case
 
 export interface RuleWho {
   scope: WhoScope;
@@ -65,7 +65,7 @@ export interface Actor {
   id: string;
   name: string;
   groups: GroupId[];
-  /** Lives in the village. False for העוברים. */
+  /** Lives in the village. False for the passers-through. */
   resident: boolean;
 }
 
@@ -89,12 +89,12 @@ export type PowerBalance = "victim-weaker" | "equal" | "victim-stronger";
 
 /** The six protections (§8). */
 export type Protection =
-  | "property" // קניין
-  | "expression" // ביטוי
-  | "equality" // שוויון בפני החוק
-  | "shelter" // מחסה
-  | "fair-hearing" // הליך הוגן
-  | "belonging"; // שייכות
+  | "property"
+  | "expression"
+  | "equality" // equality before the law
+  | "shelter"
+  | "fair-hearing" // due process: hearing both sides
+  | "belonging"; // belonging to the village
 
 export interface RightsEffect {
   protection: Protection;
@@ -288,11 +288,11 @@ export interface KeyMoment {
  * options per field, and this is a different kind of rule.
  */
 export type AuthorityForm =
-  | "you" // אני מחליט
-  | "most-senior" // מי שהכי ותיק — יותם, not the child
-  | "two-together" // שניים יחד — the child and the most senior
-  | "each-alone" // כל אחד לעצמו
-  | "village-chooses"; // הכפר בוחר — an election
+  | "you" // I decide
+  | "most-senior" // whoever has been here longest — Yotam, not the child
+  | "two-together" // the child and the most senior, together
+  | "each-alone" // each person decides for themselves
+  | "village-chooses"; // the village chooses — an election
 
 /** Who decides, and who that rule reaches. The WHO field sets who votes. */
 export interface AuthorityRule {
@@ -302,10 +302,10 @@ export interface AuthorityRule {
 
 /** How a written rule may later be changed (§10). Written behind a veil. */
 export type AmendmentForm =
-  | "author" // מי שכתב אותו
-  | "two-agree" // שניים צריכים להסכים
-  | "whole-village" // כל הכפר
-  | "cannot"; // אי אפשר לשנות
+  | "author" // whoever wrote it
+  | "two-agree" // two people have to agree
+  | "whole-village" // the whole village has to agree
+  | "cannot"; // it cannot be changed
 
 /**
  * One round of voting, decided entirely by trust the child already earned
@@ -354,10 +354,10 @@ export type TrustLevel = "comes-to-you" | "comes-but" | "stops-coming";
  * game without noticing. None of that is recoverable from the rules or the
  * rights board, so it has to be recorded as it happens.
  *
- *   wrote-rule / wrote-authority  → חקיקה, legislating
+ *   wrote-rule / wrote-authority  → legislating (חקיקה)
  *   ruled-by-precedent /
- *     chose-in-collision          → שפיטה, judging
- *   applied-rule                  → ביצוע, making it actually happen
+ *     chose-in-collision          → judging (שפיטה)
+ *   applied-rule                  → carrying out (ביצוע)
  *   overrode                      → none of the three, and §7's whole subject
  *   no-rule                       → nothing was decided
  */
@@ -404,7 +404,7 @@ export interface GameState {
   election: Election | null;
   /**
    * Who rules from here on. "other" after losing an election, or after
-   * writing that the most senior decides — which is יותם, not the child.
+   * writing that the most senior decides — which is Yotam, not the child.
    * Losing is a real outcome and the game continues under it (§9.5).
    */
   decider: Decider;

@@ -1,5 +1,5 @@
 /**
- * פרק 2 — זה כבר קרה.
+ * Chapter 2 — "זה כבר קרה" (This Already Happened).
  *
  * Situations 1–2 are fresh cases (§9) that introduce subjects untouched by
  * Chapter 1 — things (a personal object) and confidence (something told in

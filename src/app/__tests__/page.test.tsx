@@ -156,7 +156,7 @@ describe("playing the game through its own screens", () => {
       screen.getByRole("button", { name: t("app.lesson.next") }),
     );
 
-    // …skip the path situation, and it comes back at the third, on שירה.
+    // …skip the path situation, and it comes back at the third, on Shira.
     await user.click(screen.getByRole("button", { name: t("builder.skip") }));
     await user.click(
       screen.getByRole("button", { name: t("app.outcome.continue") }),

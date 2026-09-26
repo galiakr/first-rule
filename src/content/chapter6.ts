@@ -1,5 +1,5 @@
 /**
- * פרק 6 — הספר גמור, מי שומר עליו.
+ * Chapter 6 — "הספר גמור, מי שומר עליו" (The Book Is Done, Who Guards It).
  *
  * Design doc §9.6. The book is closed, so nothing here invites a rule; what's
  * left is what gets done with it, which turns out to be three jobs rather
@@ -13,7 +13,7 @@
  *   c6s1 — you-judge / other-judges
  *   c6s2 — you-enforce / other-enforces
  *   c6s3 — kept-together / split. The pinch: the child judges their own case
- *          under a rule they wrote, and מיכל names it without accusing.
+ *          under a rule they wrote, and Michal names it without accusing.
  *   c6s4 — kept-together / split, plus a `revoked` variant reachable only by
  *          choosing to tear the arrangement up (§9.6: "loses everything he
  *          built"). The cost of that is computed in revokeSeparation, since
@@ -156,7 +156,7 @@ export const chapter6 = perLanguage((lang: Lang): Chapter => {
       invitesRule: false,
       lesson: t("chapter6.c6s3.lesson"),
       // The pinch. Keeping both writing and judging means ruling on your own
-      // case under your own rule, and מיכל names it — without accusing,
+      // case under your own rule, and Michal names it — without accusing,
       // because §2 forbids the game telling the child they were wrong.
       variantOutcomes: {
         "kept-together": {

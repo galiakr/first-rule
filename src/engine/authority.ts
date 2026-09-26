@@ -23,7 +23,7 @@ import type {
 } from "./types";
 
 /**
- * העוברים are the one group that doesn't live in the village (§4), so they
+ * the passers-through are the one group that doesn't live in the village (§4), so they
  * are the one group a `residents` scope leaves out of the vote. This is the
  * hook back into chapter 6's question: the WHO field the child picks here
  * decides who has a voice in choosing who rules.
@@ -78,7 +78,7 @@ export function runElection(state: GameState, who: RuleWho): Election {
  * Who ends up ruling under a given form.
  *
  * `most-senior` hands it away: the most senior person in the village is
- * יותם, not the child, so choosing it is choosing to stop deciding.
+ * Yotam, not the child, so choosing it is choosing to stop deciding.
  * `each-alone` keeps the child nominally in place — nobody decides for
  * anybody, which costs the village plenty, but it costs it in the outcomes
  * rather than by moving the role.

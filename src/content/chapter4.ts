@@ -1,11 +1,11 @@
 /**
- * פרק 4 — מי שלא היה כאן.
+ * Chapter 4 — "מי שלא היה כאן" (Who Wasn't Here).
  *
  * The passers-through arrive (design doc §9.4). The chapter turns on one
  * field the child picked chapters ago: WHO a rule applies to. §6 requires
  * both of its outcomes to be reachable, and says neither is right —
  *
- *   residents / group      → no rule reaches נעם. The gap is felt (c4s1).
+ *   residents / group      → no rule reaches Noam. The gap is felt (c4s1).
  *   anyone-present / …     → he's punished under a rule he had no part in
  *                            writing, and a character says so out loud.
  *
@@ -14,12 +14,12 @@
  *
  * Two rules the content holds to, both pinned by tests:
  *
- * 1. `passers-through` never speaks. §4: "אין להם קול בכלל" — no situation here sets
- *    speakerGroup "passers-through", so what נעם did, or what was done to him, is
+ * 1. `passers-through` never speaks. §4: "אין להם קול בכלל" (they have no voice at all) — no situation here sets
+ *    speakerGroup "passers-through", so what Noam did, or what was done to him, is
  *    always reported by someone else. His trust still moves; it's just never
  *    his voice that opens a scene.
  * 2. `ruleApplies` checks the *actor's* coverage, not the victim's, so a
- *    residents-only rule binds ברק and thereby protects נעם without ever
+ *    residents-only rule binds Barak and thereby protects Noam without ever
  *    having asked him anything. c4s2 exists to make that asymmetry visible.
  */
 
@@ -33,14 +33,14 @@ export const chapter4 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c4s1",
       chapter: 4,
-      // יותם reports it: נעם is already gone, and would not have spoken anyway.
+      // Yotam reports it: Noam is already gone, and would not have spoken anyway.
       speakerGroup: "old-timers",
       title: t("chapter4.c4s1.title"),
       text: t("chapter4.c4s1.text"),
       subject: "water",
       act: "took-without-asking",
       justification: "needed-more",
-      // נעם owns nothing here and has no standing; יותם dug the well.
+      // Noam owns nothing here and has no standing; Yotam dug the well.
       power: "victim-stronger",
       actorId: "noam",
       victimId: "yotam",
@@ -65,7 +65,7 @@ export const chapter4 = perLanguage((lang: Lang): Chapter => {
         trust: [{ group: "old-timers", delta: -1 }],
       },
       // The other half: he is covered, and pays under a rule he had no part
-      // in. This is where the rights board first names העוברים (§8).
+      // in. This is where the rights board first names the passers-through (§8).
       outcomes: {
         "ask-first": {
           text: t("chapter4.c4s1.outcomes.ask_first"),
@@ -129,7 +129,7 @@ export const chapter4 = perLanguage((lang: Lang): Chapter => {
     {
       id: "c4s2",
       chapter: 4,
-      // מיכל reports it — she arrived recently enough to notice.
+      // Michal reports it — she arrived recently enough to notice.
       speakerGroup: "newcomers",
       title: t("chapter4.c4s2.title"),
       text: t("chapter4.c4s2.text"),
@@ -141,7 +141,7 @@ export const chapter4 = perLanguage((lang: Lang): Chapter => {
       victimId: "noam",
       scarce: false,
       someoneHarmed: true,
-      // ברק already took מיכל's hammer back in c2s1.
+      // Barak already took Michal's hammer back in c2s1.
       firstOffence: false,
       invitesRule: false,
       lesson: t("chapter4.c4s2.lesson"),
@@ -219,7 +219,7 @@ export const chapter4 = perLanguage((lang: Lang): Chapter => {
       scarce: true,
       someoneHarmed: true,
       firstOffence: true,
-      // The one rule this chapter invites, written with נעם's stake named
+      // The one rule this chapter invites, written with Noam's stake named
       // out loud in the scene so the WHO choice is conscious (§2).
       invitesRule: true,
       lesson: t("chapter4.c4s3.lesson"),

@@ -1,9 +1,9 @@
 /**
- * פרק 1 — אין כללים.
+ * Chapter 1 — "אין כללים" (No Rules).
  *
  * Four situations (§9). The first two present a gap and invite a rule; the
  * third and fourth collide with whatever was written. Situation 3 is the
- * chapter's pinch: the rule lands on שירה, who brings the child water every
+ * chapter's pinch: the rule lands on Shira, who brings the child water every
  * morning. Situation 4 turns a path rule against a shelter someone needs.
  *
  * All copy here comes from the language tokens (src/content/tokens) — see

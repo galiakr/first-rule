@@ -1,5 +1,5 @@
 /**
- * פרק 7 — לשנות את מה שכבר כתוב. The ending.
+ * Chapter 7 — "לשנות את מה שכבר כתוב" (Changing What's Already Written). The ending.
  *
  * Design doc §9.7. A rule in the book has started to hurt, and this time the
  * child is the one who wants it gone. They cannot delete it: the book closed
@@ -14,7 +14,7 @@
  *
  * The bite is chosen so the child wants the rule *changed* rather than merely
  * resenting it: the rule was written to protect someone's confidence, and
- * here keeping it means nobody can help שירה. A rule doing exactly what it
+ * here keeping it means nobody can help Shira. A rule doing exactly what it
  * says, and costing exactly what it costs.
  *
  * c7s2 branches on the amendment rule (`amendmentVariants`), c7s3 on living
@@ -117,7 +117,7 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
       firstOffence: true,
       invitesRule: false,
       invitesAmendment: true,
-      // The rule protects what שירה told in confidence, so it is the children
+      // The rule protects what Shira told in confidence, so it is the children
       // whose agreement the child needs — the same group c7s1 just cost.
       amendmentStakeholder: "children",
       lesson: t("chapter7.c7s2.lesson"),

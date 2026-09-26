@@ -172,7 +172,7 @@ describe("who a rule reaches", () => {
   });
 
   it("covers someone who belongs to two groups at once", () => {
-    // שירה is both a child and a shepherd — this is how a rule aimed at one
+    // Shira is both a child and a shepherd — this is how a rule aimed at one
     // group lands on a person the child was not thinking about.
     expect(
       whoCovers(
@@ -211,7 +211,7 @@ describe("rule to situation", () => {
     expect(ruleApplies(rule({ subject: "water" }), s1, ACTORS)).toBe(true);
   });
 
-  it("a residents-only water rule still reaches שירה in situation 3", () => {
+  it("a residents-only water rule still reaches Shira in situation 3", () => {
     expect(ruleApplies(rule(), s3, ACTORS)).toBe(true);
   });
 });
@@ -296,9 +296,9 @@ describe("conflicts caught while writing", () => {
 });
 
 describe("collisions found only by running the situation", () => {
-  it("two rules with different reach both land on שירה and pull apart", () => {
+  it("two rules with different reach both land on Shira and pull apart", () => {
     // Neither of these is flagged at write time: different WHO, so the
-    // contradiction only exists because שירה is in both groups.
+    // contradiction only exists because Shira is in both groups.
     const rules = [
       rule({
         id: "a",
@@ -446,7 +446,7 @@ describe("chapter 1 content holds up", () => {
 });
 
 describe("playing the chapter through", () => {
-  it("a forbidden-water rule ends with שירה's belonging broken", () => {
+  it("a forbidden-water rule ends with Shira's belonging broken", () => {
     let state = initialState();
     const water = rule({
       id: "water",
@@ -872,29 +872,31 @@ describe("chapter 4 content holds up", () => {
   });
 
   it("never lets the passers-through speak", () => {
-    // §4: "אין להם קול בכלל". What נעם did, or what was done to him, is
-    // always reported by somebody else — he never opens a scene.
+    // §4: "אין להם קול בכלל" (they have no voice at all). What Noam did,
+    // or what was done to him, is always reported by somebody else — he
+    // never opens a scene.
     for (const s of CHAPTER_4) {
       expect(s.speakerGroup, s.id).not.toBe("passers-through");
     }
   });
 
-  it("puts נעם on both sides: once as the actor, once as the one harmed", () => {
+  it("puts Noam on both sides: once as the actor, once as the one harmed", () => {
     expect(c4s1.actorId).toBe("noam");
     expect(c4s2.victimId).toBe("noam");
     expect(c4s4.actorId).toBe("noam");
   });
 
   it("is the first chapter to move a right belonging to the passers-through", () => {
-    // §8's own example is "הזכות לקניין שבורה — אצל העוברים", and it has
-    // nowhere to appear before this chapter.
+    // §8's own example is "הזכות לקניין שבורה — אצל העוברים" (the right to
+    // property, broken, for the passers-through), and it has nowhere to
+    // appear before this chapter.
     const earlier = [...CHAPTER_1, ...CHAPTER_2, ...CHAPTER_3];
-    const touchesOvrim = (s: Situation) =>
+    const touchesPassersThrough = (s: Situation) =>
       [s.noRuleOutcome, s.overrideOutcome, ...Object.values(s.outcomes)].some(
         (o) => o?.rights.some((r) => r.group === "passers-through"),
       );
-    expect(earlier.some(touchesOvrim)).toBe(false);
-    expect(CHAPTER_4.some(touchesOvrim)).toBe(true);
+    expect(earlier.some(touchesPassersThrough)).toBe(false);
+    expect(CHAPTER_4.some(touchesPassersThrough)).toBe(true);
   });
 
   it("names the concept only at the chapter's end, not in a situation", () => {
@@ -978,13 +980,13 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
     ).toBe("no-rule");
   });
 
-  it("the covered branch is what puts העוברים on the rights board", () => {
+  it("the covered branch is what puts the passers-through on the rights board", () => {
     const covered = outcomeFor(c4s1, "forbidden", false);
     expect(covered.rights.some((r) => r.group === "passers-through")).toBe(
       true,
     );
     // The gap costs the village instead — nobody's rule was broken, but
-    // יותם stops trusting that anything here is settled.
+    // Yotam stops trusting that anything here is settled.
     const gap = outcomeFor(c4s1, null, false);
     expect(gap.rights.every((r) => r.group !== "passers-through")).toBe(true);
     expect(gap.trust).toContainEqual({ group: "old-timers", delta: -1 });
@@ -992,8 +994,8 @@ describe("§6's two outcomes are both reachable at c4s1", () => {
 });
 
 describe("a rule binds by who acted, so it can protect someone it never binds", () => {
-  it("a residents-only rule covers ברק at c4s2, though נעם is the one harmed", () => {
-    // ruleApplies checks the actor's coverage. נעם is never bound by this
+  it("a residents-only rule covers Barak at c4s2, though Noam is the one harmed", () => {
+    // ruleApplies checks the actor's coverage. Noam is never bound by this
     // rule, and is protected by it anyway — without having been asked.
     const state = addRule(
       initialState(4),

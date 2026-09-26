@@ -19,12 +19,12 @@ Chapter 1 is the game's opening chapter: the child arrives in a village with no 
 
 ## Content — the four situations
 
-| id   | title          | subject | act                 | justification  | power           | actor→victim | invitesRule | role                                                                             |
-| ---- | -------------- | ------- | ------------------- | -------------- | --------------- | ------------ | ----------- | -------------------------------------------------------------------------------- |
-| c1s1 | הבאר של יותם   | water   | took-without-asking | needed-more    | victim-stronger | dana→yotam   | true        | invites the first-ever rule                                                      |
-| c1s2 | הדוכן על השביל | path    | blocked             | nobody-said-no | victim-weaker   | barak→shira  | true        | invites a second rule, different subject                                         |
-| c1s3 | שירה והעז      | water   | took-without-asking | needed-more    | equal           | shira→yotam  | false       | the pinch — whatever water rule exists collides with a character the child likes |
-| c1s4 | המחסה של מיכל  | path    | blocked             | needed-more    | victim-weaker   | barak→michal | false       | the pinch — the path rule collides with a shelter someone needs                  |
+| id   | title                                  | subject | act                 | justification  | power           | actor→victim | invitesRule | role                                                                             |
+| ---- | -------------------------------------- | ------- | ------------------- | -------------- | --------------- | ------------ | ----------- | -------------------------------------------------------------------------------- |
+| c1s1 | הבאר של יותם (Yotam's Well)            | water   | took-without-asking | needed-more    | victim-stronger | dana→yotam   | true        | invites the first-ever rule                                                      |
+| c1s2 | הדוכן על השביל (The Stall on the Path) | path    | blocked             | nobody-said-no | victim-weaker   | barak→shira  | true        | invites a second rule, different subject                                         |
+| c1s3 | שירה והעז (Shira and the Goat)         | water   | took-without-asking | needed-more    | equal           | shira→yotam  | false       | the pinch — whatever water rule exists collides with a character the child likes |
+| c1s4 | המחסה של מיכל (Michal's Shelter)       | path    | blocked             | needed-more    | victim-weaker   | barak→michal | false       | the pinch — the path rule collides with a shelter someone needs                  |
 
 Every situation carries an outcome for **all four** WHAT clauses plus `noRuleOutcome` and `overrideOutcome` — enforced by a test ("gives every situation an outcome for all four WHAT clauses"), because whichever rule the child actually wrote must still make sense applied to c1s3/c1s4.
 
