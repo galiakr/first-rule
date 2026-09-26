@@ -51,3 +51,32 @@ test("a village survives closing the tab, and can be thrown away", async ({
     page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
   ).toBeVisible();
 });
+
+test("the village can be thrown away from inside the game", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:3000");
+
+  await page.getByLabel("איך תרצה לקרוא לכפר הזה?").fill("עין חרוד");
+  await page.getByRole("button", { name: "להיכנס לכפר" }).click();
+  await page.getByRole("button", { name: "להתחיל" }).click();
+  await page.getByRole("button", { name: "לא לכתוב כלל הפעם" }).click();
+  await page.getByRole("button", { name: "ואז" }).click();
+  await page.getByRole("button", { name: "הלאה" }).click();
+
+  // Mid-chapter, with no way back to the opening screen except this one.
+  const contents = page.getByRole("dialog", { name: "תוכן העניינים" });
+  await page.getByRole("button", { name: "תוכן העניינים" }).click();
+  await contents.getByRole("button", { name: "להתחיל כפר חדש" }).click();
+  await contents.getByRole("button", { name: "כן, להתחיל מחדש" }).click();
+
+  await expect(
+    page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
+  ).toBeVisible();
+
+  // And it stays gone — no offer to resume what was just discarded.
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "הכפר, לפני שנכנסים" }),
+  ).toBeVisible();
+});

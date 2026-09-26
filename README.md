@@ -13,7 +13,7 @@ per-chapter implementation notes are in `docs/chapter-1-plan.md` …
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 231 tests over the engine, content and components
+npm test        # 234 tests over the engine, content and components
 npm run build
 ```
 

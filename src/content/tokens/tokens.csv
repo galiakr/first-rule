@@ -558,3 +558,5 @@ save.restart_yes,Confirms discarding the saved game,"כן, להתחיל מחדש
 save.restart_no,Cancels discarding the saved game,"לא, לחזור","No, go back"
 save.note,"Quiet line at the bottom of the about screen, so a child knows they can stop","המשחק נשמר אחרי כל מצב, במחשב הזה. אפשר לסגור ולחזור אחר כך.","The game saves after every situation, on this computer. You can close it and come back later."
 toc.close_aria,"Accessible label for the scrim that closes the table of contents. Distinct from the close button's own label, so the two controls aren't identically named",לסגור את תוכן העניינים,Close the contents
+save.reset_heading,Heading over the start-over control at the foot of the contents panel,להתחיל מחדש,Starting over
+save.reset_note,"Explains what starting over costs, before the child asks for it","אפשר להתחיל כפר חדש מאפס. הכפר הנוכחי והכללים שבו יימחקו, ואי אפשר להחזיר אותם.","You can start a new village from scratch. The village you have now and the rules in it will be deleted, and they can't be brought back."

@@ -260,7 +260,12 @@ describe("TableOfContents", () => {
   it("opens a scene that has been read, and refuses one that hasn't", async () => {
     const user = userEvent.setup();
     renderWithLanguage(
-      <TableOfContents open onClose={() => {}} chapters={entries} />,
+      <TableOfContents
+        open
+        onClose={() => {}}
+        chapters={entries}
+        onReset={() => {}}
+      />,
     );
 
     const read = screen.getByRole("button", {
@@ -280,7 +285,12 @@ describe("TableOfContents", () => {
   it("can always go back to the village, and back to the list", async () => {
     const user = userEvent.setup();
     renderWithLanguage(
-      <TableOfContents open onClose={() => {}} chapters={entries} />,
+      <TableOfContents
+        open
+        onClose={() => {}}
+        chapters={entries}
+        onReset={() => {}}
+      />,
     );
     await user.click(
       screen.getByRole("button", { name: new RegExp(ALL[0].title) }),
@@ -294,9 +304,58 @@ describe("TableOfContents", () => {
     ).toBeVisible();
   });
 
+  it("asks before throwing the village away, from inside the game", () => {
+    const onReset = vi.fn();
+    renderWithLanguage(
+      <TableOfContents
+        open
+        onClose={() => {}}
+        chapters={entries}
+        onReset={onReset}
+      />,
+    );
+    expect(screen.getByText(t("save.reset_heading"))).toBeVisible();
+    // The destructive button is never the first thing on screen.
+    expect(
+      screen.queryByRole("button", { name: t("save.restart_yes") }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("only resets once the child has confirmed, and can be backed out of", async () => {
+    const user = userEvent.setup();
+    const onReset = vi.fn();
+    renderWithLanguage(
+      <TableOfContents
+        open
+        onClose={() => {}}
+        chapters={entries}
+        onReset={onReset}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: t("save.restart") }));
+    expect(screen.getByText(t("save.restart_confirm"))).toBeVisible();
+
+    await user.click(
+      screen.getByRole("button", { name: t("save.restart_no") }),
+    );
+    expect(onReset).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: t("save.restart") }));
+    await user.click(
+      screen.getByRole("button", { name: t("save.restart_yes") }),
+    );
+    expect(onReset).toHaveBeenCalledOnce();
+  });
+
   it("renders nothing while closed", () => {
     const { container } = renderWithLanguage(
-      <TableOfContents open={false} onClose={() => {}} chapters={entries} />,
+      <TableOfContents
+        open={false}
+        onClose={() => {}}
+        chapters={entries}
+        onReset={() => {}}
+      />,
     );
     expect(container).toBeEmptyDOMElement();
   });
