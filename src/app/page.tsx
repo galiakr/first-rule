@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 import AboutVillage from "@/components/AboutVillage";
 import AmendmentAttempt from "@/components/AmendmentAttempt";
@@ -42,6 +42,15 @@ import {
   demonstrateAmendment,
   replaceRule,
 } from "@/engine/amendment";
+import {
+  clearSave,
+  getSaveSnapshot,
+  getServerSaveSnapshot,
+  makeSave,
+  saveGame,
+  subscribeSave,
+} from "@/engine/save";
+import type { SavedGame } from "@/engine/save";
 import {
   canOverride,
   closeBook,
@@ -185,11 +194,29 @@ export default function Page() {
   const [bookOpen, setBookOpen] = useState(false);
   const [tocOpen, setTocOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
+  // A village left half-played, read straight from storage rather than
+  // copied into state. Null on the server, so the prerendered markup and the
+  // first client render agree and the offer appears after hydration.
+  const storedSave = useSyncExternalStore(
+    subscribeSave,
+    getSaveSnapshot,
+    getServerSaveSnapshot,
+  );
+  const [dismissedSave, setDismissedSave] = useState(false);
+  const saved = phase === "about" && !dismissedSave ? storedSave : null;
 
   // Content is rebuilt for whichever language is active; nothing above this
   // line depends on it, so switching mid-chapter keeps rules, precedents and
   // position exactly where they were.
   const allChapters = chapters(lang);
+  // Saved at each point the child could reasonably close the tab, and never
+  // mid-decision: coming back to an unanswered situation is kinder than
+  // coming back to a frozen half-choice.
+  useEffect(() => {
+    if (phase === "about" || villageName === null) return;
+    saveGame(makeSave({ state, villageName, chapterIndex, index, phase }));
+  }, [state, villageName, chapterIndex, index, phase]);
+
   const currentChapter = allChapters[chapterIndex];
   const hasNextChapter = chapterIndex + 1 < allChapters.length;
   const situation = currentChapter.situations[index];
@@ -402,6 +429,20 @@ export default function Page() {
 
         {phase === "about" ? (
           <AboutVillage
+            saved={saved}
+            onResume={() => {
+              if (!saved) return;
+              setState(saved.state);
+              setVillageName(saved.villageName);
+              setChapterIndex(saved.chapterIndex);
+              setIndex(saved.index);
+              setPhase(saved.phase as Phase);
+              setDismissedSave(true);
+            }}
+            onDiscard={() => {
+              clearSave();
+              setDismissedSave(true);
+            }}
             onContinue={(name) => {
               setVillageName(name);
               setPhase("intro");
