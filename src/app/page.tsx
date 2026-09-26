@@ -371,6 +371,27 @@ export default function Page() {
     });
   }
 
+  /**
+   * Throw the village away and begin again. Everything the game holds goes
+   * back to how it started, including the saved copy — otherwise the next
+   * load would offer to resume the village the child just discarded.
+   */
+  function resetGame() {
+    clearSave();
+    setState(initialState());
+    setVillageName(null);
+    setPhase("about");
+    setChapterIndex(0);
+    setIndex(0);
+    setPending(null);
+    setDecidedPrompt(null);
+    setLessonRevealed(false);
+    setTocOpen(false);
+    setBookOpen(false);
+    setNotesOpen(false);
+    setDismissedSave(true);
+  }
+
   function continueToNextChapter() {
     setState((s) => advanceChapter(s));
     setChapterIndex((i) => i + 1);
@@ -915,6 +936,7 @@ export default function Page() {
         open={tocOpen}
         onClose={() => setTocOpen(false)}
         chapters={chapterEntries}
+        onReset={resetGame}
       />
 
       <Notes

@@ -170,7 +170,7 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
 - [x] All seven chapters are built (see `docs/chapter-1-plan.md` … `docs/chapter-7-plan.md`).
-- [x] The game saves after every situation and offers to resume (`src/engine/save.ts`). Nothing half-decided is kept — coming back to an unanswered situation is kinder than coming back to a frozen half-choice.
+- [x] The game saves after every situation and offers to resume (`src/engine/save.ts`), and can be started over from inside the game — at the foot of the contents panel, behind a confirm. The header's four controls are ones a child uses constantly; a destructive fifth beside them would be too easy to hit. Nothing half-decided is kept — coming back to an unanswered situation is kinder than coming back to a frozen half-choice.
 - [x] Every subject a rule can be written about has a later situation that can make it fire (§7), and every act, protection and builder option the engine models is exercised and tested. `broke` landed at c7s4. The CONSEQUENCE clause is the honest exception: it is written into the rule sentence and never enacted, and a test records that rather than pretending otherwise.
 - [x] Every component has tests, and so does `src/app/page.tsx` — `src/app/__tests__/page.test.tsx` plays the opening chapter through the real screens, which is the only way to check the wiring between engine, content and panels.
 - [x] Coverage thresholds are enforced in `vitest.config.ts` (lines 85, statements 85, functions 80, branches 75), set a little under what the suite reaches. Raise them when they look slack; never lower them to make a red build green.

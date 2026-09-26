@@ -42,6 +42,13 @@ interface Props {
   open: boolean;
   onClose: () => void;
   chapters: ChapterEntry[];
+  /**
+   * Throw the village away and start again. Lives here rather than in the
+   * header: the header's four controls are ones a child uses constantly, and
+   * a destructive fifth beside them is too easy to hit by accident. This is
+   * one deliberate click further in, and still asks before it does anything.
+   */
+  onReset: () => void;
 }
 
 /**
@@ -49,9 +56,15 @@ interface Props {
  * game's own phase machine — no cursor moves, no rule can be rewritten here.
  * It exists only so a scene, once read, isn't gone.
  */
-export default function TableOfContents({ open, onClose, chapters }: Props) {
+export default function TableOfContents({
+  open,
+  onClose,
+  chapters,
+  onReset,
+}: Props) {
   const { lang, t } = useLanguage();
   const [selected, setSelected] = useState<Entry | null>(null);
+  const [confirmingReset, setConfirmingReset] = useState(false);
   const copy = about(lang);
   const labels = groupLabel(lang);
   const blurbs = groupBlurb(lang);
@@ -60,6 +73,7 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
 
   function close() {
     setSelected(null);
+    setConfirmingReset(false);
     onClose();
   }
 
@@ -152,6 +166,42 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
                 </li>
               ))}
             </ul>
+
+            <section className="mt-10 border-t border-ink/15 pt-6">
+              <h3 className="font-book text-lg">{t("save.reset_heading")}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink/60">
+                {t("save.reset_note")}
+              </p>
+              {confirmingReset ? (
+                <div className="settle mt-4 space-y-3">
+                  <p className="leading-relaxed">{t("save.restart_confirm")}</p>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={onReset}
+                      className="rounded-sm border border-harm px-4 py-2 text-sm text-ink hover:bg-white"
+                    >
+                      {t("save.restart_yes")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingReset(false)}
+                      className="rounded-sm bg-ink px-4 py-2 text-sm text-paper"
+                    >
+                      {t("save.restart_no")}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmingReset(true)}
+                  className="mt-3 text-sm text-ink/60 underline underline-offset-4"
+                >
+                  {t("save.restart")}
+                </button>
+              )}
+            </section>
           </nav>
         ) : (
           <div className="space-y-6">
