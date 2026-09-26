@@ -3,8 +3,11 @@ name: CI
 on:
   push:
     branches: [main]
+  # Every pull request, whatever it targets. Scoping this to `main` meant a
+  # PR stacked on another branch was merged without a single check ever
+  # running against it — see PR #19, whose contents reached main untested.
   pull_request:
-    branches: [main]
+    branches: ["**"]
 
 jobs:
   lint-and-test:
