@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 
-import AboutVillage from "@/components/AboutVillage";
+import EntryScreen from "@/components/EntryScreen";
 import AmendmentAttempt from "@/components/AmendmentAttempt";
 import AuthorityBuilder from "@/components/AuthorityBuilder";
 import BookClosing from "@/components/BookClosing";
@@ -399,20 +399,37 @@ export default function Page() {
     setPhase("intro");
   }
 
+  // The entry screen is a different world from the game — daylight, its own
+  // measure, its own header — so it owns the whole viewport rather than
+  // living inside the game's dark chrome.
+  if (phase === "about") {
+    return (
+      <EntryScreen
+        saved={saved}
+        onResume={() => {
+          if (!saved) return;
+          setState(saved.state);
+          setVillageName(saved.villageName);
+          setChapterIndex(saved.chapterIndex);
+          setIndex(saved.index);
+          setPhase(saved.phase as Phase);
+          setDismissedSave(true);
+        }}
+        onDiscard={() => {
+          clearSave();
+          setDismissedSave(true);
+        }}
+        onContinue={(name) => {
+          setVillageName(name);
+          setPhase("intro");
+        }}
+      />
+    );
+  }
+
   return (
-    <main
-      className={`min-h-screen px-5 py-10 sm:px-8 sm:py-16 ${
-        phase === "about" ? "lamplight-entry" : "lamplight"
-      }`}
-    >
-      <div
-        className={`mx-auto w-full space-y-8 ${
-          // The entry screen is a poster; the game is a book. 34rem is the
-          // right measure for reading prose for an hour and far too narrow
-          // for a headline meant to be seen from across a room.
-          phase === "about" ? "max-w-2xl" : "max-w-read"
-        }`}
-      >
+    <main className="lamplight min-h-screen px-5 py-10 sm:px-8 sm:py-16">
+      <div className="mx-auto w-full max-w-read space-y-8">
         <div className="flex flex-wrap items-baseline justify-between gap-y-2">
           <div className="flex items-baseline gap-3">
             <p className="font-book text-lg text-lamp">{t("app.title")}</p>
@@ -430,64 +447,34 @@ export default function Page() {
             ) : null}
           </div>
           <div className="flex flex-wrap items-baseline gap-4">
-            {/* Before the first situation the contents, the book and the
-                notebook are all empty. Offering them competes with the one
-                thing the entry screen is for. */}
-            {phase !== "about" ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setTocOpen(true)}
-                  className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
-                >
-                  {t("app.toc_button")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBookOpen(true)}
-                  className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
-                >
-                  {t("app.rulebook_button")}
-                  {state.rules.length > 0 ? ` (${state.rules.length})` : ""}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setNotesOpen(true)}
-                  className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
-                >
-                  {t("app.notes_button")}
-                  {unlockedNoteChapters.length > 0
-                    ? ` (${unlockedNoteChapters.length})`
-                    : ""}
-                </button>
-              </>
-            ) : null}
+            <button
+              type="button"
+              onClick={() => setTocOpen(true)}
+              className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
+            >
+              {t("app.toc_button")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setBookOpen(true)}
+              className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
+            >
+              {t("app.rulebook_button")}
+              {state.rules.length > 0 ? ` (${state.rules.length})` : ""}
+            </button>
+            <button
+              type="button"
+              onClick={() => setNotesOpen(true)}
+              className="text-sm text-quiet underline underline-offset-4 hover:text-paper"
+            >
+              {t("app.notes_button")}
+              {unlockedNoteChapters.length > 0
+                ? ` (${unlockedNoteChapters.length})`
+                : ""}
+            </button>
             <LanguageSwitcher />
           </div>
         </div>
-
-        {phase === "about" ? (
-          <AboutVillage
-            saved={saved}
-            onResume={() => {
-              if (!saved) return;
-              setState(saved.state);
-              setVillageName(saved.villageName);
-              setChapterIndex(saved.chapterIndex);
-              setIndex(saved.index);
-              setPhase(saved.phase as Phase);
-              setDismissedSave(true);
-            }}
-            onDiscard={() => {
-              clearSave();
-              setDismissedSave(true);
-            }}
-            onContinue={(name) => {
-              setVillageName(name);
-              setPhase("intro");
-            }}
-          />
-        ) : null}
 
         {phase === "intro" ? (
           <section className="space-y-6">

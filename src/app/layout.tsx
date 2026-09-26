@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Assistant, Frank_Ruhl_Libre, Rubik } from "next/font/google";
+import { Assistant, Frank_Ruhl_Libre, Suez_One } from "next/font/google";
 
 import { LanguageProvider } from "@/content/language";
 
@@ -14,12 +14,12 @@ const book = Frank_Ruhl_Libre({
   display: "swap",
 });
 
-// Rubik carries the entry screen: real Hebrew support, rounded, and it goes
-// heavy enough to shout. Assistant stays for the quieter interface inside
-// the game, where a display face would be too loud to read for an hour.
-const display = Rubik({
+// The entry screen is a poster and needs a display face with real presence.
+// Suez One is Hebrew-first — not a Latin face with Hebrew bolted on — which
+// matters when the headline is the loudest Hebrew on the page.
+const display = Suez_One({
   subsets: ["hebrew", "latin"],
-  weight: ["500", "800"],
+  weight: "400",
   variable: "--font-display",
   display: "swap",
 });

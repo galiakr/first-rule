@@ -634,8 +634,12 @@
     "book_label": "Your rule",
     "headline": "There are no rules here yet.",
     "made_it": "That's it. You wrote a law. Now it needs a village to live under it.",
-    "prompt": "Try it now. Four choices, and the rule is written.",
+    "misses": "the rule doesn't touch them",
+    "prompt": "Choose who the rule applies to, and what it says. The village reacts straight away.",
+    "reaches": "the rule applies to them",
     "subhead": "You're going to write the first one.",
+    "tally": "This rule applies to {reached} of the {total} groups in the village.",
+    "tally_empty": "Choose who the rule applies to, and the village will show you who's included.",
     "who_it_lands_on": "This rule is going to land on these people."
   },
   "moments": {

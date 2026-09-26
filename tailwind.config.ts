@@ -15,10 +15,14 @@ const config: Config = {
         quiet: "#8FA79C",
         // The entry screen burns hotter than the game it opens onto: a
         // deeper night so the lamp reads as light rather than as a tint.
-        deepnight: "#07130E",
-        blaze: "#FFB43D",
-        ember: "#FF7A3D",
-        well: "#4FA8C4",
+        // The entry screen is a daylight poster, deliberately a different
+        // world from the dusk-green village it opens onto.
+        daylight: "#EDEFF7",
+        daylight2: "#FFFFFF",
+        inkdeep: "#161A3A",
+        inksoft: "#5B6088",
+        hairline: "#D5D9EA",
+        act: "#F5455C",
       },
       fontFamily: {
         book: ["var(--font-book)", "serif"],

@@ -10,27 +10,6 @@ body {
   color: theme("colors.paper");
 }
 
-/* The entry screen's lamp burns hotter than the one inside the game: it has
-   to carry a poster rather than light a page of prose. Same source, same
-   corner, so walking in feels like turning the lamp down, not changing room. */
-.lamplight-entry {
-  background-color: #07130e;
-  background-image:
-    /* the filament: small, hot, and clearly a source */
-    radial-gradient(
-      26% 18% at 92% -2%,
-      rgba(255, 214, 138, 0.55) 0%,
-      rgba(255, 180, 61, 0.28) 45%,
-      transparent 78%
-    ),
-    /* what the lamp actually reaches */
-    radial-gradient(
-        85% 60% at 92% -2%,
-        rgba(255, 122, 61, 0.14) 0%,
-        transparent 68%
-      );
-}
-
 /* One lamp on the table. The page is lit from the top right. */
 .lamplight {
   background-image: radial-gradient(
