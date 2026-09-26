@@ -199,6 +199,35 @@ describe("playing the game through its own screens", () => {
     ).toBeVisible();
   });
 
+  it("can start over from inside the game, and forgets the village", async () => {
+    const user = userEvent.setup();
+    await enterVillage(user);
+    await user.click(screen.getByRole("button", { name: t("builder.skip") }));
+    await user.click(
+      screen.getByRole("button", { name: t("app.outcome.continue") }),
+    );
+    await user.click(
+      screen.getByRole("button", { name: t("app.lesson.next") }),
+    );
+    expect(window.localStorage.getItem("first-rule:save")).not.toBeNull();
+
+    await user.click(screen.getByRole("button", { name: t("app.toc_button") }));
+    const toc = screen.getByRole("dialog", { name: t("app.toc_button") });
+    await user.click(
+      within(toc).getByRole("button", { name: t("save.restart") }),
+    );
+    await user.click(
+      within(toc).getByRole("button", { name: t("save.restart_yes") }),
+    );
+
+    // Back to the very beginning, and the saved copy is gone too — otherwise
+    // the next load would offer to resume what was just thrown away.
+    expect(
+      screen.getByRole("heading", { name: t("about.title") }),
+    ).toBeVisible();
+    expect(window.localStorage.getItem("first-rule:save")).toBeNull();
+  });
+
   it("switches language mid-situation without losing the game", async () => {
     const user = userEvent.setup();
     await enterVillage(user);

@@ -755,6 +755,8 @@
   },
   "save": {
     "note": "The game saves after every situation, on this computer. You can close it and come back later.",
+    "reset_heading": "Starting over",
+    "reset_note": "You can start a new village from scratch. The village you have now and the rules in it will be deleted, and they can't be brought back.",
     "restart": "Start a new village",
     "restart_confirm": "The village you started will be deleted, and the rules you wrote in it will go with it. Start again?",
     "restart_no": "No, go back",
