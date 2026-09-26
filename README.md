@@ -13,7 +13,7 @@ per-chapter implementation notes are in `docs/chapter-1-plan.md` …
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 184 tests over the engine, content and components
+npm test        # 231 tests over the engine, content and components
 npm run build
 ```
 
@@ -89,8 +89,12 @@ through in a test without rendering anything — see
 
 ## What's not here yet
 
-Save state — a 28-situation game with no way to stop and come back is the
-largest thing still missing. `chefetz` and `davar`, the two subjects
+Nothing structural. The game saves and resumes, and every chapter, act,
+protection and builder option the engine models is exercised and tested.
+
+The English copy has had two passes but has never been read aloud to an
+eight-year-old — the one check that matters, and the one that can't be done
+from a keyboard. `chefetz` and `davar`, the two subjects
 Chapter 2 introduces, aren't pinched within Chapter 2 itself — a later
 chapter needs to eventually collide with rules written for them.
 

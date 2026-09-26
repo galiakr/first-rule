@@ -64,6 +64,7 @@ These are enforced by `src/engine/__tests__/engine.test.ts` — a failing test h
 - **Trust is never shown as a number** — it only surfaces through which of three ways a group approaches the child (`comes-to-you` / `comes-but` / `stops-coming`).
 - **The rule book is open the whole game**; the rights board is only revealed at the end of a chapter (§10) — don't leak rights state into the always-visible book.
 - **The notebook names a concept only after its chapter is finished** (§2: felt first, named afterwards). `src/content/notes.ts` holds one note per chapter, and it is the only place in the game that uses adult vocabulary ("תקדים", "שלטון החוק") — never put those words into playable chapter content.
+- **Never run a blanket regex over the copy.** A contraction pass across the English column turned "when keeping it is inconvenient" into "when keeping it's inconvenient" in two places — "it" was an object, not a subject. Prose edits need reading, not matching.
 - **A situation's subject is inherited, never chosen** — this is what makes rules land narrower than the child expects, on purpose. `replaceRule` enforces it: rewriting a rule may change its four clauses and nothing else, not its subject and not where it came from.
 - **Every resolution records which of the three jobs it was** (`LogEntry.kind`, via `resolutionKind`). Chapter 6 replays these moments back to the child by name, so a mislabelled one puts the wrong word on something they did. `resolve()` requires it deliberately — a new call site has to say what kind of moment it is rather than defaulting to a wrong one.
 - **The book is closed after chapter 5** (§10). `canWriteRules()` collapses any later write-rule prompt to no-rule; don't work around it.
@@ -100,8 +101,8 @@ Stack: **Vitest** + **React Testing Library** + **Playwright** (e2e)
 
 ### Current state
 
-- `src/engine/` has full behavioral coverage (151 tests), including a full seven-chapter playthrough with no rendering — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
-- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 184 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
+- `src/engine/` has full behavioral coverage, including a full seven-chapter playthrough with no rendering — pure functions, no rendering needed. This is the important test suite; keep it that way as chapters are added.
+- Components and the language layer have tests (`LinkedText`, `Notes`, `LanguageSwitcher` and `src/content/__tests__/language.test.tsx` — 231 tests in all). Render components through `renderWithLanguage` in `src/test/render.tsx`; anything calling `useT()` throws without the provider. Most of `src/components/` and `src/app/page.tsx` still have no tests.
 - `e2e/` has five real Playwright specs: `home.spec.ts` (the about screen), `notes.spec.ts` (the notebook opens from the header and every chapter is still locked at the start), `language.spec.ts` (switching mid-chapter keeps your place, flips `dir`, and re-reads a Hebrew-written rule as an English sentence), and `situation-screen.spec.ts`, which drives a full situation through a real browser and asserts scene/decide/outcome/lesson all stay visible on one screen as they accumulate, rather than replacing each other — the actual behavior the single-screen redesign depends on, not just that the final state is reachable.
 - No coverage threshold is enforced yet (`vitest.config.ts` reports coverage but doesn't gate on it) — turn on the toolkit-default 80% lines/functions threshold once component tests exist, not before, or CI will fail on day one for the wrong reason.
 
@@ -168,18 +169,14 @@ Husky runs lint-staged (ESLint + Prettier) on pre-commit and the full test suite
 
 > Update this section regularly — it is the most useful thing you can tell an AI assistant.
 
-- [x] All seven chapters are built (see `docs/chapter-1-plan.md` … `docs/chapter-7-plan.md`). Save state is still unplanned, and is now the largest missing thing: a 28-situation game with no way to stop and come back.
-- [x] Staffing the three jobs is the **village's** act, not the decider's — a child who lost chapter 5's election still assigns them, and gets a line saying why. Appointing who guards the book is constitutional, not day-to-day.
-- [x] Every subject a rule can be written about now has a later situation that can make it fire (§7), `davar` included, via c7s1 — and a test checks the whole game for that class of gap rather than trusting anyone to remember.
-- [ ] `broke` is still the one unused `ActKind`. The §6/§7 claim that all 16 _builder options_ get pinched is still untested at the option level; the subject-level gap is the one that's now covered.
-- [ ] Chapter 2 introduced `chefetz` and `davar` as fresh subjects (c2s1/c2s2) that aren't pinched within Chapter 2 itself — a later chapter needs to eventually collide with rules written for them, same as Chapter 1 already does for `mayim`/`shvil`
-- [ ] Four of five `ActKind` values used (`took-without-asking`, `blocked`, `told-what-was-private`, `refused-to-share`); only `broke` remains unused
-- [ ] A situation's `noRuleOutcome` fires both when the book is empty and when a rule exists but doesn't reach the actor. Copy for it must never claim a rule exists — c4s4 shipped that bug and was caught in verification, not by a test (prose can't be linted); `initialState()` vs. a non-covering rule is pinned for c4s4 in the engine suite as a reminder
-- [x] All six protections now exercised at least once — `halich` (due process) was the last, via c3s2's `forbidden` outcome
-- [x] Hebrew and English both ship complete (296 tokens each, `src/content/tokens/tokens.csv`), switchable in place without losing the game. The rule-sentence `template` fields and the subject's `{et}`/`{be}` forms are now tokens too, so adding a third language is a CSV column plus `LANGUAGES` in `src/content/tokens/index.ts` — no code change. A language with different word order would still need `rule.sentence` reshaped, which is why that whole sentence is one token.
-- [ ] Only the `en` copy has had one pass. It reads naturally, but no native-speaking 8-year-old has seen it — the Hebrew is the copy that's been thought about hardest, and the English should be read aloud before it's shown to a child.
-- [ ] Two components have tests (`LinkedText`, `Notes`, in `src/components/__tests__/`); the rest of `src/components/` and `src/app/page.tsx` still don't. `e2e/` now has three real Playwright specs (see Testing section above)
-- [ ] Coverage threshold not yet enforced (see Testing section above)
+- [x] All seven chapters are built (see `docs/chapter-1-plan.md` … `docs/chapter-7-plan.md`).
+- [x] The game saves after every situation and offers to resume (`src/engine/save.ts`). Nothing half-decided is kept — coming back to an unanswered situation is kinder than coming back to a frozen half-choice.
+- [x] Every subject a rule can be written about has a later situation that can make it fire (§7), and every act, protection and builder option the engine models is exercised and tested. `broke` landed at c7s4. The CONSEQUENCE clause is the honest exception: it is written into the rule sentence and never enacted, and a test records that rather than pretending otherwise.
+- [x] Every component has tests, and so does `src/app/page.tsx` — `src/app/__tests__/page.test.tsx` plays the opening chapter through the real screens, which is the only way to check the wiring between engine, content and panels.
+- [x] Coverage thresholds are enforced in `vitest.config.ts` (lines 85, statements 85, functions 80, branches 75), set a little under what the suite reaches. Raise them when they look slack; never lower them to make a red build green.
+- [x] Hebrew and English both ship complete, switchable in place without losing the game. Adding a third language is a CSV column plus its code in `LANGUAGES` — no code change. A language with different word order would still need `rule.sentence` reshaped, which is why that whole sentence is one token.
+- [ ] **The English has still not been read aloud to a child.** It has had a second pass — 133 strings relaxed into contractions, because "does not" is stiff where Hebrew has no equivalent stiffness — but a pass by a model is not the same as hearing an eight-year-old read it. This is the one item that cannot be closed from a keyboard.
+- [ ] A situation's `noRuleOutcome` fires both when the book is empty and when a rule exists but doesn't reach the actor. Copy for it must never claim a rule exists — c4s4 shipped that bug and was caught by playing it through, not by a test, because prose can't be linted.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

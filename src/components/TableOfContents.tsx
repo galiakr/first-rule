@@ -74,7 +74,7 @@ export default function TableOfContents({ open, onClose, chapters }: Props) {
     >
       <button
         type="button"
-        aria-label={t("common.close")}
+        aria-label={t("toc.close_aria")}
         onClick={close}
         className="flex-1 bg-night/70"
       />
