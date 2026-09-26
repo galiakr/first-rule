@@ -238,8 +238,11 @@ export const chapter7 = perLanguage((lang: Lang): Chapter => {
       speakerGroup: "banaim",
       title: t("chapter7.c7s4.title"),
       text: t("chapter7.c7s4.text"),
-      subject: "mayim",
-      act: "took-without-asking",
+      // The one place in the game that uses `broke`. It fits the quietest
+      // scene there is: a snapped handle, settled out of the book by two
+      // people who don't need anyone to rule on it.
+      subject: "chefetz",
+      act: "broke",
       justification: "nobody-said-no",
       power: "equal",
       actorId: "barak",

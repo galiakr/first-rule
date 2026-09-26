@@ -12,10 +12,25 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
-      include: ["src/**"],
-      exclude: ["src/**/*.d.ts", "src/**/types.ts", "src/test/**"],
-      // No thresholds yet — component tests don't exist yet (see AGENTS.md
-      // Testing section). Add lines/functions thresholds once they do.
+      // Only code. "src/**" also swept up generate.py and tokens.csv, which
+      // the parser then choked on noisily for no benefit.
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/*.d.ts",
+        "src/**/types.ts",
+        "src/test/**",
+        "src/**/__tests__/**",
+      ],
+      // Set a little under what the suite actually reaches, so a real
+      // regression fails the build but ordinary refactoring doesn't. Measure
+      // and raise these when they start looking slack — never lower them to
+      // make a red build go green.
+      thresholds: {
+        lines: 85,
+        statements: 85,
+        functions: 80,
+        branches: 75,
+      },
     },
   },
   resolve: { alias: { "@": path.resolve(import.meta.dirname, "./src") } },

@@ -23,6 +23,14 @@ import {
 } from "../authority";
 import { fieldCollision, textualConflict, whatClausesClash } from "../conflict";
 import {
+  clearSave,
+  isSave,
+  loadGame,
+  makeSave,
+  SAVE_VERSION,
+  saveGame,
+} from "../save";
+import {
   amendmentTarget,
   amendmentVariants,
   applyAmendment,
@@ -1673,6 +1681,110 @@ describe("chapter 7 content holds up", () => {
   });
 });
 
+describe("every act and protection the model offers is actually used", () => {
+  const ALL = [
+    ...CHAPTER_1,
+    ...CHAPTER_2,
+    ...CHAPTER_3,
+    ...CHAPTER_4,
+    ...CHAPTER_5,
+    ...CHAPTER_6,
+    ...CHAPTER_7,
+  ];
+
+  it("uses all five kinds of act at least once (§6.1's dictionary)", () => {
+    // Unused vocabulary is vocabulary the precedent matcher can never see.
+    const used = new Set(ALL.map((s) => s.act));
+    expect([...used].sort()).toEqual([
+      "blocked",
+      "broke",
+      "refused-to-share",
+      "told-what-was-private",
+      "took-without-asking",
+    ]);
+  });
+
+  it("moves all six protections at least once (§8)", () => {
+    const moved = new Set(
+      ALL.flatMap((s) => [
+        s.noRuleOutcome,
+        s.overrideOutcome,
+        ...Object.values(s.outcomes),
+        ...Object.values(s.variantOutcomes ?? {}),
+      ]).flatMap((o) => (o?.rights ?? []).map((r) => r.protection)),
+    );
+    expect([...moved].sort()).toEqual([
+      "bitui",
+      "halich",
+      "kinyan",
+      "machse",
+      "shayachut",
+      "shivyon",
+    ]);
+  });
+});
+
+describe("all sixteen builder options get pinched (§6, §7)", () => {
+  const ALL = [
+    ...CHAPTER_1,
+    ...CHAPTER_2,
+    ...CHAPTER_3,
+    ...CHAPTER_4,
+    ...CHAPTER_5,
+    ...CHAPTER_6,
+    ...CHAPTER_7,
+  ];
+  const hurts = (o?: { rights: unknown[]; trust: { delta: number }[] }) =>
+    Boolean(o) && (o!.rights.length > 0 || o!.trust.some((t) => t.delta < 0));
+
+  it("has a situation each WHO scope can reach", () => {
+    // §6: the commitment is at the level of the value, not the combination —
+    // 256 combinations can't be covered by 28 situations, but 16 values can.
+    for (const option of whoOptions(LANG)) {
+      const reachable = ALL.some((situation) => {
+        const actor = ACTORS_WITH_CHILD[situation.actorId];
+        return (
+          actor !== undefined &&
+          GROUPS.some((group) =>
+            whoCovers(rule({ who: { scope: option.value, group } }), actor),
+          )
+        );
+      });
+      expect(reachable, `WHO ${option.value}`).toBe(true);
+    }
+  });
+
+  it("has a situation each WHEN clause holds in", () => {
+    for (const option of whenOptions(LANG)) {
+      const holds = ALL.some((s) => whenHolds(rule({ when: option.value }), s));
+      expect(holds, `WHEN ${option.value}`).toBe(true);
+    }
+  });
+
+  it("has a situation each WHAT clause costs somebody in", () => {
+    // This is the pinch itself: applying the rule has to hurt the child,
+    // somebody they like, or the weakest group — somewhere.
+    for (const option of whatOptions(LANG)) {
+      const bites = ALL.some((s) => hurts(s.outcomes[option.value]));
+      expect(bites, `WHAT ${option.value}`).toBe(true);
+    }
+  });
+
+  it("does not pretend the CONSEQUENCE clause is modelled", () => {
+    // Honest gap, recorded as a test so nobody assumes otherwise: the fourth
+    // field is written into the rule sentence and never enacted. An outcome
+    // describes what the village does, and it is authored per WHAT clause,
+    // not per consequence. Pinching those four would mean the engine
+    // carrying out punishments, which is a different game than this one.
+    for (const s of ALL) {
+      expect(Object.keys(s.outcomes).every((k) => k !== "return-or-fix")).toBe(
+        true,
+      );
+    }
+    expect(consequenceOptions(LANG)).toHaveLength(4);
+  });
+});
+
 describe("every rule the child can write gets pinched somewhere (§7)", () => {
   it("has a later situation for every subject a rule can be written about", () => {
     // The design's central content law, checked across the whole game rather
@@ -1931,5 +2043,100 @@ describe("the whole game runs end to end", () => {
     expect(resolved).toBe(28);
     expect(state.log).toHaveLength(28);
     expect(state.precedents).toHaveLength(28);
+  });
+});
+
+describe("stopping and coming back", () => {
+  function played(): GameState {
+    let state = addRule(initialState(2), rule({ id: "water" }));
+    state = resolve(state, {
+      situation: s1,
+      governedBy: "ask-first",
+      appliedRuleIds: ["water"],
+      overrode: false,
+      kind: "applied-rule",
+    });
+    return state;
+  }
+
+  it("round-trips a game through storage", () => {
+    const state = played();
+    saveGame(
+      makeSave({
+        state,
+        villageName: "עין חרוד",
+        chapterIndex: 1,
+        index: 2,
+        phase: "situation",
+      }),
+    );
+
+    const back = loadGame();
+    expect(back?.villageName).toBe("עין חרוד");
+    expect(back?.chapterIndex).toBe(1);
+    expect(back?.index).toBe(2);
+    expect(back?.phase).toBe("situation");
+    // The village itself survives, not just where the child was standing.
+    expect(back?.state.rules.map((r) => r.id)).toEqual(["water"]);
+    expect(back?.state.log).toHaveLength(1);
+    expect(back?.state.trust).toEqual(state.trust);
+    expect(back?.state.rights).toEqual(state.rights);
+  });
+
+  it("has nothing to offer before anything is played", () => {
+    expect(loadGame()).toBeNull();
+  });
+
+  it("forgets the village when the child starts a new one", () => {
+    saveGame(
+      makeSave({
+        state: played(),
+        villageName: "x",
+        chapterIndex: 0,
+        index: 0,
+        phase: "intro",
+      }),
+    );
+    expect(loadGame()).not.toBeNull();
+    clearSave();
+    expect(loadGame()).toBeNull();
+  });
+
+  it("refuses a save from a version that no longer fits", () => {
+    // Dropped rather than migrated: the game is short, and resuming into a
+    // half-valid village is worse than starting again.
+    const save = makeSave({
+      state: played(),
+      villageName: "x",
+      chapterIndex: 0,
+      index: 0,
+      phase: "intro",
+    });
+    expect(isSave({ ...save, version: SAVE_VERSION + 1 })).toBe(false);
+    window.localStorage.setItem(
+      "first-rule:save",
+      JSON.stringify({ ...save, version: SAVE_VERSION + 1 }),
+    );
+    expect(loadGame()).toBeNull();
+  });
+
+  it("refuses anything that isn't a save at all", () => {
+    for (const junk of [null, 42, "hello", {}, { version: SAVE_VERSION }]) {
+      expect(isSave(junk), JSON.stringify(junk)).toBe(false);
+    }
+    window.localStorage.setItem("first-rule:save", "{ not json");
+    expect(loadGame()).toBeNull();
+  });
+
+  it("refuses a save whose position would read off the end of the game", () => {
+    const save = makeSave({
+      state: played(),
+      villageName: "x",
+      chapterIndex: 0,
+      index: 0,
+      phase: "intro",
+    });
+    expect(isSave({ ...save, chapterIndex: -1 })).toBe(false);
+    expect(isSave({ ...save, index: -1 })).toBe(false);
   });
 });

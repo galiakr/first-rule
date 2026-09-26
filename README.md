@@ -13,7 +13,7 @@ per-chapter implementation notes are in `docs/chapter-1-plan.md` …
 ```bash
 npm install
 npm run dev     # http://localhost:3000
-npm test        # 184 tests over the engine, content and components
+npm test        # 231 tests over the engine, content and components
 npm run build
 ```
 
@@ -89,10 +89,15 @@ through in a test without rendering anything — see
 
 ## What's not here yet
 
-Save state — a 28-situation game with no way to stop and come back is the
-largest thing still missing. `chefetz` and `davar`, the two subjects
-Chapter 2 introduces, aren't pinched within Chapter 2 itself — a later
-chapter needs to eventually collide with rules written for them.
+Nothing structural. All seven chapters are built, the game saves and resumes,
+both languages ship complete, and every subject, act, protection and builder
+option the engine models is exercised and covered by a test.
+
+Deliberately out of scope for this version (design doc §11): a language model
+at runtime, multiplayer, voice narration, a free-text rule editor, an election
+campaign with promises, and opening the rule builder past four options in any
+field. The last one is a content law rather than a preference — a fifth option
+may only be added alongside a situation that pinches it.
 
 ## A note on writing content
 
