@@ -40,6 +40,7 @@ export function initialState(chapter = 1): GameState {
     decider: "you",
     amendment: null,
     bookClosed: false,
+    separation: null,
   };
 }
 

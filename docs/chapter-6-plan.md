@@ -1,6 +1,6 @@
 # Chapter 6 — "הספר גמור — מי שומר עליו" (The Book Is Done — Who Guards It)
 
-> Status: planned, not yet built. Depends on Chapter 5 (`decider`, `authority`) and on `LogEntry.kind` — see `roadmap.md`.
+> Status: **built**. Only chapter 7 is left; see `roadmap.md`.
 
 ## Context
 
@@ -47,7 +47,21 @@ Epilogue: what the three jobs are for, now that the child has felt what happens 
 - `SeparationBuilder` (three slot pickers; each offers you / characters / groups / village).
 - `ChapterEnd` for 6: shows who holds each job.
 
-## Open questions
+## Open questions, as answered
 
-- Decision #2 (village-chooses as trust vs. election) and #4 (rights on revoke).
-- Whether the replay should use the _most recent_ or the _first_ moment of each kind — first is more "you did this before you knew what it was called."
+- **Staffing is the village's act, not the decider's.** (Owner's call.) The child assigns the three jobs whether or not they lost chapter 5's election — appointing who guards the book is constitutional, not day-to-day, so it does not belong to whoever happens to be ruling. In-world the village turns to the child because they are the one who wrote the book. A child who lost gets a line acknowledging exactly that: יותם decides what happens on an ordinary day, and this is not an ordinary day.
+- **"The village chooses" resolves to the highest-trust group**, ties broken by `GROUPS` order — not a per-slot election. Chapter 5 already spent a whole chapter on a vote; running three more here would repeat the beat rather than build on it, and trust-as-the-village's-voice is the same idea without the ceremony.
+- **Revoking costs trust across the board and strains `halich` for the appointee's group.** The rights half lives in `revokeSeparation()` rather than in the outcome's `rights` array, which is the one place in the game where a consequence is computed instead of authored — because it depends on who was appointed, and static content cannot know that.
+- **The replay uses the _first_ moment of each kind, not the most recent.** "You did this before you knew what it was called" is the whole point of the opening.
+
+## What changed in the build
+
+- **The replay costs no authored content at all**, as the plan hoped. `keyMoments(state)` is three `log.find` calls; the only thing the game adds is the word for what the child was doing. A job they never did says so, rather than substituting a different moment — and going against a rule deliberately does _not_ count as having enforced one, which is §7's subject, not §9.6's.
+- **`separationVariants` layers on chapter 5's `variantOutcomes`** rather than adding a mechanism. Each situation gets three keys, most specific first, and picks up the one it defines. Chapter 5's generalisation paid for itself exactly as intended.
+- **The revoke choice replaces the whole decide UI**, rather than sitting beside it. A playthrough showed that an ordinary `chefetz` rule can fire on c6s4 — very likely, given chapters 2, 3 and 5 all invite one — which would have rendered the apply/override buttons _and_ the revoke choice together. When the arrangement has ruled against the child, the only question on screen is whether they keep to it.
+- **Revoke is offered only when somebody else holds the judging.** Keeping the job yourself leaves nothing to revoke, and c6s4's `kept-together` variant covers that case instead: the child rules against themselves, and nobody — including them — can tell whether it was the rule or the audience.
+- **`holderLabel` is the one engine function that reads tokens for presentation.** It has to, because "the village" resolves to a group only at the moment it is read.
+
+## Carried forward
+
+Chapter 7 now has everything it needs: the amendment rule from chapter 5, and `separation` for the finale's "who holds each of the three jobs". The one content debt still outstanding is `davar`, written at c2s2 and never pinched — chapter 7's rule-that-starts-to-hurt is its last chance.

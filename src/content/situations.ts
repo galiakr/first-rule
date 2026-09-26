@@ -3,6 +3,7 @@ import { chapter2 } from "@/content/chapter2";
 import { chapter3 } from "@/content/chapter3";
 import { chapter4 } from "@/content/chapter4";
 import { chapter5 } from "@/content/chapter5";
+import { chapter6 } from "@/content/chapter6";
 import { perLanguage } from "@/content/tokens";
 import type { Lang } from "@/content/tokens";
 import type { Situation } from "@/engine/types";
@@ -14,6 +15,7 @@ export const chapters = perLanguage((lang: Lang) => [
   chapter3(lang),
   chapter4(lang),
   chapter5(lang),
+  chapter6(lang),
 ]);
 
 /** Every situation in the game, keyed by id — the lookup promptFor needs to

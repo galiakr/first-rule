@@ -75,5 +75,12 @@ export const chapterNotes = perLanguage((lang: Lang): ChapterNote[] => {
       grownUp: t("notes.c5.grown_up"),
       questions: [t("notes.c5.q1"), t("notes.c5.q2"), t("notes.c5.q3")],
     },
+    {
+      chapter: 6,
+      concept: t("notes.c6.concept"),
+      whatHappened: t("notes.c6.what_happened"),
+      grownUp: t("notes.c6.grown_up"),
+      questions: [t("notes.c6.q1"), t("notes.c6.q2"), t("notes.c6.q3")],
+    },
   ];
 });
