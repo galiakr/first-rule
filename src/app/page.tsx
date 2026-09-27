@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 
-import AboutVillage from "@/components/AboutVillage";
+import EntryScreen from "@/components/EntryScreen";
 import AmendmentAttempt from "@/components/AmendmentAttempt";
 import AuthorityBuilder from "@/components/AuthorityBuilder";
 import BookClosing from "@/components/BookClosing";
@@ -399,6 +399,34 @@ export default function Page() {
     setPhase("intro");
   }
 
+  // The entry screen is a different world from the game — daylight, its own
+  // measure, its own header — so it owns the whole viewport rather than
+  // living inside the game's dark chrome.
+  if (phase === "about") {
+    return (
+      <EntryScreen
+        saved={saved}
+        onResume={() => {
+          if (!saved) return;
+          setState(saved.state);
+          setVillageName(saved.villageName);
+          setChapterIndex(saved.chapterIndex);
+          setIndex(saved.index);
+          setPhase(saved.phase as Phase);
+          setDismissedSave(true);
+        }}
+        onDiscard={() => {
+          clearSave();
+          setDismissedSave(true);
+        }}
+        onContinue={(name) => {
+          setVillageName(name);
+          setPhase("intro");
+        }}
+      />
+    );
+  }
+
   return (
     <main className="lamplight min-h-screen px-5 py-10 sm:px-8 sm:py-16">
       <div className="mx-auto w-full max-w-read space-y-8">
@@ -447,29 +475,6 @@ export default function Page() {
             <LanguageSwitcher />
           </div>
         </div>
-
-        {phase === "about" ? (
-          <AboutVillage
-            saved={saved}
-            onResume={() => {
-              if (!saved) return;
-              setState(saved.state);
-              setVillageName(saved.villageName);
-              setChapterIndex(saved.chapterIndex);
-              setIndex(saved.index);
-              setPhase(saved.phase as Phase);
-              setDismissedSave(true);
-            }}
-            onDiscard={() => {
-              clearSave();
-              setDismissedSave(true);
-            }}
-            onContinue={(name) => {
-              setVillageName(name);
-              setPhase("intro");
-            }}
-          />
-        ) : null}
 
         {phase === "intro" ? (
           <section className="space-y-6">

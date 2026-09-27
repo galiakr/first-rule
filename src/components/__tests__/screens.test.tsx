@@ -2,7 +2,7 @@ import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import AboutVillage from "@/components/AboutVillage";
+import EntryScreen from "@/components/EntryScreen";
 import AmendmentAttempt from "@/components/AmendmentAttempt";
 import AuthorityBuilder from "@/components/AuthorityBuilder";
 import BookClosing from "@/components/BookClosing";
@@ -39,12 +39,12 @@ const RULE: Rule = {
   writtenAt: "c1s1",
 };
 
-describe("AboutVillage", () => {
+describe("EntryScreen", () => {
   it("names the six groups and lets the child name the village", async () => {
     const user = userEvent.setup();
     const onContinue = vi.fn();
     renderWithLanguage(
-      <AboutVillage
+      <EntryScreen
         saved={null}
         onResume={() => {}}
         onDiscard={() => {}}
@@ -66,7 +66,7 @@ describe("AboutVillage", () => {
     const user = userEvent.setup();
     const onContinue = vi.fn();
     renderWithLanguage(
-      <AboutVillage
+      <EntryScreen
         saved={null}
         onResume={() => {}}
         onDiscard={() => {}}
@@ -88,7 +88,7 @@ describe("AboutVillage", () => {
       phase: "situation",
     });
     renderWithLanguage(
-      <AboutVillage
+      <EntryScreen
         saved={saved}
         onResume={() => {}}
         onDiscard={() => {}}
@@ -113,7 +113,7 @@ describe("AboutVillage", () => {
       phase: "intro",
     });
     renderWithLanguage(
-      <AboutVillage
+      <EntryScreen
         saved={saved}
         onResume={() => {}}
         onDiscard={onDiscard}

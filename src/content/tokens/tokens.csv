@@ -560,3 +560,13 @@ save.note,"Quiet line at the bottom of the about screen, so a child knows they c
 toc.close_aria,"Accessible label for the scrim that closes the table of contents. Distinct from the close button's own label, so the two controls aren't identically named",לסגור את תוכן העניינים,Close the contents
 save.reset_heading,Heading over the start-over control at the foot of the contents panel,להתחיל מחדש,Starting over
 save.reset_note,"Explains what starting over costs, before the child asks for it","אפשר להתחיל כפר חדש מאפס. הכפר הנוכחי והכללים שבו יימחקו, ואי אפשר להחזיר אותם.","You can start a new village from scratch. The village you have now and the rules in it will be deleted, and they can't be brought back."
+landing.headline,"The first line a child reads. States the situation, not the product",אין כאן אף כלל.,There are no rules here yet.
+landing.subhead,"The second line — the invitation, in the second person",אתה תכתוב את הראשון.,You're going to write the first one.
+landing.prompt,"Sits above the builder on the entry screen. Instruction, not explanation","בחר על מי הכלל חל, ומה הוא אומר. הכפר יגיב מיד.","Choose who the rule applies to, and what it says. The village reacts straight away."
+landing.book_label,Small label on the book surface where the sentence assembles,הכלל שלך,Your rule
+landing.made_it,Shown once the child has assembled a full rule,זהו. כתבת חוק. עכשיו צריך כפר שיחיה לפיו.,That's it. You wrote a law. Now it needs a village to live under it.
+landing.who_it_lands_on,"Introduces the six groups, after the child has written something",הכלל הזה ייפול על האנשים האלה.,This rule is going to land on these people.
+landing.reaches,Shown on a group the rule being built would apply to,הכלל חל עליהם,the rule applies to them
+landing.misses,Shown on a group the rule would not reach,הכלל לא נוגע בהם,the rule doesn't touch them
+landing.tally,"Counts the groups the rule reaches. {reached}=how many, {total}=how many there are",הכלל הזה חל על {reached} מתוך {total} הקבוצות בכפר.,This rule applies to {reached} of the {total} groups in the village.
+landing.tally_empty,Shown before the child has chosen who the rule applies to,"בחר על מי הכלל חל, והכפר יראה לך מי נכלל.","Choose who the rule applies to, and the village will show you who's included."

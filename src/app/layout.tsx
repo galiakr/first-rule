@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Assistant, Frank_Ruhl_Libre } from "next/font/google";
+import { Assistant, Frank_Ruhl_Libre, Suez_One } from "next/font/google";
 
 import { LanguageProvider } from "@/content/language";
 
@@ -11,6 +11,16 @@ const book = Frank_Ruhl_Libre({
   subsets: ["hebrew", "latin"],
   weight: ["400", "500", "700"],
   variable: "--font-book",
+  display: "swap",
+});
+
+// The entry screen is a poster and needs a display face with real presence.
+// Suez One is Hebrew-first — not a Latin face with Hebrew bolted on — which
+// matters when the headline is the loudest Hebrew on the page.
+const display = Suez_One({
+  subsets: ["hebrew", "latin"],
+  weight: "400",
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -35,7 +45,11 @@ export default function RootLayout({
   // LanguageProvider when a stored preference says otherwise, so the markup
   // rendered here and the first client render always agree.
   return (
-    <html lang="he" dir="rtl" className={`${book.variable} ${ui.variable}`}>
+    <html
+      lang="he"
+      dir="rtl"
+      className={`${book.variable} ${ui.variable} ${display.variable}`}
+    >
       <body className="font-ui antialiased">
         <LanguageProvider>{children}</LanguageProvider>
       </body>

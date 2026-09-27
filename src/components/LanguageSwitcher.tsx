@@ -11,7 +11,12 @@ import { LANGUAGES, LANG_LABEL } from "@/content/tokens";
  * Each language is written in itself ("עברית", "English"), so the one you
  * want is readable even when the interface currently isn't.
  */
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({
+  tone = "dark",
+}: {
+  /** "light" for the entry screen's daylight ground; "dark" inside the game. */
+  tone?: "light" | "dark";
+}) {
   const { lang, setLang, t } = useLanguage();
 
   return (
@@ -29,11 +34,15 @@ export default function LanguageSwitcher() {
             lang={option}
             onClick={() => setLang(option)}
             aria-pressed={current}
-            className={
-              current
-                ? "text-sm text-lamp underline underline-offset-4"
-                : "text-sm text-quiet underline underline-offset-4 hover:text-paper"
-            }
+            className={`text-sm underline underline-offset-4 ${
+              tone === "light"
+                ? current
+                  ? "text-act"
+                  : "text-inksoft hover:text-inkdeep"
+                : current
+                  ? "text-lamp"
+                  : "text-quiet hover:text-paper"
+            }`}
           >
             {LANG_LABEL[option]}
           </button>
